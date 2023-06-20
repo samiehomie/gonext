@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+        .image-container {
+            position: relative;
+            height: 300px;
+            width: 300px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .image {
+            display: block;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 300px;
+            width: 300px;
+            transition: transform 1s ease-in-out;
+            transform: none;
+            z-index: 2;
+        }
+
+        .image.hide {
+            transform: translateY(-300px);
+            z-index: 3;
+        }
+
+        .image.init {
+            transform: translateY(300px);
+            visibility: hidden;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="image-container">
+        <img src="https://via.placeholder.com/300x300/F6E199?text=Image+1" alt="Image 1" class="image" />
+        <img src="https://via.placeholder.com/300x300/C1BEF9?text=Image+2" alt="Image 2" class="image init" />
+        <img src="https://via.placeholder.com/300x300?text=Image+3" alt="Image 3" class="image init" />
+    </div>
+</body></html>
