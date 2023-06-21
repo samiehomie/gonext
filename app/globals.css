@@ -15,8 +15,11 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-
+* {
+  box-sizing: content-box;
+}
 body {
-  color: rgb(var(--foreground-rgb));
+  color: black;
   background: #ffffff;
+  min-width: 768px;
 }

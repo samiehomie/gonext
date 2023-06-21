@@ -34,7 +34,7 @@ function InnerPaging({
                 key={slide.key}
                 className={`inline-block ${
                   isBig ? 'h-[47px]' : 'h-[4px]'
-                } w-[24px] p-[4px] float-left align-top box-content`}
+                } w-[24px] p-[4px] float-left align-top`}
               >
                 <span
                   className={`inline-block ${
@@ -55,7 +55,7 @@ function InnerPaging({
               href="#"
               className={`inline-block ${
                 isBig ? 'h-[24px]' : 'h-[4px]'
-              } w-[24px] p-[4px] float-left align-top box-content`}
+              } w-[24px] p-[4px] float-left align-top`}
               onClick={() => {
                 onChangePastSlide(isBig ? '' : currentSlide)
                 onChnageSlide(slide.key)
