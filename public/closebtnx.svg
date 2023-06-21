@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="_레이어_1" data-name="레이어 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100.71 100.71">
+<svg id="_layer_1" data-name="layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100.71 100.71">
   <defs>
     <style>
       .cls-1 {
@@ -9,6 +9,6 @@
       }
     </style>
   </defs>
-  <line class="cls-1" x1=".35" y1=".35" x2="100.35" y2="100.35"/>
-  <line class="cls-1" x1="100.35" y1=".35" x2=".35" y2="100.35"/>
+  <line x1=".35" y1=".35" x2="100.35" y2="100.35"/>
+  <line x1="100.35" y1=".35" x2=".35" y2="100.35"/>
 </svg>

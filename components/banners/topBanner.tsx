@@ -2,56 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import closeButtonX from '../../public/closebtnx.svg'
-
-const slidesBack = {
-  white: 'https://i.ibb.co/TggLD59/topbanner-back-white.png',
-  black: 'https://i.ibb.co/gr5pJd4/topbanner-back-black.png',
-  bigWhite: 'https://i.ibb.co/J7Nvrby/topbanner1-big-back-white.png',
-  bigBlack: 'https://i.ibb.co/19nMznv/topbanner1-big-back-black.png',
-}
-
-const slidesInfo = [
-  {
-    src: 'https://i.ibb.co/pyj5YrN/topbanner3-text.png',
-    key: 'pyj5YrN',
-    alt: 'topbanner3-text',
-    back: slidesBack.white,
-    white: true,
-    active: true,
-    big: {
-      src: 'https://i.ibb.co/pjZ7Yfb/topbanner3-big.png',
-      alt: 'topbanner3-big-text',
-      back: slidesBack.bigWhite,
-    },
-  },
-  {
-    src: 'https://i.ibb.co/LRQcx08/topbanner2-text.png',
-    key: 'LRQcx08',
-    alt: 'topbanner2-text',
-    back: slidesBack.black,
-    white: false,
-    active: false,
-    big: {
-      src: 'https://i.ibb.co/vqrtP5m/topbanner2-big.png',
-      alt: 'topbanner2-big-text',
-      back: slidesBack.bigBlack,
-    },
-  },
-  {
-    src: 'https://i.ibb.co/7p1RBK6/topbanner1-text.png',
-    key: '7p1RBK6',
-    alt: 'topbanner1-text',
-    back: slidesBack.white,
-    white: true,
-    active: false,
-    big: {
-      src: 'https://i.ibb.co/NNVkqPB/topbanner1-big.png',
-      alt: 'topbanner1-big-text',
-      back: slidesBack.bigWhite,
-    },
-  },
-]
+import { slidesInfo } from '../../public/localdata/imgSources'
 
 function InnerPaging({
   slides,
@@ -59,12 +10,14 @@ function InnerPaging({
   isWhite,
   isBig,
   onChnageSlide,
+  onChangePastSlide,
 }: {
   slides: typeof slidesInfo
   currentSlide: string
   isWhite: boolean | undefined
   isBig: boolean
   onChnageSlide: (slideKey: string) => void
+  onChangePastSlide: (slideKey: string) => void
 }) {
   return (
     <div
@@ -103,7 +56,10 @@ function InnerPaging({
               className={`inline-block ${
                 isBig ? 'h-[24px]' : 'h-[4px]'
               } w-[24px] p-[4px] float-left align-top box-content`}
-              onClick={() => onChnageSlide(slide.key)}
+              onClick={() => {
+                onChangePastSlide(isBig ? '' : currentSlide)
+                onChnageSlide(slide.key)
+              }}
             >
               <span
                 className={`inline-block ${
@@ -154,7 +110,6 @@ export default function TopBanner() {
       slideNodes.forEach((node, index) => {
         if (node instanceof HTMLElement) {
           if (currentSlide === node.dataset.key) {
-            node.classList.add('translate-y-[-60px]', 'z-[3]')
             nextIndex = index + 1 === slideNodes.length ? 0 : index + 1
             setPastSlide(currentSlide)
             setCurrentSlide(slidesInfo[nextIndex].key)
@@ -186,11 +141,11 @@ export default function TopBanner() {
     }
   }, [])
 
-  const currentSlideColor = slidesInfo.find(
+  const slideIsWhite = slidesInfo.find(
     (slide) => slide.key === currentSlide,
   )?.white
   return (
-    <div ref={containerRef} className="overflow-y-scroll overflow-x-auto">
+    <div ref={containerRef} className="overflow-y-auto overflow-x-auto">
       <div
         className={`relative overflow-hidden transition-margin duration-700 linear ${
           slideIsBig ? 'mt-0' : 'mt-[-420px]'
@@ -254,9 +209,10 @@ export default function TopBanner() {
         <InnerPaging
           slides={slidesInfo}
           currentSlide={currentSlide}
-          isWhite={currentSlideColor}
+          isWhite={slideIsWhite}
           isBig={slideIsBig}
           onChnageSlide={(slideKey) => setCurrentSlide(slideKey)}
+          onChangePastSlide={(slideKey) => setPastSlide(slideKey)}
         />
         {true && (
           <button
@@ -264,16 +220,21 @@ export default function TopBanner() {
             className="absolute left-[50%] bottom-[50%] 
           z-[4] ml-[570px] mb-[-30px]"
           >
-            <Image
-              src={closeButtonX}
-              alt="close-button"
-              width={60}
-              height={60}
-            />
+            <svg
+              id="_closebutton_1"
+              data-name="closebutton 1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 100.71 100.71"
+              className={`${
+                slideIsWhite ? 'stroke-zinc-500' : 'stroke-zinc-200'
+              } fill-none w-[60px] h-[60px]`}
+            >
+              <line x1=".35" y1=".35" x2="100.35" y2="100.35" />
+              <line x1="100.35" y1=".35" x2=".35" y2="100.35" />
+            </svg>
           </button>
         )}
       </div>
-      <div className="h-[2000px] bg-cyan-500"></div>
     </div>
   )
 }
