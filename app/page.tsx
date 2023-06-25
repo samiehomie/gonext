@@ -1,12 +1,13 @@
 import TopBanner from '@/components/banners/topBanner'
 import TopNavigation from '@/components/topNavigation'
+import BookSlide from '@/components/bookSlide'
 
 export default function Page() {
   return (
     <div className={`relative`}>
       <TopBanner />
       <TopNavigation />
-      <div className="w-[960px] m-auto">
+      <div className="w-[960px] m-auto text-[12px]">
         <div className="font-serif_mj">
           <h3
             className={`text-[40px] font-normal mt-[0px] text-left 
@@ -30,6 +31,7 @@ export default function Page() {
             </span>
           </p>
         </div>
+        <BookSlide />
       </div>
     </div>
   )

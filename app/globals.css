@@ -15,11 +15,34 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+
 * {
   box-sizing: content-box;
 }
-body {
-  color: black;
-  background: #ffffff;
-  min-width: 768px;
+
+@layer utilities {
+  .book-cover,
+  .txt-writer {
+    display: -webkit-box;
+    display: box;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+  }
+  .txt-writer {
+    -webkit-line-clamp: 2;
+  }
+}
+
+@layer components {
+  .screen-out {
+    height: 0;
+    line-height: 0;
+    overflow: hidden;
+    position: absolute;
+    text-indent: -9999px;
+    width: 0;
+  }
+  .title-pic {
+    @apply font-serif_mj block text-[28px] tracking-[-.025em] leading-[36px] pt-[12px] font-normal;
+  }
 }
