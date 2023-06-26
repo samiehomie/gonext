@@ -42,6 +42,13 @@
     text-indent: -9999px;
     width: 0;
   }
+  .ico-brunch {
+    line-height: 0;
+    display: inline-block;
+    vertical-align: top;
+    overflow: hidden;
+    text-indent: -9999px;
+  }
   .title-pic {
     @apply font-serif_mj block text-[28px] tracking-[-.025em] leading-[36px] pt-[12px] font-normal;
   }

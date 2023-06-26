@@ -1,14 +1,15 @@
 import TopBanner from '@/components/banners/topBanner'
 import TopNavigation from '@/components/topNavigation'
-import BookSlide from '@/components/bookSlide'
+import SlidesContainer from '@/components/slides/slidesContainer'
+import Slides from '@/components/slides/slides'
 
 export default function Page() {
   return (
-    <div className={`relative`}>
+    <div className="relative overflow-hidden">
       <TopBanner />
       <TopNavigation />
-      <div className="w-[960px] m-auto text-[12px]">
-        <div className="font-serif_mj">
+      <div className="text-[12px]">
+        <div className="w-[960px] m-auto font-serif_mj">
           <h3
             className={`text-[40px] font-normal mt-[0px] text-left 
         text-[#1a1a1a] tracking-[-.05em]`}
@@ -31,7 +32,10 @@ export default function Page() {
             </span>
           </p>
         </div>
-        <BookSlide />
+        <SlidesContainer>test</SlidesContainer>
+        {/* <SlidesContainer>
+          <Slides />
+        </SlidesContainer> */}
       </div>
     </div>
   )
