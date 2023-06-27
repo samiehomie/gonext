@@ -1,41 +1,56 @@
 'use client'
 import { useRef, useState } from 'react'
 import Slides from './slides'
-// function Pagination({ pageNumber }: { pageNumber: number }) {
 
-//   return (
-//     <div className="w-[960px] text-center m-[22px_auto_0px_auto]">
-//       <span className="inline-block h-[31px] align-top px-[11px]">
-//         <span className="screen-out">현재페이지</span>
-//         <span
-//           className="block bg-img-paging bg-[0px_-10px]
-//     h-[12px] mt-[8px] w-[13px] indent-[-9999px] overflow-hidden"
-//         >
-//           01
-//         </span>
-//       </span>
-//       <span className="inline-block h-[31px] align-top px-[11px]">
-//         <span
-//           className="block bg-img-paging bg-[-20px_0px]
-//     h-[9px] mt-[10px] w-[13px] indent-[-9999px] overflow-hidden"
-//         >
-//           02
-//         </span>
-//       </span>
-//     </div>
-//   )
-// }
+function Pagination({
+  pageNumber,
+  i,
+  onSlide,
+}: {
+  pageNumber: number
+  i: number
+  onSlide: (plus: number, pagination?: boolean) => void
+}) {
+  return (
+    <span
+      className={`inline-block h-[31px] align-top px-[11px] ${
+        i !== pageNumber && 'cursor-pointer'
+      }`}
+      onClick={() => onSlide(i, true)}
+    >
+      {i === pageNumber && <span className="screen-out">현재페이지</span>}
+      {i === pageNumber ? (
+        <span
+          className={`block bg-img-paging overflow-hidden
+                        h-[12px] mt-[8px] w-[13px] indent-[-9999px]`}
+          style={{ backgroundPosition: `${i * -20}px -10px` }}
+        >
+          {`0${i + 1}`}
+        </span>
+      ) : (
+        <span
+          className={`block bg-img-paging overflow-hidden
+                        h-[9px] mt-[10px] w-[13px] indent-[-9999px] `}
+          style={{ backgroundPosition: `${i * -20}px 0px` }}
+        >
+          {`0${i + 1}`}
+        </span>
+      )}
+    </span>
+  )
+}
 
 export default function SlidesShow() {
   const [page, setPage] = useState(0)
   const slidesRef = useRef<HTMLUListElement>(null)
   const lastPage = 2
-  const onSlide = (plus: number) => {
-    if (page + plus < 0 || page + plus > lastPage) {
+  const onSlide = (plus: number, pagination = false) => {
+    const nextPage = pagination ? plus : page + plus
+    if (nextPage < 0 || nextPage > lastPage) {
       return
     }
-    setPage(page + plus)
-    slidesRef.current!.style.transform = `translateX(-${(page + plus) * 960}px)`
+    setPage(nextPage)
+    slidesRef.current!.style.transform = `translateX(-${nextPage * 960}px)`
   }
 
   return (
@@ -82,6 +97,11 @@ export default function SlidesShow() {
         </button>
       </div>
       {/* wrap_paging */}
+      <div className="w-[960px] text-center m-[22px_auto_0px_auto]">
+        {[...Array(9)].map((_, i) => (
+          <Pagination key={i} pageNumber={page} i={i} onSlide={onSlide} />
+        ))}
+      </div>
     </div>
   )
 }
