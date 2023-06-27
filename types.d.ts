@@ -232,3 +232,5 @@ const writingHasLarge = {
 export type writing = typeof writing | typeof writingHasLarge
 
 export type writings = { data: [writing] }
+
+export type slideStyles = 'hor' | 'ver' | 'big'

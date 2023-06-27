@@ -1,6 +1,6 @@
 import TopBanner from '@/components/banners/topBanner'
 import TopNavigation from '@/components/topNavigation'
-import SlidesContainer from '@/components/slides/slidesContainer'
+import SlidesShow from '@/components/slides/slidesShow'
 import Slides from '@/components/slides/slides'
 
 export default function Page() {
@@ -32,10 +32,7 @@ export default function Page() {
             </span>
           </p>
         </div>
-        <SlidesContainer>test</SlidesContainer>
-        {/* <SlidesContainer>
-          <Slides />
-        </SlidesContainer> */}
+        <SlidesShow />
       </div>
     </div>
   )
