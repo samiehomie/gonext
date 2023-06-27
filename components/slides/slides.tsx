@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 import qs from 'qs'
-import type { singleBookHasCover, writings, slideStyles } from '../../types'
-import { getData } from '../../lib/fetchData'
+import type { writings, slideStyles } from '../../types'
+import { fetcher } from '../../lib/fetchData'
 import Image from 'next/image'
 import { ReactElement } from 'react'
 import Book from './book'
@@ -49,39 +49,22 @@ const queryWritings = qs.stringify(
   },
 )
 
-export default async function Slides() {
-  const [bookData, setBookData] = useState<singleBookHasCover | null>(null)
-  const [writings, setWritings] = useState<writings | null>(null)
-  const [error, setError] = useState<Error | null>(null)
+export default function Slides() {
+  console.log(urlWritings + queryWritings)
+  const {
+    data: writings,
+    error,
+    isLoading,
+  }: {
+    data: writings
+    error: any
+    isLoading: any
+  } = useSWR(urlWritings + queryWritings, fetcher, {
+    revalidateOnMount: true,
+  })
 
-  useEffect(() => {
-    setError(null)
-    const fetchData = async () => {
-      console.log('1', urlBook + queryBook)
-      console.log('2', urlWritings + queryWritings)
-      try {
-        const [bookData, writings] = await Promise.all([
-          getData(urlBook + queryBook),
-          getData(urlWritings + queryWritings),
-        ])
-        setBookData(bookData)
-        setWritings(writings)
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(error)
-        }
-      }
-    }
-    fetchData()
-  }, [])
-
-  if (error !== null) {
-    return <div>{error.message}</div>
-  }
-
-  if (writings === null || bookData === null) {
-    return <div>Loading...</div>
-  }
+  if (error) return <div>failed to load</div>
+  if (isLoading) return <div>loading...</div>
 
   const writingsWithBook = writings.data.slice(0, 2)
   const restWritings = writings.data.slice(2)
@@ -119,7 +102,7 @@ export default async function Slides() {
       <li className="float-left">
         <div className="overflow-hidden w-[960px]">
           {/* brunch book */}
-          <Book bookData={bookData} />
+          <Book url={urlBook + queryBook} />
           {/* 2 stack writings alongside book*/}
           {writingsWithBook.map((writing) => (
             <a

@@ -2,8 +2,23 @@
 import Image from 'next/image'
 import moment from 'moment'
 import { singleBookHasCover } from '@/types'
+import { fetcher } from '@/lib/fetchData'
+import useSWR from 'swr'
 
-export default function Book({ bookData }: { bookData: singleBookHasCover }) {
+export default function Book({ url }: { url: string }) {
+  const {
+    data: bookData,
+    error,
+    isLoading,
+  }: { data: singleBookHasCover; error: any; isLoading: any } = useSWR(
+    url,
+    fetcher,
+    {revalidateOnMount: true}
+  )
+
+  if (error) return <div>failed to load</div>
+  if (isLoading) return <div>loading...</div>
+
   const {
     Title: title,
     publishedAt,

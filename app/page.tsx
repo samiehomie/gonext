@@ -1,7 +1,6 @@
 import TopBanner from '@/components/banners/topBanner'
 import TopNavigation from '@/components/topNavigation'
 import SlidesShow from '@/components/slides/slidesShow'
-import Slides from '@/components/slides/slides'
 
 export default function Page() {
   return (

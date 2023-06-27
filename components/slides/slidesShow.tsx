@@ -26,7 +26,7 @@ import Slides from './slides'
 //   )
 // }
 
-export default async function SlidesShow() {
+export default function SlidesShow() {
   const [page, setPage] = useState(0)
   const slidesRef = useRef<HTMLUListElement>(null)
   const lastPage = 2
