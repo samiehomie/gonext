@@ -32,6 +32,7 @@ export default function Page() {
           </p>
         </div>
         <SlidesShow />
+        <div className="h-[1500px]"></div>
       </div>
     </div>
   )
