@@ -30,6 +30,21 @@ export default function Page() {
               서랍 속 간직하고 있는 글과 감성을.
             </span>
           </p>
+          <ul className="h-[18px] overflow-hidden relative font-noto_sans_light">
+            <li className="h-full">
+              <a href="#">
+                <span className="float-right pl-[7px] text-[#959595]">
+                  작가별 알림 기능 신설 및 매거진 개편
+                </span>
+              </a>
+              <span
+                className="text-[#00c6be] font-[Georgia] text-[10.5px]
+                          italic float-right pt-[2px] font-semibold tracking-tighter"
+              >
+                Notice
+              </span>
+            </li>
+          </ul>
         </div>
         <SlidesShow />
         <div className="h-[1500px]"></div>

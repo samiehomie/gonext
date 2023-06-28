@@ -9,6 +9,7 @@ import { ReactElement } from 'react'
 import Book from './book'
 import Writing from './writing'
 
+// TODO: Check out whether lazy loading is working
 const slideStyles: Array<slideStyles>[] = [
   ['ver', 'ver', 'ver'],
   ['hor', 'hor', 'hor', 'hor'],

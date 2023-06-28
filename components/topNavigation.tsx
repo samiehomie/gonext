@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-
+// TODO: #1 Implement search modal and right hidden menu
 export default function TopNavigation() {
   return (
     <div className="h-[60px]">

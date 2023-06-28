@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { slidesInfo } from '../../public/localdata/imgSources'
-
+// TODO: Consider another way to manage the states
 function InnerPaging({
   slides,
   currentSlide,
