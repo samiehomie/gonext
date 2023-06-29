@@ -11,6 +11,7 @@ module.exports = {
         'ico-brunch-titles': "url('../public/ico-brunch-titles.png')",
         'ico-brunch-main': "url('../public/ico-brunch-main.png')",
         'ico-brunch-sub': "url('../public/ico-brunch-sub.png')",
+        'ico-brunch-sub2': "url('../public/ico-brunch-sub2.png')",
         'book-blur': "url('../public/bg-bookblur.png')",
         'book-cover': 'linear-gradient(-180deg, #f4f4f4, #dedede 82%)',
         'book-shadow': "url('../public/bg-brunchhome.png')",

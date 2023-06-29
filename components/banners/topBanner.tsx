@@ -123,19 +123,23 @@ export default function TopBanner() {
 
   useEffect(() => {
     const { current: slidesNode } = slidesRef
-    if (slidesNode === null) return
-    const handler = handlerWheel(
-      () => {
-        setPastSlide('')
-        setSlideIsBig(true)
-      },
-      () => setSlideIsBig(false),
-      slidesNode,
-    )
-    document.addEventListener('wheel', throttle(handler, 100))
+    if (slidesNode !== null) {
+      const handler = throttle(
+        handlerWheel(
+          () => {
+            setPastSlide('')
+            setSlideIsBig(true)
+          },
+          () => setSlideIsBig(false),
+          slidesNode,
+        ),
+        100,
+      )
+      document.addEventListener('wheel', handler)
 
-    return () => {
-      document.removeEventListener('wheel', throttle(handler, 100))
+      return () => {
+        document.removeEventListener('wheel', handler)
+      }
     }
   }, [])
 
@@ -212,26 +216,24 @@ export default function TopBanner() {
           onChnageSlide={(slideKey) => setCurrentSlide(slideKey)}
           onChangePastSlide={(slideKey) => setPastSlide(slideKey)}
         />
-        {true && (
-          <button
-            onClick={() => setSlideIsBig(false)}
-            className="absolute left-[50%] bottom-[50%] 
+        <button
+          onClick={() => setSlideIsBig(false)}
+          className="absolute left-[50%] bottom-[50%] 
           z-[4] ml-[570px] mb-[-30px]"
+        >
+          <svg
+            id="_closebutton_1"
+            data-name="closebutton 1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 100.71 100.71"
+            className={`${
+              slideIsWhite ? 'stroke-zinc-500' : 'stroke-zinc-200'
+            } fill-none w-[60px] h-[60px]`}
           >
-            <svg
-              id="_closebutton_1"
-              data-name="closebutton 1"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 100.71 100.71"
-              className={`${
-                slideIsWhite ? 'stroke-zinc-500' : 'stroke-zinc-200'
-              } fill-none w-[60px] h-[60px]`}
-            >
-              <line x1=".35" y1=".35" x2="100.35" y2="100.35" />
-              <line x1="100.35" y1=".35" x2=".35" y2="100.35" />
-            </svg>
-          </button>
-        )}
+            <line x1=".35" y1=".35" x2="100.35" y2="100.35" />
+            <line x1="100.35" y1=".35" x2=".35" y2="100.35" />
+          </svg>
+        </button>
       </div>
     </div>
   )

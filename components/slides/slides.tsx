@@ -33,6 +33,8 @@ const queryBook = qs.stringify(
     encodeValuesOnly: true,
   },
 )
+
+
 const queryWritings = qs.stringify(
   {
     fields: ['Title', 'Subtitle', 'Content'],
@@ -51,7 +53,6 @@ const queryWritings = qs.stringify(
 )
 
 export default function Slides() {
-  console.log(urlWritings + queryWritings)
   const {
     data: writings,
     error,

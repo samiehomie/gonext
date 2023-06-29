@@ -20,6 +20,18 @@
   box-sizing: content-box;
 }
 
+@keyframes animation_up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
 @layer utilities {
   .book-cover,
   .txt-writer {
@@ -49,7 +61,23 @@
     overflow: hidden;
     text-indent: -9999px;
   }
+
   .title-pic {
     @apply font-serif_mj block text-[28px] tracking-[-.025em] leading-[36px] pt-[12px] font-normal;
+  }
+
+  .suggest-list {
+    animation: animation_up 0.5s;
+    transition: opacity 0.2s ease-out 0s, transform 0.5s ease-out 0s;
+  }
+  .suggest-tag {
+    border: 1px solid #56ddd5;
+    border-radius: 24px;
+    color: #00c6be;
+    display: inline-block;
+    font-size: 15px;
+    line-height: 22px;
+    margin: 0 4px;
+    padding: 4px 14px;
   }
 }
