@@ -1,10 +1,12 @@
 import TopBanner from '@/components/banners/topBanner'
-import TopNavigation from '@/components/topNavigation'
+import TopNavigation from '@/components/navigations/topNavigation'
 import SlidesShow from '@/components/slides/slidesShow'
+import SuggestBox from '@/components/modals/suggestBox'
 
 export default function Page() {
   return (
     <div className="relative overflow-hidden">
+      {/* <SuggestBox /> */}
       <TopBanner />
       <TopNavigation />
       <div className="text-[12px]">

@@ -1,8 +1,8 @@
 'use client'
-
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { slidesInfo } from '../../public/localdata/imgSources'
+import { throttle } from 'lodash'
 // TODO: Consider another way to manage the states
 function InnerPaging({
   slides,
@@ -81,7 +81,6 @@ function InnerPaging({
 
 export default function TopBanner() {
   const slidesRef = useRef<HTMLUListElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
   const [currentSlide, setCurrentSlide] = useState(slidesInfo[0].key)
   const [slideIsBig, setSlideIsBig] = useState(false)
   const [pastSlide, setPastSlide] = useState('')
@@ -123,9 +122,8 @@ export default function TopBanner() {
   }, [currentSlide, slideIsBig])
 
   useEffect(() => {
-    const { current: containerNode } = containerRef
     const { current: slidesNode } = slidesRef
-    if (containerNode === null || slidesNode === null) return
+    if (slidesNode === null) return
     const handler = handlerWheel(
       () => {
         setPastSlide('')
@@ -134,10 +132,10 @@ export default function TopBanner() {
       () => setSlideIsBig(false),
       slidesNode,
     )
-    containerNode.addEventListener('wheel', handler)
+    document.addEventListener('wheel', throttle(handler, 100))
 
     return () => {
-      containerNode.removeEventListener('wheel', handler)
+      document.removeEventListener('wheel', throttle(handler, 100))
     }
   }, [])
 
@@ -145,7 +143,7 @@ export default function TopBanner() {
     (slide) => slide.key === currentSlide,
   )?.white
   return (
-    <div ref={containerRef} className="overflow-y-auto overflow-x-auto">
+    <div className="overflow-y-auto overflow-x-auto">
       <div
         className={`relative overflow-hidden transition-margin duration-700 linear ${
           slideIsBig ? 'mt-0' : 'mt-[-420px]'
