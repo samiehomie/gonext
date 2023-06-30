@@ -45,3 +45,5 @@ export function getSearchUrl(searchWord: string) {
     authorsUrl: `${process.env.NEXT_PUBLIC_DB_URL}/api/authors?${queryAuthors}`,
   }
 }
+
+export const regexInvalidQuery = /\[\$contains\]=$/

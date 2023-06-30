@@ -1,6 +1,10 @@
-import SlidesShow from '@/components/slides/slidesShow'
-import IndexContainer from '@/components/indexContainer'
+import IndexContainer from '@/components/index/indexContainer'
+
 
 export default function Page() {
-  return <IndexContainer />
+  return (
+    <>
+      <IndexContainer />
+    </>
+  )
 }

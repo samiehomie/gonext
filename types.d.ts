@@ -458,6 +458,36 @@ export type authors = {
   }
 }
 
+export type authorWeekly = {
+  id: number
+  attributes: {
+    Name: string
+    Introduction: string
+    Job: string
+    Tags: string[]
+    Profile: {
+      data: {
+        id: number
+        attributes: {
+          url: string
+        }
+      }
+    }
+  }
+}
+
+export type authorsWeekly = {
+  data: authorWeekly[]
+  meta: {
+    pagination: {
+      page: number
+      pageSize: number
+      pageCount: number
+      total: number
+    }
+  }
+}
+
 export type authorsForSuggest = typeof authorsForSuggest
 
 export type writing = typeof writing | typeof writingHasLarge

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, FormEvent } from 'react'
 import { fetcher } from '@/lib/fetchData'
-import { getSearchUrl } from '@/lib/utils'
+import { getSearchUrl, regexInvalidQuery } from '@/lib/utils'
 import useSWR from 'swr'
 import qs from 'qs'
 import type {
@@ -80,8 +80,6 @@ function SuggestList() {
     </ul>
   )
 }
-
-const regexInvalidQuery = /\[\$contains\]=$/
 
 function SearchSide({ searchWord }: { searchWord: string }) {
   const { booksUrl, authorsUrl } = getSearchUrl(searchWord)
@@ -231,8 +229,14 @@ function SearchList({ searchWord }: { searchWord: string }) {
       </h3>
       <div className="pb-[2px]">
         <ul className="font-noto_sans_light">
-          {!writingData ? (
-            <li></li>
+          {!writingData || writingData.data.length === 0 ? (
+            <div className="pb-[2px]">
+              <div className="pt-[20px] max-h-[298px] overflow-hidden suggest-list">
+                <span className="pb-[9px] block text-[#959595] text-[16px]">
+                  검색 결과가 없습니다.
+                </span>
+              </div>
+            </div>
           ) : (
             writingData.data.slice(0, 7).map((title) => (
               <li key={title.id} className="mt-[26px] box-border">

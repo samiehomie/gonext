@@ -14,7 +14,7 @@ const sfBold = localFont({
 })
 
 const notoSansLight = localFont({
-  src: '../public/fonts/NotoSansCJKsc-DemiLight.otf',
+  src: '../public/fonts/NotoSans-Light.ttf',
   display: 'swap',
   variable: '--font-noto-sans-light',
 })

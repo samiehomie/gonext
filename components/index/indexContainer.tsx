@@ -1,8 +1,10 @@
 'use client'
 import { useState } from 'react'
-import TopBanner from './banners/topBanner'
-import TopNavigation from './navigations/topNavigation'
-import SlidesShow from './slides/slidesShow'
+import TopBanner from '../banners/topBanner'
+import TopNavigation from '../navigations/topNavigation'
+import SlidesShow from '../slides/slidesShow'
+import WritersWeekly from './writersWeekly'
+import Keywords from './keywords'
 
 function MainContent() {
   return (
@@ -46,7 +48,6 @@ function MainContent() {
         </ul>
       </div>
       <SlidesShow />
-      <div className="h-[1500px]"></div>
     </div>
   )
 }
@@ -58,6 +59,8 @@ export default function IndexContainer() {
       {!onSearch && <TopBanner />}
       <TopNavigation onSearch={onSearch} setOnSearch={setOnSearch} />
       {!onSearch && <MainContent />}
+      {!onSearch && <Keywords />}
+      {!onSearch && <WritersWeekly />}
     </div>
   )
 }

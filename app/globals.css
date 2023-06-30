@@ -20,6 +20,10 @@
   box-sizing: content-box;
 }
 
+body {
+  color: #333;
+}
+
 @keyframes animation_up {
   0% {
     opacity: 0;
@@ -79,5 +83,27 @@
     line-height: 22px;
     margin: 0 4px;
     padding: 4px 14px;
+  }
+  .clear-both {
+    clear: both;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    width: 0;
+  }
+  .txt-brunch {
+    overflow: hidden;
+    text-indent: -9999px;
+  }
+  .tit_writer {
+    word-wrap: break-word;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    line-height: 28px;
+    max-height: 57px;
+    padding: 17px 12px 0;
+    white-space: normal;
+    word-break: keep-all;
+    font-weight: normal;
   }
 }

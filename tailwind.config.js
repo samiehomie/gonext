@@ -12,10 +12,12 @@ module.exports = {
         'ico-brunch-main': "url('../public/ico-brunch-main.png')",
         'ico-brunch-sub': "url('../public/ico-brunch-sub.png')",
         'ico-brunch-sub2': "url('../public/ico-brunch-sub2.png')",
+        'ico-weekly': "url('../public/ico-weekly.png')",
         'book-blur': "url('../public/bg-bookblur.png')",
         'book-cover': 'linear-gradient(-180deg, #f4f4f4, #dedede 82%)',
         'book-shadow': "url('../public/bg-brunchhome.png')",
         'img-paging': "url('../public/img-paging.png')",
+        'brunch-text': "url('../public/brunch-text.png')",
       },
       fontFamily: {
         serif_mj: ['var(--font-nanum-mj)'],
