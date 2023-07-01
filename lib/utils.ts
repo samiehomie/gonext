@@ -47,3 +47,8 @@ export function getSearchUrl(searchWord: string) {
 }
 
 export const regexInvalidQuery = /\[\$contains\]=$/
+
+export function removeMarkdownImages(str: string) {
+  const regex = /!\[(.*?)\]\((.*?)\)/g
+  return str.replace(regex, '')
+}

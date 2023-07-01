@@ -1,11 +1,9 @@
 'use client'
 import Image from 'next/image'
 import { writing, slideStyles } from '@/types'
+import {removeMarkdownImages} from '../../lib/utils'
 
-function removeMarkdownImages(str: string) {
-  const regex = /!\[(.*?)\]\((.*?)\)/g
-  return str.replace(regex, '')
-}
+
 
 export default function Writing({
   writing,

@@ -1,13 +1,18 @@
 'use client'
 
 import useSWR from 'swr'
-import qs from 'qs'
 import type { writings, slideStyles } from '../../types'
 import { fetcher } from '../../lib/fetchData'
 import Image from 'next/image'
 import { ReactElement } from 'react'
 import Book from './book'
 import Writing from './writing'
+import {
+  queryWritings,
+  queryBook,
+  urlBook,
+  urlWritings,
+} from '../../lib/queries'
 
 // TODO: Check out whether lazy loading is working
 const slideStyles: Array<slideStyles>[] = [
@@ -15,58 +20,17 @@ const slideStyles: Array<slideStyles>[] = [
   ['hor', 'hor', 'hor', 'hor'],
   ['big', 'hor', 'hor'],
 ]
-const urlBook = `${process.env.NEXT_PUBLIC_DB_URL}/api/books/1?`
-const urlWritings = `${process.env.NEXT_PUBLIC_DB_URL}/api/writings?`
-const queryBook = qs.stringify(
-  {
-    fields: ['Title', 'publishedAt'],
-    populate: {
-      author: {
-        fields: ['name'],
-      },
-      Cover: {
-        fields: ['formats'],
-      },
-    },
-  },
-  {
-    encodeValuesOnly: true,
-  },
-)
-
-
-const queryWritings = qs.stringify(
-  {
-    fields: ['Title', 'Subtitle', 'Content'],
-    populate: {
-      author: {
-        fields: ['Name'],
-      },
-      Cover: {
-        fields: ['formats'],
-      },
-    },
-  },
-  {
-    encodeValuesOnly: true,
-  },
-)
 
 export default function Slides() {
   const {
     data: writings,
-    error,
-    isLoading,
   }: {
     data: writings
-    error: any
-    isLoading: any
   } = useSWR(urlWritings + queryWritings, fetcher, {
     revalidateOnMount: true,
   })
 
-  if (error) return <div>failed to load</div>
-  if (isLoading) return <div>loading...</div>
+  if (!writings) return null
 
   const writingsWithBook = writings.data.slice(0, 2)
   const restWritings = writings.data.slice(2)

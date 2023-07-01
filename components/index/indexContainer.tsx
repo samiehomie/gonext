@@ -5,10 +5,11 @@ import TopNavigation from '../navigations/topNavigation'
 import SlidesShow from '../slides/slidesShow'
 import WritersWeekly from './writersWeekly'
 import Keywords from './keywords'
+import RecommendArticle from './recommendArticle'
 
 function MainContent() {
   return (
-    <div className="text-[12px]">
+    <article className="text-[12px]">
       <div className="w-[960px] m-auto font-serif_mj">
         <h3
           className={`text-[40px] font-normal mt-[0px] text-left 
@@ -48,19 +49,20 @@ function MainContent() {
         </ul>
       </div>
       <SlidesShow />
-    </div>
+    </article>
   )
 }
 
 export default function IndexContainer() {
   const [onSearch, setOnSearch] = useState(false)
   return (
-    <div className="relative overflow-hidden">
+    <div className={`relative overflow-hidden`}>
       {!onSearch && <TopBanner />}
       <TopNavigation onSearch={onSearch} setOnSearch={setOnSearch} />
       {!onSearch && <MainContent />}
       {!onSearch && <Keywords />}
       {!onSearch && <WritersWeekly />}
+      {!onSearch && <RecommendArticle />}
     </div>
   )
 }

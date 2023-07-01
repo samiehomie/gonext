@@ -106,4 +106,12 @@ body {
     word-break: keep-all;
     font-weight: normal;
   }
+  .tit_subject {
+    word-wrap: break-word;
+    display: inline;
+    font-size: 16px;
+    font-weight: normal;
+    letter-spacing: -0.025em;
+    word-break: break-all;
+  }
 }

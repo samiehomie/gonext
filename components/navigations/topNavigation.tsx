@@ -82,6 +82,7 @@ export default function TopNavigation({
               className={`float-right ${onSearch && 'hidden'}`}
               onClick={() => {
                 setOnSearch(true)
+                document.body.style.overflowY = 'scroll'
               }}
             >
               <div>
