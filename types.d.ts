@@ -446,6 +446,7 @@ const author = {
   },
 }
 
+
 export type authors = {
   data: (typeof author)[]
   meta: {
@@ -492,6 +493,21 @@ export type authorsForSuggest = typeof authorsForSuggest
 
 export type writing = typeof writing | typeof writingHasLarge
 
-export type writings = { data: [writing] }
+export type writings = {
+  data: [writing]
+  meta: {
+    pagination: {
+      page: number
+      pageSize: number
+      pageCount: number
+      total: number
+    }
+  }
+}
 
 export type slideStyles = 'hor' | 'ver' | 'big'
+
+export type commonShape = {
+  data: object[]
+  meta: object
+}

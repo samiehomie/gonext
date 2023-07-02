@@ -1,7 +1,29 @@
 import qs from 'qs'
 
-// https://strapi-pyj2.onrender.com/api/books?fields[0]=Title&populate[Cover][fields]=formats&filters[Title][$contains]=정
-export function getSearchUrl(searchWord: string) {
+export function getWritingsQuery(pageSize: number, page: number = 1) {
+  return qs.stringify(
+    {
+      fields: ['Title', 'Subtitle', 'Content'],
+      populate: {
+        author: {
+          fields: ['Name'],
+        },
+        Cover: {
+          fields: ['formats'],
+        },
+      },
+      pagination: {
+        page,
+        pageSize,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  )
+}
+
+export function getSearchQuery(searchWord: string) {
   const queryWritings = qs.stringify(
     {
       fields: ['Title'],
@@ -40,9 +62,9 @@ export function getSearchUrl(searchWord: string) {
     },
   )
   return {
-    writingsUrl: `${process.env.NEXT_PUBLIC_DB_URL}/api/writings?${queryWritings}`,
-    booksUrl: `${process.env.NEXT_PUBLIC_DB_URL}/api/books?${queryBooks}`,
-    authorsUrl: `${process.env.NEXT_PUBLIC_DB_URL}/api/authors?${queryAuthors}`,
+    queryWritings,
+    queryBooks,
+    queryAuthors,
   }
 }
 

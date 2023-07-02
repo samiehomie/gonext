@@ -6,6 +6,7 @@ import SlidesShow from '../slides/slidesShow'
 import WritersWeekly from './writersWeekly'
 import Keywords from './keywords'
 import RecommendArticle from './recommendArticle'
+import { SWRConfig } from 'swr'
 
 function MainContent() {
   return (
@@ -56,13 +57,22 @@ function MainContent() {
 export default function IndexContainer() {
   const [onSearch, setOnSearch] = useState(false)
   return (
-    <div className={`relative overflow-hidden`}>
-      {!onSearch && <TopBanner />}
-      <TopNavigation onSearch={onSearch} setOnSearch={setOnSearch} />
-      {!onSearch && <MainContent />}
-      {!onSearch && <Keywords />}
-      {!onSearch && <WritersWeekly />}
-      {!onSearch && <RecommendArticle />}
-    </div>
+    <SWRConfig
+      value={{
+        fetcher: (query: string) =>
+          fetch(`${process.env.NEXT_PUBLIC_DB_URL}/api/${query}`).then((res) =>
+            res.json(),
+          ),
+      }}
+    >
+      <div className={`relative overflow-hidden`}>
+        {!onSearch && <TopBanner />}
+        <TopNavigation onSearch={onSearch} setOnSearch={setOnSearch} />
+        {!onSearch && <MainContent />}
+        {!onSearch && <Keywords />}
+        {!onSearch && <WritersWeekly />}
+        {!onSearch && <RecommendArticle />}
+      </div>
+    </SWRConfig>
   )
 }

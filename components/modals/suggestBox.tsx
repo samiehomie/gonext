@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, FormEvent } from 'react'
 import { fetcher } from '@/lib/fetchData'
-import { getSearchUrl, regexInvalidQuery } from '@/lib/utils'
+import { getSearchQuery, regexInvalidQuery } from '@/lib/utils'
 import useSWR from 'swr'
 import qs from 'qs'
 import type {
@@ -30,16 +30,12 @@ const queryAuthors = qs.stringify(
   },
 )
 
-const urlAuthors = `${process.env.NEXT_PUBLIC_DB_URL}/api/authors?`
-
 function SuggestList() {
-  const { data: authors }: { data: authorsForSuggest } = useSWR(
-    urlAuthors + queryAuthors,
-    fetcher,
-    {
-      revalidateOnMount: true,
-    },
+  const { data: authors }: { data: authorsForSuggest | undefined } = useSWR(
+    'authors?' + queryAuthors,
   )
+
+  if (!authors) return null
 
   return (
     <ul className="text-[0px] leading-none text-center w-[1000px] ml-[-30px]">
@@ -82,20 +78,22 @@ function SuggestList() {
 }
 
 function SearchSide({ searchWord }: { searchWord: string }) {
-  const { booksUrl, authorsUrl } = getSearchUrl(searchWord)
+  const { queryBooks, queryAuthors } = getSearchQuery(searchWord)
   const {
     data: booksData,
   }: {
-    data: books
-  } = useSWR(regexInvalidQuery.test(booksUrl) ? null : booksUrl, fetcher)
+    data: books | undefined
+  } = useSWR(regexInvalidQuery.test(queryBooks) ? null : 'books?' + queryBooks)
+
   const {
     data: authorsData,
   }: {
-    data: authors
-  } = useSWR(regexInvalidQuery.test(authorsUrl) ? null : authorsUrl, fetcher)
+    data: authors | undefined
+  } = useSWR(
+    regexInvalidQuery.test(queryAuthors) ? null : 'authors?' + queryAuthors,
+  )
 
-  if (regexInvalidQuery.test(booksUrl) || regexInvalidQuery.test(authorsUrl))
-    return null
+  if (!booksData || !authorsData) return null
 
   return (
     <div className="overflow-hidden w-[220px] text-[14px]">
@@ -209,14 +207,16 @@ function SearchSide({ searchWord }: { searchWord: string }) {
 }
 
 function SearchList({ searchWord }: { searchWord: string }) {
-  const { writingsUrl } = getSearchUrl(searchWord)
+  const { queryWritings } = getSearchQuery(searchWord)
   const {
     data: writingData,
   }: {
-    data: writingTitles
-  } = useSWR(regexInvalidQuery.test(writingsUrl) ? null : writingsUrl, fetcher)
+    data: writingTitles | undefined
+  } = useSWR(
+    regexInvalidQuery.test(queryWritings) ? null : 'writings?' + queryWritings,
+  )
 
-  if (regexInvalidQuery.test(writingsUrl)) return null
+  if (!writingData) return null
 
   return (
     <div className="float-left w-[720px]">

@@ -50,7 +50,9 @@ export default function SlidesShow() {
       return
     }
     setPage(nextPage)
-    slidesRef.current!.style.transform = `translateX(-${nextPage * 960}px)`
+    if (slidesRef.current !== null) {
+      slidesRef.current.style.transform = `translateX(-${nextPage * 960}px)`
+    }
   }
 
   return (

@@ -34,7 +34,9 @@ export default function RootLayout({
       <body
         className={`${nanumMJ.variable} ${sfBold.variable} ${notoSansLight.variable}`}
       >
-        {children}
+
+          {children}
+        
       </body>
     </html>
   )

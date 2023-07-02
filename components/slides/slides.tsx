@@ -2,17 +2,11 @@
 
 import useSWR from 'swr'
 import type { writings, slideStyles } from '../../types'
-import { fetcher } from '../../lib/fetchData'
 import Image from 'next/image'
 import { ReactElement } from 'react'
 import Book from './book'
 import Writing from './writing'
-import {
-  queryWritings,
-  queryBook,
-  urlBook,
-  urlWritings,
-} from '../../lib/queries'
+import { queryWritings } from '../../lib/queries'
 
 // TODO: Check out whether lazy loading is working
 const slideStyles: Array<slideStyles>[] = [
@@ -25,10 +19,8 @@ export default function Slides() {
   const {
     data: writings,
   }: {
-    data: writings
-  } = useSWR(urlWritings + queryWritings, fetcher, {
-    revalidateOnMount: true,
-  })
+    data: writings | undefined
+  } = useSWR('writings?' + queryWritings)
 
   if (!writings) return null
 
@@ -68,7 +60,7 @@ export default function Slides() {
       <li className="float-left">
         <div className="overflow-hidden w-[960px]">
           {/* brunch book */}
-          <Book url={urlBook + queryBook} />
+          <Book />
           {/* 2 stack writings alongside book*/}
           {writingsWithBook.map((writing) => (
             <a

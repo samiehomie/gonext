@@ -14,7 +14,7 @@ function getRandomElementExcept(arr: string[], except: string) {
 }
 
 const getFilterdUrl = (tag: string) => {
-  const query = qs.stringify(
+  const queryTags = qs.stringify(
     {
       fields: ['Name', 'Introduction', 'Job', 'Tags'],
       populate: {
@@ -33,7 +33,7 @@ const getFilterdUrl = (tag: string) => {
       encodeValuesOnly: true,
     },
   )
-  return `${process.env.NEXT_PUBLIC_DB_URL}/api/authors?${query}`
+  return queryTags
 }
 
 const tags = ['사랑', '여행', '가족']
@@ -51,16 +51,11 @@ function AuthorsGroup({
   tag: string
   tagsState: typeof initialState
 }) {
-  const url = getFilterdUrl(tag)
-  const { data: authors }: { data: authorsWeekly } = useSWR(
-    regexInvalidQuery.test(url) ? null : url,
-    fetcher,
-    {
-      revalidateOnMount: true,
-    },
+  const query = getFilterdUrl(tag)
+  const { data: authors }: { data: authorsWeekly | undefined } = useSWR(
+    regexInvalidQuery.test(query) ? null : 'authors?' + query,
   )
 
-  if (regexInvalidQuery.test(url)) return null
   if (!authors) return null
 
   return (
