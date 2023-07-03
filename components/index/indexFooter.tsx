@@ -21,7 +21,7 @@ const menuItems = [
 
 export default function IndexFooter() {
   return (
-    <footer className="bg-[#101010] h-[353px]">
+    <footer className="index-footer bg-[#101010] h-[353px]">
       <div className="pt-[48px] m-auto relative w-[960px] text-[14px] font-noto_sans_light">
         <div className="mb-[35px] after:content-[''] after:clear-both after:block">
           <div
@@ -72,7 +72,10 @@ export default function IndexFooter() {
                     after:content-[''] after:clear-both after:block"
         >
           <small className="mt-[2px] ml-[-1px] float-left">
-            <a href="#" className="text-[11px] text-[#fff] font-[Georgia] italic opacity-50">
+            <a
+              href="#"
+              className="text-[11px] text-[#fff] font-[Georgia] italic opacity-50"
+            >
               @ Sam
             </a>
           </small>

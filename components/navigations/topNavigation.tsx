@@ -6,9 +6,11 @@ import SuggestBox from '../modals/suggestBox'
 export default function TopNavigation({
   onSearch,
   setOnSearch,
+  setOnStart,
 }: {
   onSearch: boolean
   setOnSearch: (onSearch: boolean) => void
+  setOnStart: (onSearch: boolean) => void
 }) {
   const [isFloat, setIsFloat] = useState(false)
 
@@ -78,15 +80,14 @@ export default function TopNavigation({
                 </a>
               </h1>
             </div>
-            <div
-              className={`float-right ${onSearch && 'hidden'}`}
-              onClick={() => {
-                setOnSearch(true)
-                document.body.style.overflowY = 'scroll'
-              }}
-            >
+            <div className={`float-right ${onSearch && 'hidden'}`}>
               <div>
                 <button
+                  onClick={() => {
+                    setOnSearch(true)
+                    document.body.style.overflowY = 'scroll'
+                    document.body.classList.add('brunch-suggest')
+                  }}
                   className={`leading-none overflow-hidden 
                           indent-[-999px] inline-block h-[22px] w-[22px] 
                           bg-[-30px_0px] bg-ico-brunch-sub float-right 
@@ -99,6 +100,7 @@ export default function TopNavigation({
             <div className={`float-right ${onSearch && 'hidden'}`}>
               <a
                 href="#"
+                onClick={() => setOnStart(true)}
                 className={`text-[#666] leading-[28px] w-[64px] h-[28px]
                           border boder-solid border-[#959595] text-center 
                           font-sans float-right mt-[-5px]

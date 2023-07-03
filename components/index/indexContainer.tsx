@@ -7,6 +7,8 @@ import WritersWeekly from './writersWeekly'
 import Keywords from './keywords'
 import RecommendArticle from './recommendArticle'
 import { SWRConfig } from 'swr'
+import IndexStart from './indexStart'
+
 
 function MainContent() {
   return (
@@ -56,6 +58,7 @@ function MainContent() {
 
 export default function IndexContainer() {
   const [onSearch, setOnSearch] = useState(false)
+  const [onStart, setOnStart] = useState(false)
   return (
     <SWRConfig
       value={{
@@ -66,8 +69,13 @@ export default function IndexContainer() {
       }}
     >
       <div className={`relative overflow-hidden`}>
+        {onStart && <IndexStart setOnStart={setOnStart} />}
         {!onSearch && <TopBanner />}
-        <TopNavigation onSearch={onSearch} setOnSearch={setOnSearch} />
+        <TopNavigation
+          onSearch={onSearch}
+          setOnSearch={setOnSearch}
+          setOnStart={setOnStart}
+        />
         {!onSearch && <MainContent />}
         {!onSearch && <Keywords />}
         {!onSearch && <WritersWeekly />}

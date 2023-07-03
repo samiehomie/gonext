@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useRef, useEffect, FormEvent } from 'react'
-import { fetcher } from '@/lib/fetchData'
 import { getSearchQuery, regexInvalidQuery } from '@/lib/utils'
 import useSWR from 'swr'
 import qs from 'qs'
@@ -14,6 +13,7 @@ import type {
 import Image from 'next/image'
 import { debounce } from 'lodash'
 
+// TODO: #4 Broken layout as its width returns to initial size on remount
 const queryAuthors = qs.stringify(
   {
     fields: ['Name', 'Introduction'],
@@ -359,7 +359,10 @@ export default function SuggestBox({
       </div>
       <button
         className="absolute block right-[32px] top-[31px]"
-        onClick={() => setOnSearch(false)}
+        onClick={() => {
+          setOnSearch(false)
+          document.body.classList.remove('brunch-suggest')
+        }}
       >
         <span
           className="block text-[0px] leading-none 

@@ -114,4 +114,7 @@ body {
     letter-spacing: -0.025em;
     word-break: break-all;
   }
+  .brunch-suggest .index-footer {
+    display: none;
+  }
 }
