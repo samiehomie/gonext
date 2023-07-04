@@ -4,15 +4,9 @@ import { useState, useRef, useEffect, FormEvent } from 'react'
 import { getSearchQuery, regexInvalidQuery } from '@/lib/utils'
 import useSWR from 'swr'
 import qs from 'qs'
-import type {
-  authorsForSuggest,
-  writingTitles,
-  books,
-  authors,
-} from '../../types'
+import type { writings, books, authors } from '../../types'
 import Image from 'next/image'
 import { debounce } from 'lodash'
-
 
 const queryAuthors = qs.stringify(
   {
@@ -31,7 +25,7 @@ const queryAuthors = qs.stringify(
 )
 
 function SuggestList() {
-  const { data: authors }: { data: authorsForSuggest | undefined } = useSWR(
+  const { data: authors }: { data: authors | undefined } = useSWR(
     'authors?' + queryAuthors,
   )
 
@@ -50,7 +44,9 @@ function SuggestList() {
           >
             <a href="#" className="block">
               <Image
-                src={author.attributes.Profile.data.attributes.url}
+                src={
+                  author.attributes.Profile?.data.attributes.url as string
+                }
                 alt={author.attributes.Name}
                 width={120}
                 height={120}
@@ -115,7 +111,7 @@ function SearchSide({ searchWord }: { searchWord: string }) {
             </div>
           </div>
         ) : (
-          booksData.data.slice(0, 3).map((book) => (
+          booksData.data.map((book) => (
             <div className="pt-[8px] pb-[2px]" key={book.id}>
               <div className="pt-[11px] max-h-[298px] overflow-hidden suggest-list">
                 <div className="relative pl-[50px]">
@@ -125,7 +121,8 @@ function SearchSide({ searchWord }: { searchWord: string }) {
                   >
                     <Image
                       src={
-                        book.attributes.Cover.data.attributes.formats.small.url
+                        book.attributes.Cover?.data.attributes.formats
+                          .small.url as string
                       }
                       alt={book.attributes.Title}
                       width={36}
@@ -167,7 +164,7 @@ function SearchSide({ searchWord }: { searchWord: string }) {
             </div>
           </div>
         ) : (
-          authorsData.data.slice(0, 3).map((author) => (
+          authorsData.data.map((author) => (
             <div className="pt-[8px] pb-[2px]" key={author.id}>
               <div className="pt-[11px] max-h-[298px] overflow-hidden suggest-list">
                 <div className="relative pl-[50px]">
@@ -177,8 +174,8 @@ function SearchSide({ searchWord }: { searchWord: string }) {
                   >
                     <Image
                       src={
-                        author.attributes.Profile.data.attributes.formats
-                          .thumbnail.url
+                        author.attributes.Profile?.data.attributes.formats
+                          .thumbnail.url as string
                       }
                       alt={author.attributes.Name}
                       width={36}
@@ -211,7 +208,7 @@ function SearchList({ searchWord }: { searchWord: string }) {
   const {
     data: writingData,
   }: {
-    data: writingTitles | undefined
+    data: writings | undefined
   } = useSWR(
     regexInvalidQuery.test(queryWritings) ? null : 'writings?' + queryWritings,
   )
@@ -238,15 +235,15 @@ function SearchList({ searchWord }: { searchWord: string }) {
               </div>
             </div>
           ) : (
-            writingData.data.slice(0, 7).map((title) => (
-              <li key={title.id} className="mt-[26px] box-border">
+            writingData.data.slice(0, 7).map((writing) => (
+              <li key={writing.id} className="mt-[26px] box-border">
                 <a href="#">
                   <div className="max-w-[620px] overflow-hidden whitespace-nowrap text-ellipsis">
                     <strong
                       className="leading-none text-[20px] font-normal 
                       overflow-hidden whitespace-nowrap text-ellipsis"
                       dangerouslySetInnerHTML={{
-                        __html: title.attributes.Title.replaceAll(
+                        __html: writing.attributes.Title.replaceAll(
                           searchWord,
                           `<b style="color: #00c6be; font-weight: normal">${searchWord}</b>`,
                         ),

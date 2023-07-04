@@ -1,10 +1,9 @@
 'use client'
 import { useState } from 'react'
 import useSWR from 'swr'
-import { fetcher } from '@/lib/fetchData'
 import { regexInvalidQuery } from '@/lib/utils'
 import qs from 'qs'
-import type { authorsWeekly } from '@/types'
+import type { authors } from '@/types'
 import Image from 'next/image'
 
 function getRandomElementExcept(arr: string[], except: string) {
@@ -52,7 +51,7 @@ function AuthorsGroup({
   tagsState: typeof initialState
 }) {
   const query = getFilterdUrl(tag)
-  const { data: authors }: { data: authorsWeekly | undefined } = useSWR(
+  const { data: authors }: { data: authors | undefined } = useSWR(
     regexInvalidQuery.test(query) ? null : 'authors?' + query,
   )
 
@@ -76,7 +75,7 @@ function AuthorsGroup({
             className="bg-[#fff] block min-h-[288px] py-[46px] px-[40px]"
           >
             <Image
-              src={author.attributes.Profile.data.attributes.url}
+              src={author.attributes.Profile?.data.attributes.url as string}
               alt={author.attributes.Name}
               width={80}
               height={80}

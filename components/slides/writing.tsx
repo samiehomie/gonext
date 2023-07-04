@@ -2,18 +2,19 @@
 import Image from 'next/image'
 import { writing, slideStyles } from '@/types'
 import { removeMarkdownImages } from '../../lib/utils'
+import Link from 'next/link'
 
 export default function Writing({
   writing,
   boxType,
 }: {
-  writing: writing
+  writing: writing['data']
   boxType: slideStyles
 }) {
   return (
-    <a
+    <Link
       key={writing.id}
-      href="#"
+      href={`/${writing.attributes.author?.data.id}/${writing.id}`}
       className={`${
         boxType === 'hor'
           ? 'w-1/2 h-[260px]'
@@ -27,7 +28,7 @@ export default function Writing({
       } group block relative float-left overflow-hidden`}
     >
       <Image
-        src={writing.attributes.Cover.data.attributes.formats.small.url}
+        src={writing.attributes.Cover?.data.attributes.formats.small.url as string}
         fill={true}
         className="object-cover object-cneter 
                         transition-transform duration-300
@@ -64,7 +65,7 @@ export default function Writing({
             >
               by
             </span>
-            {` ${writing.attributes.author.data.attributes.Name}`}
+            {` ${writing.attributes.author?.data.attributes.Name}`}
           </span>
         </div>
         <div className="h-full overflow-hidden inline-block align-middle"></div>
@@ -74,6 +75,6 @@ export default function Writing({
                         bg-[#333] opacity-40 transition-opacity duration-300 ease-in-out 
                         group-hover:opacity-50"
       ></div>
-    </a>
+    </Link>
   )
 }

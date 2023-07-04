@@ -7,6 +7,7 @@ import { ReactElement } from 'react'
 import Book from './book'
 import Writing from './writing'
 import { queryWritings } from '../../lib/queries'
+import Link from 'next/link'
 
 // TODO: Check out whether lazy loading is working
 const slideStyles: Array<slideStyles>[] = [
@@ -68,14 +69,19 @@ export default function Slides() {
           <Book />
           {/* 2 stack writings alongside book*/}
           {writingsWithBook.map((writing) => (
-            <a
+            <Link
               key={writing.id}
-              href="#"
+              href={`/${writing.attributes.author?.data.id as number}/${
+                writing.id
+              }`}
               className="group block w-1/2 h-[260px]
                         relative float-left overflow-hidden"
             >
               <Image
-                src={writing.attributes.Cover.data.attributes.formats.small.url}
+                src={
+                  writing.attributes.Cover?.data.attributes.formats.small
+                    .url as string
+                }
                 fill={true}
                 className="object-cover object-cneter 
                           transition-transform duration-300
@@ -101,7 +107,9 @@ export default function Slides() {
                     >
                       by
                     </span>
-                    {` ${writing.attributes.author.data.attributes.Name}`}
+                    {` ${
+                      writing.attributes.author?.data.attributes.Name as string
+                    }`}
                   </span>
                 </div>
                 <div className="h-full overflow-hidden inline-block align-middle"></div>
@@ -111,7 +119,7 @@ export default function Slides() {
                           opacity-40 transition-opacity duration-300 ease-in-out 
                           group-hover:opacity-50"
               ></div>
-            </a>
+            </Link>
           ))}
         </div>
       </li>

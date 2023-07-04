@@ -1,24 +1,20 @@
 'use client'
 import Image from 'next/image'
 import moment from 'moment'
-import { singleBookHasCover } from '@/types'
+import { book } from '@/types'
 import { queryBook } from '@/lib/queries'
 import useSWR from 'swr'
 
 export default function Book() {
-  const { data: bookData }: { data: singleBookHasCover | undefined } = useSWR(
+  const { data: bookData }: { data: book | undefined } = useSWR(
     'books/1?' + queryBook,
   )
 
   if (!bookData) return null
 
-  const {
-    Title: title,
-    publishedAt,
-    author,
-    Cover: cover,
-  } = bookData.data.attributes
-  const imgUrl = cover.data.attributes.formats.small.url
+  const { Title: title, publishedAt, Cover: cover } = bookData.data.attributes
+  const imgUrl = cover?.data.attributes.formats.small.url
+  const author = bookData.data.attributes.author?.data
   const date = moment(publishedAt).format('MMM.DD.YYYY')
 
   return (
@@ -52,7 +48,7 @@ export default function Book() {
                   after:blur-[1px] after:opacity-[.12]"
       >
         <Image
-          src={imgUrl}
+          src={imgUrl as string}
           width={230}
           height={324}
           className="object-cover object-cneter rounded-[2px_7px_7px_2px] box-border block "
@@ -74,7 +70,7 @@ export default function Book() {
                        w-full left-0 px-[10px] overflow-hidden max-h-[35px]
                        text-[11px] leading-[16px] break-all text-ellipsis txt-writer"
           >
-            {author.data.attributes.Name}
+            {author?.attributes.Name}
           </span>
         </div>
         <span

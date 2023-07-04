@@ -28,6 +28,10 @@ export function getSearchQuery(searchWord: string) {
     {
       fields: ['Title'],
       filters: { Title: { $contains: searchWord } },
+      pagination: {
+        page: 1,
+        pageSize: 7,
+      },
     },
     {
       encodeValuesOnly: true,
@@ -42,7 +46,12 @@ export function getSearchQuery(searchWord: string) {
         },
       },
       filters: { Title: { $contains: searchWord } },
+      pagination: {
+        page: 1,
+        pageSize: 3,
+      },
     },
+
     {
       encodeValuesOnly: true,
     },
@@ -56,6 +65,10 @@ export function getSearchQuery(searchWord: string) {
         },
       },
       filters: { Name: { $contains: searchWord } },
+      pagination: {
+        page: 1,
+        pageSize: 3,
+      },
     },
     {
       encodeValuesOnly: true,

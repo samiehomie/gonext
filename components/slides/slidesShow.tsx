@@ -1,6 +1,7 @@
 'use client'
 import { useRef, useEffect } from 'react'
 import Slides from './slides'
+import Link from 'next/link'
 
 function Pagination({
   pageNumber,

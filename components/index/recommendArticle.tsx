@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useEffect, useMemo } from 'react'
+import { useRef, useEffect } from 'react'
 import useSWRInfinite from 'swr/infinite'
 import { writing, writings } from '../../types'
 import { removeMarkdownImages, getWritingsQuery } from '../../lib/utils'
@@ -7,10 +7,13 @@ import Image from 'next/image'
 
 // TODO: #4 Broken layout as its width returns to initial size on remount
 
-function calcHeight(data: writing, height: number) {
+function calcHeight(data: writing['data'], height: number) {
   return (
-    data.attributes.Cover.data.attributes.formats.small.height *
-    (height / data.attributes.Cover.data.attributes.formats.small.width)
+    (data.attributes.Cover?.data.attributes.formats.small
+      ?.height as number) *
+    (height /
+      (data.attributes.Cover?.data.attributes.formats.small
+        ?.width as number))
   )
 }
 
@@ -80,7 +83,7 @@ export default function RecommendArticle({
   }, [])
 
   if (!writings) return null
-  const { pageCount } = writings[0].meta.pagination
+  const pageCount = writings[0].meta.pagination?.pageCount as number
 
   return (
     <div className="relative">
@@ -118,8 +121,8 @@ export default function RecommendArticle({
                   <div className="mb-[22px] max-h-[320px] overflow-hidden">
                     <Image
                       src={
-                        writing.attributes.Cover.data.attributes.formats.small
-                          .url
+                        writing.attributes.Cover?.data.attributes.formats
+                          .small?.url as string
                       }
                       alt={writing.attributes.Title}
                       width={240}
@@ -144,7 +147,7 @@ export default function RecommendArticle({
                     <span className="mt-[3px] text-[#bfbfbf] italic font-[Georgia]">
                       by
                     </span>
-                    {` ${writing.attributes.author.data.attributes.Name}`}
+                    {` ${writing.attributes.author?.data.attributes.Name}`}
                   </span>
                 </a>
               </li>

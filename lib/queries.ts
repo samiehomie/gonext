@@ -37,5 +37,86 @@ export const queryBook = qs.stringify(
   },
 )
 
+export function getQueryWritingPage(userId: string, writingId: string) {
+  const url = `${process.env.NEXT_PUBLIC_DB_URL}/api/authors/${userId}?`
+  const target = qs.stringify(
+    {
+      fields: ['Name', 'Introduction', 'Job'],
+      populate: {
+        Profile: {
+          fields: 'url',
+        },
+        writings: {
+          filters: {
+            id: {
+              $eq: writingId,
+            },
+          },
+          fields: ['Title', 'Content', 'Created', 'Subtitle', 'Tags'],
+          populate: {
+            Cover: {
+              fields: 'url',
+            },
+          },
+        },
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  )
+  const others = qs.stringify(
+    {
+      fields: ['Name', 'Introduction', 'Job'],
+      populate: {
+        Profile: {
+          fields: 'url',
+        },
+        writings: {
+          filters: {
+            id: {
+              $ne: writingId,
+            },
+          },
+          fields: ['Title', 'Content', 'Created', 'Subtitle', 'Tags'],
+          populate: {
+            Cover: {
+              fields: 'url',
+            },
+          },
+        },
+      },
+      pagination: {
+        pageSize: 6,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  )
+  return [url + target, url + others]
+}
+
+const queryForWritingPage = qs.stringify({
+  fields: ['Name', 'Introduction', 'Job'],
+  populate: {
+    Profile: {
+      fields: 'url',
+    },
+    writings: {
+      filters: {
+        id: {
+          $eq: 1,
+        },
+      },
+      fields: ['Title', 'Content', 'Created', 'Subtitle', 'Tags'],
+      populate: {
+        Cover: {
+          fields: 'url',
+        },
+      },
+    },
+  },
+})
 export const urlBook = `${process.env.NEXT_PUBLIC_DB_URL}/api/books/1?`
 export const urlWritings = `${process.env.NEXT_PUBLIC_DB_URL}/api/writings?`
