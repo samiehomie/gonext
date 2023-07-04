@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import Slides from './slides'
 
 function Pagination({
@@ -40,19 +40,24 @@ function Pagination({
   )
 }
 
-let lastPage = 0
+const endNumber = 8
 
-export default function SlidesShow() {
-  const [page, setPage] = useState(0)
+export default function SlidesShow({
+  page,
+  setPage,
+}: {
+  page: number
+  setPage: (arg: number) => void
+}) {
   const slidesRef = useRef<HTMLUListElement>(null)
-  const endNumber = 8
+  const lastPage = useRef(page)
   const onSlide = (plus: number, pagination = false) => {
     const nextPage = pagination ? plus : page + plus
     if (nextPage < 0 || nextPage > endNumber) {
       return
     }
     setPage(nextPage)
-    lastPage = nextPage
+
     if (slidesRef.current !== null) {
       slidesRef.current.style.transform = `translateX(-${nextPage * 960}px)`
     }
@@ -60,8 +65,9 @@ export default function SlidesShow() {
 
   useEffect(() => {
     if (slidesRef.current !== null) {
-      setPage(lastPage)
-      slidesRef.current.style.transform = `translateX(-${lastPage * 960}px)`
+      slidesRef.current.style.transform = `translateX(-${
+        lastPage.current * 960
+      }px)`
     }
   }, [])
 

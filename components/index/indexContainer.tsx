@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ReactElement } from 'react'
 import TopBanner from '../banners/topBanner'
 import TopNavigation from '../navigations/topNavigation'
 import SlidesShow from '../slides/slidesShow'
@@ -10,7 +10,7 @@ import { SWRConfig } from 'swr'
 import IndexStart from '../modals/indexStart'
 import SideMenu from '../modals/sideMenu'
 
-function MainContent() {
+function MainContent({ children }: { children: ReactElement }) {
   return (
     <article className="text-[12px]">
       <div className="w-[960px] m-auto font-serif_mj">
@@ -51,7 +51,7 @@ function MainContent() {
           </li>
         </ul>
       </div>
-      <SlidesShow />
+      {children}
     </article>
   )
 }
@@ -61,6 +61,8 @@ export default function IndexContainer() {
   const [onStart, setOnStart] = useState(false)
   const [onSide, setOnSide] = useState(false)
   const [onTop, setOnTop] = useState(false)
+  const [cursor, setCursor] = useState(0)
+  const [page, setPage] = useState(0)
 
   useEffect(() => {
     document.addEventListener('click', function handler(e) {
@@ -117,10 +119,16 @@ export default function IndexContainer() {
           setOnStart={setOnStart}
           setOnSide={setOnSide}
         />
-        {!onSearch && <MainContent />}
+        {!onSearch && (
+          <MainContent>
+            <SlidesShow page={page} setPage={setPage}/>
+          </MainContent>
+        )}
         {!onSearch && <Keywords />}
         {!onSearch && <WritersWeekly />}
-        {!onSearch && <RecommendArticle />}
+        {!onSearch && (
+          <RecommendArticle cursor={cursor} setCursor={setCursor} />
+        )}
       </div>
     </SWRConfig>
   )
