@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import TopBanner from '../banners/topBanner'
 import TopNavigation from '../navigations/topNavigation'
 import SlidesShow from '../slides/slidesShow'
@@ -7,8 +7,8 @@ import WritersWeekly from './writersWeekly'
 import Keywords from './keywords'
 import RecommendArticle from './recommendArticle'
 import { SWRConfig } from 'swr'
-import IndexStart from './indexStart'
-
+import IndexStart from '../modals/indexStart'
+import SideMenu from '../modals/sideMenu'
 
 function MainContent() {
   return (
@@ -59,6 +59,34 @@ function MainContent() {
 export default function IndexContainer() {
   const [onSearch, setOnSearch] = useState(false)
   const [onStart, setOnStart] = useState(false)
+  const [onSide, setOnSide] = useState(false)
+  const [onTop, setOnTop] = useState(false)
+
+  useEffect(() => {
+    document.addEventListener('click', function handler(e) {
+      if (
+        e.target instanceof HTMLElement &&
+        !e.target.matches('#side-menu *') &&
+        onSide
+      ) {
+        setOnSide(false)
+        document.removeEventListener('click', handler)
+      }
+    })
+  }, [onSide])
+
+  useEffect(() => {
+    if (window.scrollY >= 1700) {
+      setOnTop(true)
+    }
+    document.addEventListener('scroll', function handler() {
+      if (!onTop && window.scrollY >= 1700) {
+        setOnTop(true)
+        document.removeEventListener('scroll', handler)
+      }
+    })
+  }, [onTop])
+
   return (
     <SWRConfig
       value={{
@@ -69,12 +97,25 @@ export default function IndexContainer() {
       }}
     >
       <div className={`relative overflow-hidden`}>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault()
+            window.scrollTo(0, 0)
+            setOnTop(false)
+          }}
+          className={`block bg-ico-brunch-discover bg-[0px_-90px] 
+                    fixed h-[31px] w-[60px] z-[15] right-[40px] transition-[bottom] duration-500 ease-linear 
+                    ${onTop ? 'bottom-[40px]' : 'bottom-[-80px]'}`}
+        ></a>
+        <SideMenu onSide={onSide} setOnStart={setOnStart} />
         {onStart && <IndexStart setOnStart={setOnStart} />}
         {!onSearch && <TopBanner />}
         <TopNavigation
           onSearch={onSearch}
           setOnSearch={setOnSearch}
           setOnStart={setOnStart}
+          setOnSide={setOnSide}
         />
         {!onSearch && <MainContent />}
         {!onSearch && <Keywords />}

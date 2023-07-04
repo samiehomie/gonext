@@ -124,7 +124,7 @@ export default function IndexStart({
   }, [page, handlePage])
 
   return (
-    <div className="block bg-[rgba(0,0,0,.3)] h-full w-full fixed left-0 top-0 z-[1001]">
+    <div className="block bg-[rgba(0,0,0,.3)] h-full w-full fixed left-0 top-0 z-[1002]">
       <h2 className="screen-out">브런치 로그인</h2>
       <div
         className="bg-white rounded-[15px] inline-block h-[610px] w-[1000px] 

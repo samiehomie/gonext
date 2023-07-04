@@ -5,6 +5,8 @@ import { writing, writings } from '../../types'
 import { removeMarkdownImages, getWritingsQuery } from '../../lib/utils'
 import Image from 'next/image'
 
+// TODO: #4 Broken layout as its width returns to initial size on remount
+
 function calcHeight(data: writing, height: number) {
   return (
     data.attributes.Cover.data.attributes.formats.small.height *

@@ -13,7 +13,7 @@ import type {
 import Image from 'next/image'
 import { debounce } from 'lodash'
 
-// TODO: #4 Broken layout as its width returns to initial size on remount
+
 const queryAuthors = qs.stringify(
   {
     fields: ['Name', 'Introduction'],

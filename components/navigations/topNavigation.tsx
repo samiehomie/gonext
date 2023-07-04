@@ -7,10 +7,12 @@ export default function TopNavigation({
   onSearch,
   setOnSearch,
   setOnStart,
+  setOnSide,
 }: {
   onSearch: boolean
   setOnSearch: (onSearch: boolean) => void
   setOnStart: (onSearch: boolean) => void
+  setOnSide: (onSearch: boolean) => void
 }) {
   const [isFloat, setIsFloat] = useState(false)
 
@@ -50,7 +52,7 @@ export default function TopNavigation({
                       }
                       ${
                         isFloat &&
-                        `border-b border-[#ddd] bg-[hsla(0,0%,100%,.9)] z-[1000]
+                        `border-b border-[#ddd] bg-[hsla(0,0%,100%,.9)] z-[1001]
                           w-full top-0
                         `
                       }
@@ -63,6 +65,8 @@ export default function TopNavigation({
           >
             <div className={`float-left`}>
               <button
+                id="side-menu-button"
+                onClick={() => setOnSide(true)}
                 className={`bg-ico-brunch-sub overflow-hidden 
                         indent-[-999px] leading-none h-[20px] w-[27px] 
                         mr-[14px] bg-[0px_0px] float-left`}
