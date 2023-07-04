@@ -38,7 +38,7 @@ function MainContent() {
         <ul className="h-[18px] overflow-hidden relative font-noto_sans_light">
           <li className="h-full">
             <a href="#">
-              <span className="float-right pl-[7px] text-[#959595]">
+              <span className="float-right pl-[7px] text-[#959595] text-[11.5px]">
                 작가별 알림 기능 신설 및 매거진 개편
               </span>
             </a>

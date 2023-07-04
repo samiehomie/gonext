@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import useSWRInfinite from 'swr/infinite'
 import { writing, writings } from '../../types'
 import { removeMarkdownImages, getWritingsQuery } from '../../lib/utils'
@@ -21,7 +21,8 @@ const getKey = (pageIndex: number, previousPageData: writings) => {
 
 const slideGroupActions = 7
 let previousSection = 1
-
+let section = 1
+let lastCursor = 0
 export default function RecommendArticle() {
   const slidesRef = useRef<HTMLUListElement>(null)
   const [cursor, setCursor] = useState(0)
@@ -37,28 +38,41 @@ export default function RecommendArticle() {
   } = useSWRInfinite(getKey, { initialSize: 1 })
 
   const onNext = () => {
-    const nextPage = cursor + 1
-    const section = Math.floor(nextPage / slideGroupActions) + 1
+    const nextCursor = cursor + 1
+    section = Math.floor(nextCursor / slideGroupActions) + 1
 
     if (previousSection < section) {
       previousSection = section
       setSize(size + 1)
     }
-    setCursor(nextPage)
+    lastCursor = nextCursor
+    setCursor(nextCursor)
 
-    slidesRef.current!.style.transform = `translateX(-${nextPage * 960}px)`
+    slidesRef.current!.style.transform = `translateX(-${nextCursor * 960}px)`
     slidesRef.current!.style.width = `${
       7800 * Math.max(section, previousSection)
     }px`
   }
 
   const onPrev = () => {
-    const nextPage = cursor - 1
-    if (nextPage < 0) return
-    setCursor(nextPage)
+    const nextCursor = cursor - 1
+    if (nextCursor < 0) return
 
-    slidesRef.current!.style.transform = `translateX(-${nextPage * 960}px)`
+    lastCursor = nextCursor
+    setCursor(nextCursor)
+
+    slidesRef.current!.style.transform = `translateX(-${nextCursor * 960}px)`
   }
+
+  useEffect(() => {
+    if (slidesRef.current !== null) {
+      setCursor(lastCursor)
+      slidesRef.current.style.width = `${
+        7800 * Math.max(section, previousSection)
+      }px`
+      slidesRef.current.style.transform = `translateX(-${lastCursor * 960}px)`
+    }
+  }, [])
 
   if (!writings) return null
   const { pageCount } = writings[0].meta.pagination

@@ -13,6 +13,11 @@ const slideStyles: Array<slideStyles>[] = [
   ['ver', 'ver', 'ver'],
   ['hor', 'hor', 'hor', 'hor'],
   ['big', 'hor', 'hor'],
+  ['ver', 'ver', 'ver'],
+  ['long', 'short', 'short', 'short'],
+  ['big', 'hor', 'hor'],
+  ['ver', 'ver', 'ver'],
+  ['long', 'short', 'short', 'short'],
 ]
 
 export default function Slides() {

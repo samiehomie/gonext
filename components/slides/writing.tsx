@@ -1,9 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { writing, slideStyles } from '@/types'
-import {removeMarkdownImages} from '../../lib/utils'
-
-
+import { removeMarkdownImages } from '../../lib/utils'
 
 export default function Writing({
   writing,
@@ -21,6 +19,10 @@ export default function Writing({
           ? 'w-1/2 h-[260px]'
           : boxType === 'big'
           ? 'w-1/2 h-[520px]'
+          : boxType === 'long'
+          ? 'w-full h-[320px]'
+          : boxType === 'short'
+          ? 'w-[320px] h-[200px]'
           : 'w-[320px] h-[520px]'
       } group block relative float-left overflow-hidden`}
     >

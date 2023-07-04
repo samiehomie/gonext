@@ -446,7 +446,6 @@ const author = {
   },
 }
 
-
 export type authors = {
   data: (typeof author)[]
   meta: {
@@ -505,7 +504,7 @@ export type writings = {
   }
 }
 
-export type slideStyles = 'hor' | 'ver' | 'big'
+export type slideStyles = 'hor' | 'ver' | 'big' | 'long' | 'short'
 
 export type commonShape = {
   data: object[]

@@ -11,6 +11,9 @@ export const queryWritings = qs.stringify(
         fields: ['formats'],
       },
     },
+    pagination: {
+      pageSize: 29,
+    },
   },
   {
     encodeValuesOnly: true,
