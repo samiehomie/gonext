@@ -117,4 +117,7 @@ body {
   .brunch-suggest .index-footer {
     display: none;
   }
+  .wordspacing-60 {
+    word-spacing: -0.06em;
+  }
 }

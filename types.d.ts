@@ -219,3 +219,24 @@ export type books = {
 }
 
 export type slideStyles = 'hor' | 'ver' | 'big' | 'long' | 'short'
+
+export type dimensions = { width: number; height: number; type: string }
+
+export type imgAttrsMDX = { src: string; alt: string }
+
+export type paraTextAttrsMDX = { children: string }
+
+export type paraImgAttrsMDX = {
+  children: {
+    $$typeof: Symbol
+    type: [AsyncFunction: string]
+    key: null
+    ref: null
+    props: {
+      src: string
+      alt: string
+    }
+    _owner: null
+    _store: {}
+  }
+}
