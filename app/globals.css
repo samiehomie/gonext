@@ -21,7 +21,7 @@
 }
 
 body {
-  color: #333;
+  color: #8d8d8d;
 }
 
 @keyframes animation_up {
@@ -46,6 +46,12 @@ body {
   }
   .txt-writer {
     -webkit-line-clamp: 2;
+  }
+  .vertical-three-box {
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    display: box;
   }
 }
 
@@ -83,6 +89,29 @@ body {
     line-height: 22px;
     margin: 0 4px;
     padding: 4px 14px;
+  }
+  .writing-tag {
+    border: 1px solid #ddd;
+    border-radius: 28px;
+    color: #959595;
+    display: block;
+    font-size: 12px;
+    height: 26px;
+    letter-spacing: -1px;
+    line-height: 26px;
+    min-width: 14px;
+    padding: 0 10px;
+    text-align: center;
+  }
+  .comment-button {
+    background-color: #fff;
+    border: 1px solid #bbb;
+    border-radius: 42px;
+    color: #666;
+    float: left;
+    font-size: 13px;
+    margin-left: 8px;
+    padding: 10px 20px 8px 19px;
   }
   .clear-both {
     clear: both;

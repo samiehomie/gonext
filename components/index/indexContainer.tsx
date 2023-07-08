@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, ReactElement } from 'react'
 import TopBanner from '../banners/topBanner'
-import TopNavigation from '../navigations/topNavigation'
+import IndexTopNavigation from '../navigations/indexTopNavigation'
 import SlidesShow from '../slides/slidesShow'
 import WritersWeekly from './writersWeekly'
 import Keywords from './keywords'
@@ -68,7 +68,7 @@ export default function IndexContainer() {
     document.addEventListener('click', function handler(e) {
       if (
         e.target instanceof HTMLElement &&
-        !e.target.matches('#side-menu *') &&
+        !e.target.matches('#side-menu, #side-menu *') &&
         onSide
       ) {
         setOnSide(false)
@@ -113,7 +113,7 @@ export default function IndexContainer() {
         <SideMenu onSide={onSide} setOnStart={setOnStart} />
         {onStart && <IndexStart setOnStart={setOnStart} />}
         {!onSearch && <TopBanner />}
-        <TopNavigation
+        <IndexTopNavigation
           onSearch={onSearch}
           setOnSearch={setOnSearch}
           setOnStart={setOnStart}
@@ -121,7 +121,7 @@ export default function IndexContainer() {
         />
         {!onSearch && (
           <MainContent>
-            <SlidesShow page={page} setPage={setPage}/>
+            <SlidesShow page={page} setPage={setPage} />
           </MainContent>
         )}
         {!onSearch && <Keywords />}

@@ -12,8 +12,10 @@ module.exports = {
         'ico-brunch-main': "url('../public/ico-brunch-main.png')",
         'ico-brunch-sub': "url('../public/ico-brunch-sub.png')",
         'ico-brunch-sub2': "url('../public/ico-brunch-sub2.png')",
+        'ico-brunch-sub3': "url('../public/ico-brunch-sub3.png')",
         'ico-weekly': "url('../public/ico-weekly.png')",
         'ico-brunch-discover': "url('../public/ico-brunch-discover.png')",
+        'ico-article-buttons': "url('../public/ico-article-btn.png')",
         'line-type-03': "url('../public/line-type-03.png')",
         'book-blur': "url('../public/bg-bookblur.png')",
         'book-cover': 'linear-gradient(-180deg, #f4f4f4, #dedede 82%)',
@@ -24,6 +26,7 @@ module.exports = {
       fontFamily: {
         serif_mj: ['var(--font-nanum-mj)'],
         sf_bold: ['var(--font-sf-bold)'],
+        sf_light: ['var(--font-sf-light)'],
         noto_sans_light: ['var(--font-noto-sans-light)'],
       },
     },

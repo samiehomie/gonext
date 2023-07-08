@@ -1,19 +1,13 @@
 'use client'
 import { useEffect, useState } from 'react'
-import SuggestBox from '../modals/suggestBox'
 
 // TODO: #1 Implement search modal and right hidden menu
 export default function TopNavigation({
-  onSearch,
-  setOnSearch,
-  setOnStart,
-  setOnSide,
+  children,
 }: {
-  onSearch: boolean
-  setOnSearch: (onSearch: boolean) => void
-  setOnStart: (onSearch: boolean) => void
-  setOnSide: (onSearch: boolean) => void
+  children: React.ReactNode
 }) {
+  const [onSide, setOnSide] = useState(false)
   const [isFloat, setIsFloat] = useState(false)
 
   function handlerDown() {
@@ -58,11 +52,7 @@ export default function TopNavigation({
                       }
                       `}
         >
-          <div
-            className={`${!isFloat ? 'mt-[30px]' : 'mt-[20px]'} mx-[30px] ${
-              onSearch && 'relative z-[10]'
-            }`}
-          >
+          <div className={`${!isFloat ? 'mt-[30px]' : 'mt-[20px]'} mx-[30px]`}>
             <div className={`float-left`}>
               <button
                 id="side-menu-button"
@@ -84,37 +74,8 @@ export default function TopNavigation({
                 </a>
               </h1>
             </div>
-            <div className={`float-right ${onSearch && 'hidden'}`}>
-              <div>
-                <button
-                  onClick={() => {
-                    setOnSearch(true)
-                    document.body.style.overflowY = 'scroll'
-                    document.body.classList.add('brunch-suggest')
-                  }}
-                  className={`leading-none overflow-hidden 
-                          indent-[-999px] inline-block h-[22px] w-[22px] 
-                          bg-[-30px_0px] bg-ico-brunch-sub float-right 
-                          align-middle ml-[16px]`}
-                >
-                  검색
-                </button>
-              </div>
-            </div>
-            <div className={`float-right ${onSearch && 'hidden'}`}>
-              <a
-                href="#"
-                onClick={() => setOnStart(true)}
-                className={`text-[#666] leading-[28px] w-[64px] h-[28px]
-                          border boder-solid border-[#959595] text-center 
-                          font-sans float-right mt-[-5px]
-                          rounded-[16px] text-[12px] opacity-90`}
-              >
-                시작하기
-              </a>
-            </div>
           </div>
-          {onSearch && <SuggestBox setOnSearch={setOnSearch} />}
+          {children}
         </div>
       </div>
     </div>

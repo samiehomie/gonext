@@ -63,7 +63,7 @@ const components = {
       const { width, height } = await getImgSize(props.children.props.src)
       const { src, alt } = props.children.props
       return (
-        <div className="mt-[20px] w-full min-w-[940px]">
+        <div className="mt-[20px] w-full min-w-[940px] peer only-image">
           <div className="w-[700px] m-auto">
             <Image
               src={src}
@@ -77,12 +77,24 @@ const components = {
       )
     } else {
       return (
-        <h4
-          className="font-noto_sans_light text-[11pt] m-auto 
-                    w-[700px] min-w-[700px] text-left leading-[22pt] tracking-[.8px]"
-        >
-          {props.children as string}
-        </h4>
+        <>
+          <h4
+            className="first:mt-[-7px] font-noto_sans_light text-[11pt] m-auto text-[#8d8d8d]
+                    w-[700px] min-w-[700px] text-justify leading-[22pt] tracking-[.8px] peer-[.only-image]:mt-[13px]"
+          >
+            <span
+              dangerouslySetInnerHTML={{
+                __html: (props.children as string).replaceAll('\n', '<br />'),
+              }}
+            />
+          </h4>
+          <h4
+            className="first:mt-[-7px] font-noto_sans_light text-[11pt] m-auto 
+                    w-[700px] min-w-[700px] text-justify leading-[22pt] tracking-[.8px]"
+          >
+            <br />
+          </h4>
+        </>
       )
     }
   },
