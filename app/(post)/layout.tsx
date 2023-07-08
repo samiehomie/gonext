@@ -1,5 +1,5 @@
 import TopNavigation from '@/components/navigations/topNavigation'
-
+import ScrollIndicator from '@/components/navigations/scrollIndicator'
 export default function PostLayout({
   children,
 }: {
@@ -8,7 +8,7 @@ export default function PostLayout({
   return (
     <div>
       <TopNavigation>
-        <div></div>
+        <ScrollIndicator />
       </TopNavigation>
       {children}
     </div>

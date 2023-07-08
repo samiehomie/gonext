@@ -9,7 +9,6 @@ import type {
   paraImgAttrsMDX,
   paraTextAttrsMDX,
 } from '@/types'
-import { divide } from 'lodash'
 
 async function getImgSize(imgUrl: string) {
   const options = new URL(imgUrl)

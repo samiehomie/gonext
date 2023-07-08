@@ -4,16 +4,15 @@ import useSWRInfinite from 'swr/infinite'
 import { writing, writings } from '../../types'
 import { removeMarkdownImages, getWritingsQuery } from '../../lib/utils'
 import Image from 'next/image'
+import Link from 'next/link'
 
-// TODO: #4 Broken layout as its width returns to initial size on remount
+// TODO: Layout is cut off when the screen is resized
 
 function calcHeight(data: writing['data'], height: number) {
   return (
-    (data.attributes.Cover?.data.attributes.formats.small
-      ?.height as number) *
+    (data.attributes.Cover?.data.attributes.formats.small?.height as number) *
     (height /
-      (data.attributes.Cover?.data.attributes.formats.small
-        ?.width as number))
+      (data.attributes.Cover?.data.attributes.formats.small?.width as number))
   )
 }
 
@@ -117,12 +116,15 @@ export default function RecommendArticle({
                 className="inline-block overflow-hidden px-[10px] w-[240px] 
                         align-top float-left"
               >
-                <a href="#" className="block">
+                <Link
+                  href={`/${writing.attributes.author?.data.id}/${writing.id}`}
+                  className="block"
+                >
                   <div className="mb-[22px] max-h-[320px] overflow-hidden">
                     <Image
                       src={
-                        writing.attributes.Cover?.data.attributes.formats
-                          .small?.url as string
+                        writing.attributes.Cover?.data.attributes.formats.small
+                          ?.url as string
                       }
                       alt={writing.attributes.Title}
                       width={240}
@@ -149,7 +151,7 @@ export default function RecommendArticle({
                     </span>
                     {` ${writing.attributes.author?.data.attributes.Name}`}
                   </span>
-                </a>
+                </Link>
               </li>
             ))
           })}

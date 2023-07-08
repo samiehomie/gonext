@@ -8,7 +8,6 @@ import Keywords from './keywords'
 import RecommendArticle from './recommendArticle'
 import { SWRConfig } from 'swr'
 import IndexStart from '../modals/indexStart'
-import SideMenu from '../modals/sideMenu'
 
 function MainContent({ children }: { children: ReactElement }) {
   return (
@@ -59,30 +58,25 @@ function MainContent({ children }: { children: ReactElement }) {
 export default function IndexContainer() {
   const [onSearch, setOnSearch] = useState(false)
   const [onStart, setOnStart] = useState(false)
-  const [onSide, setOnSide] = useState(false)
   const [onTop, setOnTop] = useState(false)
   const [cursor, setCursor] = useState(0)
   const [page, setPage] = useState(0)
 
   useEffect(() => {
-    document.addEventListener('click', function handler(e) {
-      if (
-        e.target instanceof HTMLElement &&
-        !e.target.matches('#side-menu, #side-menu *') &&
-        onSide
-      ) {
-        setOnSide(false)
-        document.removeEventListener('click', handler)
-      }
-    })
-  }, [onSide])
-
-  useEffect(() => {
-    if (window.scrollY >= 1700) {
+    const winScroll =
+      document.body.scrollTop || document.documentElement.scrollTop
+    if (winScroll >= 1700) {
       setOnTop(true)
+    } else {
+      setOnTop(false)
     }
     document.addEventListener('scroll', function handler() {
-      if (!onTop && window.scrollY >= 1700) {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop
+
+      if (winScroll < 1700) setOnTop(false)
+
+      if (!onTop && winScroll >= 1700) {
         setOnTop(true)
         document.removeEventListener('scroll', handler)
       }
@@ -110,14 +104,14 @@ export default function IndexContainer() {
                     fixed h-[31px] w-[60px] z-[15] right-[40px] transition-[bottom] duration-500 ease-linear 
                     ${onTop ? 'bottom-[40px]' : 'bottom-[-80px]'}`}
         ></a>
-        <SideMenu onSide={onSide} setOnStart={setOnStart} />
+
         {onStart && <IndexStart setOnStart={setOnStart} />}
         {!onSearch && <TopBanner />}
         <IndexTopNavigation
           onSearch={onSearch}
           setOnSearch={setOnSearch}
           setOnStart={setOnStart}
-          setOnSide={setOnSide}
+          
         />
         {!onSearch && (
           <MainContent>

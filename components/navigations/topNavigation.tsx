@@ -1,7 +1,9 @@
 'use client'
 import { useEffect, useState } from 'react'
+import SideMenu from '../modals/sideMenu'
 
 // TODO: #1 Implement search modal and right hidden menu
+
 export default function TopNavigation({
   children,
 }: {
@@ -11,13 +13,17 @@ export default function TopNavigation({
   const [isFloat, setIsFloat] = useState(false)
 
   function handlerDown() {
-    if (window.scrollY >= 400) {
+    const winScroll =
+      document.body.scrollTop || document.documentElement.scrollTop
+    if (winScroll >= 400) {
       setIsFloat(true)
     }
   }
 
   function handlerUp() {
-    if (window.scrollY < 400) {
+    const winScroll =
+      document.body.scrollTop || document.documentElement.scrollTop
+    if (winScroll < 400) {
       setIsFloat(false)
     }
   }
@@ -35,49 +41,47 @@ export default function TopNavigation({
   }, [isFloat])
 
   return (
-    <div>
-      <div className={`h-[60px]`}>
-        <div
-          className={`float-left transition duration-300 ease-in-out
-                      ${
-                        !isFloat
-                          ? 'h-[40px] w-full static'
-                          : 'h-[60px] fixed box-border'
-                      }
-                      ${
-                        isFloat &&
-                        `border-b border-[#ddd] bg-[hsla(0,0%,100%,.9)] z-[1001]
-                          w-full top-0
-                        `
-                      }
-                      `}
-        >
-          <div className={`${!isFloat ? 'mt-[30px]' : 'mt-[20px]'} mx-[30px]`}>
-            <div className={`float-left`}>
-              <button
-                id="side-menu-button"
-                onClick={() => setOnSide(true)}
-                className={`bg-ico-brunch-sub overflow-hidden 
+    <>
+      <SideMenu onSide={onSide} setOnStart={() => null} setOnSide={setOnSide} />
+      <div
+        className={`transition duration-300
+                  ease-in top-0 w-full z-[100] 
+                  ${
+                    !isFloat
+                      ? 'overflow-hidden absolute h-[80px]'
+                      : 'fixed border-b border-[#ddd] h-[59px] overflow-visible bg-[hsla(0,0%,100%,.9)] box-border'
+                  }`}
+      >
+        {children}
+
+        <div className={`${!isFloat ? 'mt-[30px]' : 'mt-[20px]'} mx-[30px]`}>
+          <div className={`float-left`}>
+            <button
+              id="side-menu-button"
+              onClick={() => setOnSide(true)}
+              className={`bg-ico-brunch-sub overflow-hidden 
                         indent-[-999px] leading-none h-[20px] w-[27px] 
-                        mr-[14px] bg-[0px_0px] float-left`}
-              >
-                메뉴
-              </button>
-              <h1 className={`inline-block float-left`}>
-                <a
-                  href="/"
-                  className={`block leading-none indent-[-999px] 
+                        mr-[14px] float-left ${
+                          !isFloat ? 'bg-[0px_-30px]' : 'bg-[0px_0px]'
+                        }`}
+            >
+              메뉴
+            </button>
+            <h1 className={`inline-block float-left`}>
+              <a
+                href="/"
+                className={`block leading-none indent-[-999px] 
                           overflow-hidden w-[120px] h-[22px] mt-[-1px] 
-                          bg-ico-brunch-titles bg-[0px_-80px]`}
-                >
-                  brunch
-                </a>
-              </h1>
-            </div>
+                          bg-ico-brunch-titles ${
+                            !isFloat ? 'bg-[-120px_-80px]' : 'bg-[0px_-80px]'
+                          }`}
+              >
+                brunch
+              </a>
+            </h1>
           </div>
-          {children}
         </div>
       </div>
-    </div>
+    </>
   )
 }

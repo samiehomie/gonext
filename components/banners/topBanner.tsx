@@ -88,11 +88,13 @@ export default function TopBanner() {
   const handlerWheel =
     (cbForBig: () => void, cbForSmall: () => void, elem: HTMLUListElement) =>
     (event: WheelEvent) => {
-      if (window.scrollY === 0 && event.deltaY < 0) {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop
+      if (winScroll === 0 && event.deltaY < 0) {
         cbForBig()
       }
 
-      if (window.scrollY >= 480 && elem.offsetTop === 0) {
+      if (winScroll >= 480 && elem.offsetTop === 0) {
         cbForSmall()
       }
     }

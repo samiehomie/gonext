@@ -1,13 +1,28 @@
 'use client'
 import Image from 'next/image'
+import { useEffect } from 'react'
 
 export default function SideMenu({
   onSide,
   setOnStart,
+  setOnSide,
 }: {
   onSide: boolean
   setOnStart: (arg: boolean) => void
+  setOnSide: (arg: boolean) => void
 }) {
+  useEffect(() => {
+    document.addEventListener('click', function handler(e) {
+      if (
+        e.target instanceof HTMLElement &&
+        !e.target.matches('#side-menu, #side-menu *') &&
+        onSide
+      ) {
+        setOnSide(false)
+        document.removeEventListener('click', handler)
+      }
+    })
+  }, [onSide, setOnSide])
   return (
     <div
       id="side-menu"
