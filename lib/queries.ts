@@ -22,13 +22,21 @@ export const queryWritings = qs.stringify(
 
 export const queryBook = qs.stringify(
   {
-    fields: ['Title', 'publishedAt'],
+    fields: ['Title', 'publishedAt', 'Introduction', 'Summary', 'Tags'],
     populate: {
       author: {
-        fields: ['name'],
+        fields: ['name', 'Introduction', 'Job'],
+        populate: {
+          Profile: {
+            fields: ['formats', 'url'],
+          },
+        },
+      },
+      writings: {
+        fields: ['Title', 'Content'],
       },
       Cover: {
-        fields: ['formats'],
+        fields: ['formats', 'url'],
       },
     },
   },

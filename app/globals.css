@@ -36,6 +36,64 @@ body {
   }
 }
 
+@keyframes bookReleaseMotion {
+  0% {
+    left: 329px;
+    opacity: 0;
+  }
+
+  3% {
+    left: 329px;
+    opacity: 1;
+  }
+
+  38% {
+    left: 329px;
+  }
+
+  60% {
+    left: 461px;
+    opacity: 1;
+  }
+
+  88% {
+    left: 461px;
+    opacity: 1;
+  }
+
+  to {
+    left: 461px;
+    opacity: 1;
+  }
+}
+
+@keyframes bookCoverMotion {
+  0% {
+    left: 341px;
+    opacity: 0;
+  }
+
+  3% {
+    opacity: 1;
+  }
+
+  38% {
+    left: 341px;
+  }
+
+  58% {
+    left: 208px;
+  }
+
+  80% {
+    left: 208px;
+  }
+
+  to {
+    left: 0;
+  }
+}
+
 @layer utilities {
   .book-cover,
   .txt-writer {
@@ -52,6 +110,19 @@ body {
     -webkit-box-orient: vertical;
     display: -webkit-box;
     display: box;
+  }
+  .book-release {
+    animation: bookReleaseMotion 2s;
+    left: 329px;
+    opacity: 1;
+    height: 477px;
+    position: absolute;
+    top: -9px;
+    width: 343px;
+    z-index: 80;
+  }
+  .book-cover-motion {
+    animation: bookCoverMotion 2s;
   }
 }
 
@@ -148,5 +219,9 @@ body {
   }
   .wordspacing-60 {
     word-spacing: -0.06em;
+  }
+  .break-word {
+    word-wrap: break-word;
+    word-break: break-all;
   }
 }

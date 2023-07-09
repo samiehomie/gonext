@@ -8,6 +8,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
+        'wrap-overview-bg': 'linear-gradient(#f8f8f8,#fff)',
+        'book-slide-cover': 'url("../public/bg-book.png")',
         'ico-brunch-titles': "url('../public/ico-brunch-titles.png')",
         'ico-brunch-main': "url('../public/ico-brunch-main.png')",
         'ico-brunch-sub': "url('../public/ico-brunch-sub.png')",
@@ -22,12 +24,14 @@ module.exports = {
         'book-shadow': "url('../public/bg-brunchhome.png')",
         'img-paging': "url('../public/img-paging.png')",
         'brunch-text': "url('../public/brunch-text.png')",
+        'book-shadow': "url('../public/book-shadow.png')",
       },
       fontFamily: {
         serif_mj: ['var(--font-nanum-mj)'],
         sf_bold: ['var(--font-sf-bold)'],
         sf_light: ['var(--font-sf-light)'],
         noto_sans_light: ['var(--font-noto-sans-light)'],
+        noto_sans_thin: ['var(--font-noto-sans-thin)'],
       },
     },
   },

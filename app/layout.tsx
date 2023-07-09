@@ -25,6 +25,12 @@ const notoSansLight = localFont({
   variable: '--font-noto-sans-light',
 })
 
+const notoSansThin = localFont({
+  src: '../public/fonts/NotoSansCJKkr-Thin.otf',
+  display: 'swap',
+  variable: '--font-noto-sans-thin',
+})
+
 export const metadata = {
   title: 'Next brunch',
   description: 'Next.js + brunch',
@@ -38,7 +44,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${nanumMJ.variable} ${sfBold.variable} ${sfLight.variable} ${notoSansLight.variable}`}
+        className={`${nanumMJ.variable} ${sfBold.variable} 
+        ${sfLight.variable} ${notoSansLight.variable} ${notoSansThin.variable}`}
       >
         {children}
       </body>

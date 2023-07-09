@@ -6,7 +6,7 @@ import { removeMarkdownImages, getWritingsQuery } from '../../lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 
-// TODO: Layout is cut off when the screen is resized
+// TODO: #6 Layout is cut off when the screen is resized
 
 function calcHeight(data: writing['data'], height: number) {
   return (
