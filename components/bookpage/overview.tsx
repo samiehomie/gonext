@@ -8,12 +8,15 @@ import Image from 'next/image'
 function SlideCover({
   releasedDate,
   isOpen,
+  id,
 }: {
   releasedDate: string
   isOpen: boolean
+  id: string
 }) {
   return (
     <div
+      id={id}
       className={`${
         isOpen && 'hidden'
       } book-release bg-book-slide-cover bg-cover`}
@@ -53,7 +56,7 @@ function OverviewSlide({
       style={{ ...style }}
       className={`${extraClass} absolute top-0 h-full pt-[10px] pb-[29px]
               w-[330px] bg-book-shadow bg-[50%_50%] transition-transform 
-              duration-[.8s] ease-in`}
+              duration-[.8s] ease-out`}
     >
       <div
         className={`z-[50] bg-white ${step !== 'step3' && 'pt-[27px] px-[30px]'}
@@ -258,10 +261,19 @@ export default function Overview({ bookData }: { bookData: book }) {
   const releasedDate = getEnglishDate(bookData.data.attributes.publishedAt)
 
   useEffect(() => {
-    const timerId = setTimeout(() => {
+    const coverTimerId = setTimeout(() => {
+      const slideCover = document.getElementById('slide-cover')
+      if (slideCover) {
+        slideCover.style.display = 'none'
+      }
+    }, 1000)
+    const slideTimerId = setTimeout(() => {
       setIsOpen(true)
-    }, 2000)
-    return () => clearTimeout(timerId)
+    }, 1300)
+    return () => {
+      clearTimeout(slideTimerId)
+      clearTimeout(coverTimerId)
+    }
   }, [])
 
   return (
@@ -270,7 +282,11 @@ export default function Overview({ bookData }: { bookData: book }) {
       <div className="w-[1000px] h-[450px] m-auto relative">
         {/* slide wrap */}
         <div className="w-[2000px] h-full absolute transition-all duration-300 top-0 left-0">
-          <SlideCover releasedDate={releasedDate} isOpen={isOpen} />
+          <SlideCover
+            releasedDate={releasedDate}
+            isOpen={isOpen}
+            id="slide-cover"
+          />
           <BookCover bookData={bookData} isBookPage={true} />
           <div
             className={`${
@@ -297,7 +313,7 @@ export default function Overview({ bookData }: { bookData: book }) {
             <span
               className={`z-[2] absolute leading-[16px] right-[-92px] 
                         tracking-[-.3px] text-[12px] text-[#959595] font-sf_light 
-                        transition-transform duration-[.8s] ease-in w-[166px] h-[26px] 
+                        transition-transform duration-[.8s] ease-out w-[166px] h-[26px] 
                         bottom-[62px] text-right rotate-[90deg] ${
                           isOpen ? 'translate-x-[1330px]' : 'translate-x-0'
                         }`}
