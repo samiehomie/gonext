@@ -260,7 +260,7 @@ export default function Overview({ bookData }: { bookData: book }) {
   useEffect(() => {
     const timerId = setTimeout(() => {
       setIsOpen(true)
-    }, 1500)
+    }, 2000)
     return () => clearTimeout(timerId)
   }, [])
 
