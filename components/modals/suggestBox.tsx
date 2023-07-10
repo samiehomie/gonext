@@ -54,7 +54,7 @@ function SuggestList() {
               />
               <strong
                 className="block w-[140px] text-ellipsis leading-[1.5] 
-                              overflow-hidden text-[#333] text-[15px] font-noto_sans_light 
+                              overflow-hidden text-[#333] text-[15px] font-noto_sans_demlight 
                               whitespace-nowrap pt-[15px] font-extralight"
               >
                 {author.attributes.Name}
@@ -225,7 +225,7 @@ function SearchList({ searchWord }: { searchWord: string }) {
         ></span>
       </h3>
       <div className="pb-[2px]">
-        <ul className="font-noto_sans_light">
+        <ul className="font-noto_sans_demlight">
           {!writingData || writingData.data.length === 0 ? (
             <div className="pb-[2px]">
               <div className="pt-[20px] max-h-[298px] overflow-hidden suggest-list">
@@ -279,7 +279,7 @@ export default function SuggestBox({
   return (
     <div
       className="box-border overflow-hidden pt-[275px] pb-[227px] 
-                flex flex-col justify-center bg-white font-noto_sans_light
+                flex flex-col justify-center bg-white font-noto_sans_demlight
                 fixed top-0 left-0 w-full h-full"
     >
       {/* box_suggest_inner */}
@@ -290,7 +290,7 @@ export default function SuggestBox({
             <h2 className="screen-out">검색 키워드 입력창</h2>
             <div>
               <div>
-                <span className="relative font-noto_sans_light">
+                <span className="relative font-noto_sans_demlight">
                   <input
                     ref={inputRef}
                     type="text"

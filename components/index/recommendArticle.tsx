@@ -106,7 +106,7 @@ export default function RecommendArticle({
         <ul
           ref={slidesRef}
           className="w-[7800px] overflow-hidden relative pb-[180px] text-[12px] 
-                    font-noto_sans_light translate-x-0 
+                    font-noto_sans_demlight translate-x-0 
                     transition-transform duration-300 ease-in-out"
         >
           {writings.map((writingGroup) => {

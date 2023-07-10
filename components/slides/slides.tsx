@@ -66,7 +66,7 @@ export default function Slides() {
       <li className="float-left">
         <div className="overflow-hidden w-[960px]">
           {/* brunch book */}
-          <Book />
+          <Book bookId={1} />
           {/* 2 stack writings alongside book*/}
           {writingsWithBook.map((writing) => (
             <Link

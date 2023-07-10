@@ -55,7 +55,7 @@ export default function Keywords() {
           키워드로 분류된 다양한 글 모음
         </span>
       </p>
-      <div className="overflow-x-auto w-full font-noto_sans_light">
+      <div className="overflow-x-auto w-full font-noto_sans_demlight">
         <div className="h-[363px] w-[960px] relative mt-[46px] mx-auto">
           {keywords.map((keyword, index) => (
             <a

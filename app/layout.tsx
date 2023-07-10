@@ -19,8 +19,14 @@ const sfLight = localFont({
   variable: '--font-sf-light',
 })
 
-const notoSansLight = localFont({
+const notoSansDemLight = localFont({
   src: '../public/fonts/NotoSansCJKkr-DemiLight.otf',
+  display: 'swap',
+  variable: '--font-noto-sans-demlight',
+})
+
+const notoSansLight = localFont({
+  src: '../public/fonts/NotoSans-Light.ttf',
   display: 'swap',
   variable: '--font-noto-sans-light',
 })
@@ -44,8 +50,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${nanumMJ.variable} ${sfBold.variable} 
-        ${sfLight.variable} ${notoSansLight.variable} ${notoSansThin.variable}`}
+        className={`${nanumMJ.variable} ${sfBold.variable} ${notoSansLight.variable}
+        ${sfLight.variable} ${notoSansDemLight.variable} ${notoSansThin.variable}`}
       >
         {children}
       </body>

@@ -30,6 +30,7 @@ module.exports = {
         serif_mj: ['var(--font-nanum-mj)'],
         sf_bold: ['var(--font-sf-bold)'],
         sf_light: ['var(--font-sf-light)'],
+        noto_sans_demlight: ['var(--font-noto-sans-demlight)'],
         noto_sans_light: ['var(--font-noto-sans-light)'],
         noto_sans_thin: ['var(--font-noto-sans-thin)'],
       },

@@ -33,7 +33,7 @@ export default function SideMenu({
       <main>
         <div
           className="bg-[#f8f8f8] h-[239px] overflow-hidden 
-                      relative text-center font-noto_sans_light"
+                      relative text-center font-noto_sans_demlight"
         >
           <div
             className="bg-ico-brunch-titles bg-[-1px_-106px] h-[48px] w-[48px] 

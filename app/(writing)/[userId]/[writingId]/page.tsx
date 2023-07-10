@@ -150,9 +150,9 @@ export default async function Page({
   const author: author = await getData(target)
 
   return (
-    <div className="font-noto_sans_light">
+    <div className="font-noto_sans_demlight">
       {/* wrap cover */}
-      <div className="min-w-[1020px] break-words text-[14px] font-noto_sans_light">
+      <div className="min-w-[1020px] break-words text-[14px] font-noto_sans_demlight">
         <div className="fixed top-0 w-full z-0">
           {/* Cover image */}
           <div className="relative w-full h-[450px]">
@@ -284,12 +284,12 @@ export default async function Page({
               <a
                 href="#"
                 className="block text-[28px] font-normal overflow-hidden 
-                        font-noto_sans_light text-ellipsis whitespace-nowrap w-[588px]"
+                        font-noto_sans_demlight text-ellipsis whitespace-nowrap w-[588px]"
               >
                 {author.data.attributes.Name}
               </a>
             </strong>
-            <span className="text-[#666] block text-[13px] my-[1px] mx-[2px] font-noto_sans_light">
+            <span className="text-[#666] block text-[13px] my-[1px] mx-[2px] font-noto_sans_demlight">
               <em className="screen-out absolute h-0 w-0">직업</em>
               {author.data.attributes.Job}
             </span>

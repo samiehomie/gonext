@@ -1,32 +1,34 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import SideMenu from '../modals/sideMenu'
 
 // TODO: #1 Implement search modal and right hidden menu
 
 export default function TopNavigation({
   children,
+  inBookPage = false,
 }: {
   children: React.ReactNode
+  inBookPage?: boolean
 }) {
   const [onSide, setOnSide] = useState(false)
   const [isFloat, setIsFloat] = useState(false)
-
-  function handlerDown() {
+  const breakpoint = inBookPage ? 5 : 400
+  const handlerDown = useCallback(() => {
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop
-    if (winScroll >= 400) {
+    if (winScroll >= breakpoint) {
       setIsFloat(true)
     }
-  }
+  }, [breakpoint])
 
-  function handlerUp() {
+  const handlerUp = useCallback(() => {
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop
-    if (winScroll < 400) {
+    if (winScroll < breakpoint) {
       setIsFloat(false)
     }
-  }
+  }, [breakpoint])
 
   useEffect(() => {
     if (!isFloat) {
@@ -38,7 +40,7 @@ export default function TopNavigation({
       window.removeEventListener('scroll', handlerDown)
       window.removeEventListener('scroll', handlerUp)
     }
-  }, [isFloat])
+  }, [isFloat, handlerDown, handlerUp])
 
   return (
     <>
@@ -49,7 +51,7 @@ export default function TopNavigation({
                   ${
                     !isFloat
                       ? 'overflow-hidden absolute h-[80px]'
-                      : 'fixed border-b border-[#ddd] h-[59px] overflow-visible bg-[hsla(0,0%,100%,.9)] box-border'
+                      : `fixed border-b border-[#ddd] h-[59px] overflow-visible bg-[hsla(0,0%,100%,.9)] box-border`
                   }`}
       >
         {children}
@@ -62,7 +64,9 @@ export default function TopNavigation({
               className={`bg-ico-brunch-sub overflow-hidden 
                         indent-[-999px] leading-none h-[20px] w-[27px] 
                         mr-[14px] float-left ${
-                          !isFloat ? 'bg-[0px_-30px]' : 'bg-[0px_0px]'
+                          isFloat || inBookPage
+                            ? 'bg-[0px_0px]'
+                            : 'bg-[0px_-30px]'
                         }`}
             >
               메뉴
@@ -73,7 +77,9 @@ export default function TopNavigation({
                 className={`block leading-none indent-[-999px] 
                           overflow-hidden w-[120px] h-[22px] mt-[-1px] 
                           bg-ico-brunch-titles ${
-                            !isFloat ? 'bg-[-120px_-80px]' : 'bg-[0px_-80px]'
+                            isFloat || inBookPage
+                              ? 'bg-[0px_-80px]'
+                              : 'bg-[-120px_-80px]'
                           }`}
               >
                 brunch

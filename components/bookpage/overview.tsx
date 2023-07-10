@@ -1,6 +1,6 @@
 'use client'
 import { book } from '@/types'
-import { useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { getEnglishDate } from '@/lib/utils'
 import BookCover from '../slides/bookCover'
 import Image from 'next/image'
@@ -252,12 +252,16 @@ const threeStep = [
   ['step2', 'z-[4]'],
   ['step3', 'z-[3]'],
 ]
-// translate-x-[320px]
-// translate-x-[670px]
-// translate-x-[1000px]
-// [1330px]
-export default function Overview({ bookData }: { bookData: book }) {
+
+export default function Overview({
+  bookData,
+  children,
+}: {
+  bookData: book
+  children: ReactElement
+}) {
   const [isOpen, setIsOpen] = useState(false)
+  const [next, setNext] = useState(false)
   const releasedDate = getEnglishDate(bookData.data.attributes.publishedAt)
 
   useEffect(() => {
@@ -266,10 +270,10 @@ export default function Overview({ bookData }: { bookData: book }) {
       if (slideCover) {
         slideCover.style.display = 'none'
       }
-    }, 1000)
+    }, 1500)
     const slideTimerId = setTimeout(() => {
       setIsOpen(true)
-    }, 1300)
+    }, 1900)
     return () => {
       clearTimeout(slideTimerId)
       clearTimeout(coverTimerId)
@@ -277,52 +281,83 @@ export default function Overview({ bookData }: { bookData: book }) {
   }, [])
 
   return (
-    <div className="h-[600px] box-border pt-[100px] overflow-hidden bg-wrap-overview-bg">
-      <h3 className="screen-out">브런치북 정보</h3>
-      <div className="w-[1000px] h-[450px] m-auto relative">
-        {/* slide wrap */}
-        <div className="w-[2000px] h-full absolute transition-all duration-300 top-0 left-0">
-          <SlideCover
-            releasedDate={releasedDate}
-            isOpen={isOpen}
-            id="slide-cover"
-          />
-          <BookCover bookData={bookData} isBookPage={true} />
+    <>
+      <div className="h-[600px] box-border pt-[100px] overflow-y-atuo bg-wrap-overview-bg">
+        <h3 className="screen-out">브런치북 정보</h3>
+        <div className="w-[1000px] h-[450px] m-auto relative">
+          {/* slide wrap */}
           <div
-            className={`${
-              !isOpen && 'opacity-0'
-            } absolute top-[-10px] h-full after:content-[''] after:block after:clear-both`}
+            className={`w-[2000px] h-full absolute transition-all duration-300 top-0 ${
+              next ? 'left-[-340px]' : 'left-0'
+            }`}
           >
-            {/* introduction */}
-            {threeStep.map(([step, extraClass], index) => {
-              const shift = index === 0 ? 0 : 20
-              return (
-                <OverviewSlide
-                  key={index}
-                  bookData={bookData}
-                  step={step as 'step1' | 'step2' | 'step3'}
-                  extraClass={extraClass}
-                  style={{
-                    transform: isOpen
-                      ? `translateX(${320 + index * 330 + shift}px)`
-                      : 'translateX(0px)',
-                  }}
-                />
-              )
-            })}
-            <span
-              className={`z-[2] absolute leading-[16px] right-[-92px] 
+            <SlideCover
+              releasedDate={releasedDate}
+              isOpen={isOpen}
+              id="slide-cover"
+            />
+            <BookCover bookData={bookData} isBookPage={true} />
+            <div
+              className={`${
+                !isOpen && 'opacity-0'
+              } absolute top-[-10px] h-full after:content-[''] after:block after:clear-both`}
+            >
+              {/* introduction */}
+              {threeStep.map(([step, extraClass], index) => {
+                const shift = index === 0 ? 0 : 20
+                return (
+                  <OverviewSlide
+                    key={index}
+                    bookData={bookData}
+                    step={step as 'step1' | 'step2' | 'step3'}
+                    extraClass={extraClass}
+                    style={{
+                      transform: isOpen
+                        ? `translateX(${320 + index * 330 + shift}px)`
+                        : 'translateX(0px)',
+                    }}
+                  />
+                )
+              })}
+              <span
+                className={`z-[2] absolute leading-[16px] right-[-92px] 
                         tracking-[-.3px] text-[12px] text-[#959595] font-sf_light 
                         transition-transform duration-[.8s] ease-out w-[166px] h-[26px] 
                         bottom-[62px] text-right rotate-[90deg] ${
                           isOpen ? 'translate-x-[1330px]' : 'translate-x-0'
                         }`}
+              >
+                {`Release date. ${releasedDate}`}
+              </span>
+            </div>
+          </div>
+          {/* button */}
+          <div className="absolute right-[20px] top-[-30px] z-[1001] text-[0px] leading-none">
+            <button
+              onClick={() => setNext(false)}
+              className={`${
+                !next && 'cursor-default opacity-40'
+              } h-[18px] w-[22px] 
+                      leading-none overflow-hidden indent-[-9999px] inline-block align-top
+                      bg-ico-brunch-sub2 bg-[-100px_-250px]`}
             >
-              {`Release date. ${releasedDate}`}
-            </span>
+              이전
+            </button>
+            <button
+              onClick={() => setNext(true)}
+              className={`${
+                next && 'cursor-default opacity-40'
+              } h-[18px] w-[22px] ml-[28px] inline-block align-top
+                      leading-none overflow-hidden indent-[-9999px] 
+                      bg-ico-brunch-sub2 bg-[-100px_-270px]`}
+            >
+              다음
+            </button>
           </div>
         </div>
+        <div className="w-full h-[5000px]"></div>
       </div>
-    </div>
+      {isOpen && children}
+    </>
   )
 }

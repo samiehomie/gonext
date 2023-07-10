@@ -78,7 +78,7 @@ const components = {
       return (
         <>
           <h4
-            className="first:mt-[-7px] font-noto_sans_light text-[11pt] m-auto text-[#8d8d8d]
+            className="first:mt-[-7px] font-noto_sans_demlight text-[11pt] m-auto text-[#8d8d8d]
                     w-[700px] min-w-[700px] text-justify leading-[22pt] tracking-[.8px] peer-[.only-image]:mt-[13px]"
           >
             <span
@@ -88,7 +88,7 @@ const components = {
             />
           </h4>
           <h4
-            className="first:mt-[-7px] font-noto_sans_light text-[11pt] m-auto 
+            className="first:mt-[-7px] font-noto_sans_demlight text-[11pt] m-auto 
                     w-[700px] min-w-[700px] text-justify leading-[22pt] tracking-[.8px]"
           >
             <br />

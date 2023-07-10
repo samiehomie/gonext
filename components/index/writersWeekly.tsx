@@ -158,7 +158,7 @@ export default function WritersWeekly() {
               onClick={() => setTagsState({ ...initialState, [tag]: true })}
               type="button"
               className={`bg-white border rounded-[25px] inline-block
-                    font-noto_sans_light text-[15px] leading-[18px] mx-[2px]
+                    font-noto_sans_demlight text-[15px] leading-[18px] mx-[2px]
                     overflow-hidden p-[7px_16px_6px] outline-none cursor-pointer
                    ${
                      tagsState[tag]
@@ -173,7 +173,7 @@ export default function WritersWeekly() {
         {/* writer_keyword_writers */}
         <div
           className={`w-[960px] mx-auto mt-[50px] mb-[85px] 
-                  font-noto_sans_light`}
+                  font-noto_sans_demlight`}
         >
           {tags.map((tag, i) => (
             <AuthorsGroup key={i} tag={tag} tagsState={tagsState} />

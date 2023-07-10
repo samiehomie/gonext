@@ -34,7 +34,7 @@ function MainContent({ children }: { children: ReactElement }) {
             서랍 속 간직하고 있는 글과 감성을.
           </span>
         </p>
-        <ul className="h-[18px] overflow-hidden relative font-noto_sans_light">
+        <ul className="h-[18px] overflow-hidden relative font-noto_sans_demlight">
           <li className="h-full">
             <a href="#">
               <span className="float-right pl-[7px] text-[#959595] text-[11.5px]">

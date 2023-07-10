@@ -33,7 +33,15 @@ export const queryBook = qs.stringify(
         },
       },
       writings: {
-        fields: ['Title', 'Content'],
+        fields: ['Title', 'Content', 'Subtitle'],
+        populate: {
+          Cover: {
+            fields: ['formats', 'url'],
+          },
+          author: {
+            fields: ['Name'],
+          },
+        },
       },
       Cover: {
         fields: ['formats', 'url'],

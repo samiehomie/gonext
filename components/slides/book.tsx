@@ -4,10 +4,11 @@ import { book } from '@/types'
 import { queryBook } from '@/lib/queries'
 import useSWR from 'swr'
 import BookCover from './bookCover'
+import Link from 'next/link'
 
-export default function Book() {
+export default function Book({ bookId }: { bookId: number }) {
   const { data: bookData }: { data: book | undefined } = useSWR(
-    'books/1?' + queryBook,
+    `books/${bookId}?` + queryBook,
   )
 
   if (!bookData) return null
@@ -16,8 +17,8 @@ export default function Book() {
   const date = moment(publishedAt).format('MMM.DD.YYYY')
 
   return (
-    <a
-      href="#"
+    <Link
+      href={`/book/${bookId}`}
       className="group float-left relative w-1/2 h-[520px] block bg-book-cover
                 before:content-[''] before:block before:absolute 
                 before:bottom-0 before:w-full before:h-[156px] before:bg-[#f6f6f6]
@@ -37,7 +38,7 @@ export default function Book() {
       <BookCover bookData={bookData} />
       <span
         className="absolute table z-[2] w-full bottom-0 h-[109px] 
-                  text-[12px] font-noto_sans_light"
+                  text-[12px] font-noto_sans_demlight"
       >
         <span className="table-cell align-middle text-center">
           <span className="block text-center">First Edition</span>
@@ -46,6 +47,6 @@ export default function Book() {
           </span>
         </span>
       </span>
-    </a>
+    </Link>
   )
 }

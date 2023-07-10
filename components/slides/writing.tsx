@@ -46,7 +46,7 @@ export default function Writing({
           <span
             className={`${
               boxType === 'hor' ? 'hidden' : 'block'
-            } font-noto_sans_light 
+            } font-noto_sans_demlight 
                             leading-[20px] pt-[9px]`}
           >
             {removeMarkdownImages(writing.attributes.Content).slice(0, 20)}

@@ -62,7 +62,7 @@ export default function BookCover({
           className={`block overflow-hidden absolute box-border w-full left-0 
           break-all text-ellipsis txt-writer ${
             isBookPage
-              ? `font-noto_sans_light bottom-[16px] text-[14px] 
+              ? `font-noto_sans_demlight bottom-[16px] text-[14px] 
               leading-[20px] max-h-[37px] text-[#959595] px-[16px]`
               : `bottom-[9px] text-[#666] px-[10px] max-h-[35px]
               text-[11px] leading-[16px] `
