@@ -4,6 +4,7 @@ import { ReactElement, useEffect, useState } from 'react'
 import { getEnglishDate } from '@/lib/utils'
 import BookCover from '../slides/bookCover'
 import Image from 'next/image'
+import Link from 'next/link'
 
 function SlideCover({
   releasedDate,
@@ -58,191 +59,191 @@ function OverviewSlide({
               w-[330px] bg-book-shadow bg-[50%_50%] transition-transform 
               duration-[.8s] ease-out`}
     >
-      <div
-        className={`z-[50] bg-white ${step !== 'step3' && 'pt-[27px] px-[30px]'}
-              box-border h-[450px] relative w-full ${
-                step !== 'step1' && 'border-l border-[#eee]'
-              }`}
-      >
-        {/* STEP 1 */}
-        {step === 'step1' && (
-          <>
-            <div className="h-auto mb-[12px] w-[180px]">
-              <strong
-                className="break-word text-[#666] block text-[26px] 
+      {/* STEP 1 */}
+      {step === 'step1' && (
+        <div
+          className={`block z-[50] bg-white pt-[27px] px-[30px]
+                      box-border h-[450px] relative w-full`}
+        >
+          <div className="h-auto mb-[12px] w-[180px]">
+            <strong
+              className="break-word text-[#666] block text-[26px] 
                   font-normal leading-[35px]"
-              >
-                {bookData.data.attributes.Title}
-              </strong>
-            </div>
-            <div className="pt-[-3px]">
-              <dl className="inline-block align-top pr-[8px] text-[0px] leading-none">
-                <dt className="inline-block align-top pt-[2px] pr-[3px]">
-                  <span
-                    className="float-left h-[13px] w-[13px] overflow-hidden indent-[-9999px] 
-                      inline-block bg-ico-brunch-sub2 bg-[-100px_-370px] align-top"
-                  >
-                    전체글갯수
-                  </span>
-                </dt>
-                <dd className="text-[#666] inline-block align-top text-[12px] leading-[17px]">
-                  <em className="text-[13px] font-sf_light leading-[17px] font-normal not-italic">
-                    {bookData.data.attributes.writings?.data.length}
-                  </em>
-                  화
-                </dd>
-              </dl>
-              <dl className="inline-block align-top pr-[8px] text-[0px] leading-none">
-                <dt className="inline-block align-top pt-[2px] pr-[3px]">
-                  <span
-                    className="float-left h-[13px] w-[13px] overflow-hidden indent-[-9999px] 
-                      inline-block bg-ico-brunch-sub2 bg-[-160px_-250px] align-top"
-                  >
-                    전체시간
-                  </span>
-                </dt>
-                <dd className="text-[#666] inline-block align-top text-[12px] leading-[17px]">
-                  <em className="text-[13px] font-sf_light leading-[17px] font-normal not-italic">
-                    25
-                  </em>
-                  분
-                </dd>
-              </dl>
-            </div>
-            <div className="absolute bottom-[30px] left-[25px] right-[25px]">
-              <strong
-                className="block font-normal p-[0px_0px_11px_5px] text-[#333] 
-                  text-[13px] leading-[19px]"
-              >
-                이런분께 추천드려요!
-              </strong>
-              {bookData.data.attributes.Summary.map((sentence, index) => (
+            >
+              {bookData.data.attributes.Title}
+            </strong>
+          </div>
+          <div className="pt-[-3px]">
+            <dl className="inline-block align-top pr-[8px] text-[0px] leading-none">
+              <dt className="inline-block align-top pt-[2px] pr-[3px]">
                 <span
-                  className="break-word pl-[17px] text-[13px] text-[#666] block 
+                  className="float-left h-[13px] w-[13px] overflow-hidden indent-[-9999px] 
+                      inline-block bg-ico-brunch-sub2 bg-[-100px_-370px] align-top"
+                >
+                  전체글갯수
+                </span>
+              </dt>
+              <dd className="text-[#666] inline-block align-top text-[12px] leading-[17px]">
+                <em className="text-[13px] font-sf_light leading-[17px] font-normal not-italic">
+                  {bookData.data.attributes.writings?.data.length}
+                </em>
+                화
+              </dd>
+            </dl>
+            <dl className="inline-block align-top pr-[8px] text-[0px] leading-none">
+              <dt className="inline-block align-top pt-[2px] pr-[3px]">
+                <span
+                  className="float-left h-[13px] w-[13px] overflow-hidden indent-[-9999px] 
+                      inline-block bg-ico-brunch-sub2 bg-[-160px_-250px] align-top"
+                >
+                  전체시간
+                </span>
+              </dt>
+              <dd className="text-[#666] inline-block align-top text-[12px] leading-[17px]">
+                <em className="text-[13px] font-sf_light leading-[17px] font-normal not-italic">
+                  25
+                </em>
+                분
+              </dd>
+            </dl>
+          </div>
+          <div className="absolute bottom-[30px] left-[25px] right-[25px]">
+            <strong
+              className="block font-normal p-[0px_0px_11px_5px] text-[#333] 
+                  text-[13px] leading-[19px]"
+            >
+              이런분께 추천드려요!
+            </strong>
+            {bookData.data.attributes.Summary.map((sentence, index) => (
+              <span
+                className="break-word pl-[17px] text-[13px] text-[#666] block 
                       leading-[20px] relative 
                       after:content-[''] after:bg-[#979797] after:absolute after:h-[1px]
                       after:w-[6px] after:top-[8px] after:left-[6px]"
-                  key={index}
-                >
-                  {sentence}
-                </span>
-              ))}
-            </div>
-            <div className="absolute right-[26px] top-[26px] text-center">
-              <button className="w-[46px] h-[46px] border border-[#ddd] rounded-full">
-                <span
-                  className="bg-ico-brunch-sub2 inline-block align-top 
+                key={index}
+              >
+                {sentence}
+              </span>
+            ))}
+          </div>
+          <div className="absolute right-[26px] top-[26px] text-center">
+            <button className="w-[46px] h-[46px] border border-[#ddd] rounded-full">
+              <span
+                className="bg-ico-brunch-sub2 inline-block align-top 
                     indent-[-999px] overflow-hidden leading-none h-[18px] w-[20px] mt-[2px]
                     bg-[-60px_-360px]"
-                >
-                  라이킷
-                </span>
-              </button>
-              <span className="screen-out">라이킷 수</span>
-              <span
-                className="text-center text-[#666] block text-[14px] font-sf_light 
-                    pt-[4px]"
               >
-                6
+                라이킷
               </span>
-            </div>
-          </>
-        )}
-        {/* STEP 2 */}
-        {step === 'step2' && (
-          <>
-            <strong
-              className="mt-[-2px] ml-[-1px] text-[13px] leading-[19px] pb-[17px] 
-                    text-[#333] font-normal block"
+            </button>
+            <span className="screen-out">라이킷 수</span>
+            <span
+              className="text-center text-[#666] block text-[14px] font-sf_light 
+                    pt-[4px]"
             >
-              브랜치북 소개
-            </strong>
-            <p className="break-word pt-[20px] text-[#666] text-[13px] leading-[23px]">
-              {bookData.data.attributes.Introduction}
-            </p>
-            <div className="text-[0px] after:content-[''] after:block after:clear-both">
-              {bookData.data.attributes.Tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="relative block float-left p-[1px] mt-[8px] mr-[8px]"
-                >
-                  <input
-                    type="checkbox"
-                    disabled
-                    id={`bookkeyword${index}`}
-                    className="cursor-default appearance-none bg-transparent 
+              6
+            </span>
+          </div>
+        </div>
+      )}
+      {/* STEP 2 */}
+      {step === 'step2' && (
+        <div
+          className={`block z-[50] bg-white pt-[27px] px-[30px]
+                      box-border h-[450px] relative w-full border-l border-[#eee]`}
+        >
+          <strong
+            className="mt-[-2px] ml-[-1px] text-[13px] leading-[19px] pb-[17px] 
+                    text-[#333] font-normal block"
+          >
+            브랜치북 소개
+          </strong>
+          <p className="break-word pt-[20px] text-[#666] text-[13px] leading-[23px]">
+            {bookData.data.attributes.Introduction}
+          </p>
+          <div className="text-[0px] after:content-[''] after:block after:clear-both">
+            {bookData.data.attributes.Tags.map((tag, index) => (
+              <span
+                key={index}
+                className="relative block float-left p-[1px] mt-[8px] mr-[8px]"
+              >
+                <input
+                  type="checkbox"
+                  disabled
+                  id={`bookkeyword${index}`}
+                  className="cursor-default appearance-none bg-transparent 
                             absolute left-0 top-0 right-0 bottom-0 w-full opacity-10"
-                  />
-                  <label
-                    htmlFor={`bookkeyword${index}`}
-                    className="bg-white border border-[#ddd] rounded-[40px] text-[#959595] 
+                />
+                <label
+                  htmlFor={`bookkeyword${index}`}
+                  className="bg-white border border-[#ddd] rounded-[40px] text-[#959595] 
                               inline-block text-[12px] h-[26px] leading-[26px] px-[10px] align-top"
-                  >
-                    {tag}
-                  </label>
-                </span>
-              ))}
-            </div>
-          </>
-        )}
-        {/* STEP 3 */}
-        {step === 'step3' && (
-          <>
-            <div className="relative w-full h-[97px]">
+                >
+                  {tag}
+                </label>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+      {/* STEP 3 */}
+      {step === 'step3' && (
+        <Link
+          href={`/${bookData.data.attributes.author?.data.id}`}
+          className={`block z-[50] bg-white
+                     box-border h-[450px] relative w-full border-l border-[#eee]`}
+        >
+          <div className="relative w-full h-[97px] block">
+            <Image
+              src={
+                bookData.data.attributes.Cover?.data.attributes.url as string
+              }
+              alt="book cover"
+              fill={true}
+              className=" object-cover"
+            />
+            <div className="absolute top-0 w-full h-[97px] bg-[rgba(0,0,0,0.1)]"></div>
+          </div>
+          <div className="relative">
+            <span
+              className="absolute rounded-full h-[80px] overflow-hidden 
+                          right-[26px] w-[80px] top-[-40px]"
+            >
               <Image
                 src={
-                  bookData.data.attributes.Cover?.data.attributes.url as string
+                  bookData.data.attributes.author?.data.attributes.Profile?.data
+                    .attributes.url as string
                 }
-                alt="book cover"
-                fill={true}
-                className=" object-cover"
+                alt="profile"
+                width={80}
+                height={80}
+                className="rounded-full"
               />
-              <div className="absolute top-0 w-full h-[97px] bg-[rgba(0,0,0,0.1)]"></div>
-            </div>
-            <div className="relative">
-              <span
-                className="absolute rounded-full h-[80px] overflow-hidden 
-                          right-[26px] w-[80px] top-[-40px]"
-              >
-                <Image
-                  src={
-                    bookData.data.attributes.author?.data.attributes.Profile
-                      ?.data.attributes.url as string
-                  }
-                  alt="profile"
-                  width={80}
-                  height={80}
-                  className="rounded-full"
-                />
-              </span>
-              <div className="p-[33px_30px_0px]">
-                <strong
-                  className="vertical-three-box break-words text-ellipsis overflow-hidden 
+            </span>
+            <div className="p-[33px_30px_0px]">
+              <strong
+                className="vertical-three-box break-words text-ellipsis overflow-hidden 
                             leading-[24px] font-normal text-[18px] text-[#333] pr-[110px]"
-                >
-                  {bookData.data.attributes.author?.data.attributes.Name}
-                </strong>
-                <span className="block pt-[5px]">
-                  <span>
-                    <em className="screen-out">직업</em>
-                    <span className="text-[#666] text-[13px] leading-[19px]">
-                      {bookData.data.attributes.author?.data.attributes.Job}
-                    </span>
+              >
+                {bookData.data.attributes.author?.data.attributes.Name}
+              </strong>
+              <span className="block pt-[5px]">
+                <span>
+                  <em className="screen-out">직업</em>
+                  <span className="text-[#666] text-[13px] leading-[19px]">
+                    {bookData.data.attributes.author?.data.attributes.Job}
                   </span>
                 </span>
-              </div>
-              <div className="p-[22px_33px_0px]">
-                <p className="break-word pt-[1px] text-[#666] text-[13px] leading-[22px]">
-                  {
-                    bookData.data.attributes.author?.data.attributes
-                      .Introduction
-                  }
-                </p>
-              </div>
+              </span>
             </div>
-          </>
-        )}
-      </div>
+            <div className="p-[22px_33px_0px]">
+              <p className="break-word pt-[1px] text-[#666] text-[13px] leading-[22px]">
+                {bookData.data.attributes.author?.data.attributes.Introduction}
+              </p>
+            </div>
+          </div>
+        </Link>
+      )}
     </div>
   )
 }

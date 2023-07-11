@@ -89,7 +89,7 @@ export default function Keywords() {
           ))}
         </div>
       </div>
-      <div className="clear-both"></div>
+      <div className="clear-both-custom"></div>
     </div>
   )
 }

@@ -111,7 +111,36 @@ body {
   }
 }
 
+@keyframes animation_up_linear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+@keyframes zoom {
+  from {
+    transform: perspective(100px) translate3d(55%, -80%, -100px);
+  }
+  to {
+    transform: perspective(100px) translate3d(0px, 0px, 0px);
+  }
+}
+
 @layer utilities {
+  .word-wrap-break {
+    word-wrap: break-word;
+  }
+  .display-box {
+    display: -webkit-box;
+    display: box;
+    -webkit-box-orient: vertical;
+  }
   .book-cover,
   .txt-writer {
     display: -webkit-box;
@@ -201,7 +230,7 @@ body {
     margin-left: 8px;
     padding: 10px 20px 8px 19px;
   }
-  .clear-both {
+  .clear-both-custom {
     clear: both;
     font-size: 0;
     height: 0;
@@ -244,5 +273,13 @@ body {
   .animation-up-late {
     animation: animation_up 1s;
     transition: opacity 0.6s ease-out 0s, transform 1s ease-out 0s;
+  }
+  .animation-up {
+    animation: animation_up_linear 0.2s;
+    transition: opacity 0.2s ease-out 0s, transform 0.2s ease-out 0s;
+  }
+  .zoom-motion {
+    animation-name: zoom;
+    animation-duration: 0.4s;
   }
 }

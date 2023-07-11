@@ -5,6 +5,7 @@ import { regexInvalidQuery } from '@/lib/utils'
 import qs from 'qs'
 import type { authors } from '@/types'
 import Image from 'next/image'
+import Link from 'next/link'
 
 function getRandomElementExcept(arr: string[], except: string) {
   const filteredArr = arr.filter((el) => el !== except)
@@ -70,8 +71,8 @@ function AuthorsGroup({
           key={author.id}
           className="float-left h-full mb-[15px] relative text-center w-[310px]"
         >
-          <a
-            href="#"
+          <Link
+            href={`/${author.id}`}
             className="bg-[#fff] block min-h-[288px] py-[46px] px-[40px]"
           >
             <Image
@@ -98,7 +99,7 @@ function AuthorsGroup({
             >
               {author.attributes.Introduction}
             </span>
-          </a>
+          </Link>
           {/* weekly_writer_tags */}
           <div className="absolute w-full bottom-[46px] mt-[43px] text-center">
             <button

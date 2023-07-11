@@ -6,7 +6,7 @@ export default function PostLayout({
 }) {
   return (
     <div>
-      <TopNavigation inBookPage={true}>
+      <TopNavigation inBookPage={true} breakpoint={5}>
         <div className="absolute text-center left-[250px] right-[250px] h-full">
           <div className="table h-full mx-auto">
             <h2

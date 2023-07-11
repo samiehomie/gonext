@@ -7,13 +7,14 @@ import SideMenu from '../modals/sideMenu'
 export default function TopNavigation({
   children,
   inBookPage = false,
+  breakpoint = 400,
 }: {
   children: React.ReactNode
   inBookPage?: boolean
+  breakpoint?: number
 }) {
   const [onSide, setOnSide] = useState(false)
   const [isFloat, setIsFloat] = useState(false)
-  const breakpoint = inBookPage ? 5 : 400
   const handlerDown = useCallback(() => {
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop
@@ -54,7 +55,7 @@ export default function TopNavigation({
                       : `fixed border-b border-[#ddd] h-[59px] overflow-visible bg-[hsla(0,0%,100%,.9)] box-border`
                   }`}
       >
-        {children}
+        {breakpoint === 400 ? isFloat && children : children}
 
         <div className={`${!isFloat ? 'mt-[30px]' : 'mt-[20px]'} mx-[30px]`}>
           <div className={`float-left`}>

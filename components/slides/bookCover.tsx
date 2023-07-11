@@ -4,9 +4,11 @@ import { book } from '@/types'
 export default function BookCover({
   bookData,
   isBookPage = false,
+  isAuthorPage = false
 }: {
   bookData: book
   isBookPage?: boolean
+  isAuthorPage?: boolean
 }) {
   const { Title: title, Cover: cover } = bookData.data.attributes
   const imgUrl = cover?.data.attributes.url

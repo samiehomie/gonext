@@ -12,15 +12,15 @@ import Link from 'next/link'
 // TODO: #5 Add anchor using rehype library
 
 async function Others({
-  userId,
+  authorId,
   writingId,
   authorName,
 }: {
-  userId: string
+  authorId: string
   writingId: string
   authorName: string
 }) {
-  const [_, others] = getQueryWritingPage(userId, writingId)
+  const [_, others] = getQueryWritingPage(authorId, writingId)
   const otherWritings: author = await getData(others)
   const writings: writings = otherWritings.data.attributes.writings!
   const prev: undefined | writing['data'] = writings.data
@@ -47,7 +47,7 @@ async function Others({
               key={writing.id}
               className="float-left w-[300px] mx-[20px] mb-[35px]"
             >
-              <Link href={`/${userId}/${writing.id}`} className="block">
+              <Link href={`/${authorId}/${writing.id}`} className="block">
                 <div className="relative w-full h-[170px]">
                   <Image
                     src={
@@ -100,7 +100,7 @@ async function Others({
       <div className="bg-white w-full z-[100] fixed bottom-0 h-[59px] border-t border-[#eee]">
         {prev && (
           <Link
-            href={`/${userId}/${prev.id}`}
+            href={`/${authorId}/${prev.id}`}
             className="float-left h-full px-[30px]"
           >
             <span
@@ -119,7 +119,7 @@ async function Others({
         )}
         {next && (
           <Link
-            href={`/${userId}/${next.id}`}
+            href={`/${authorId}/${next.id}`}
             className="float-right h-full px-[30px]"
           >
             <span
@@ -142,11 +142,11 @@ async function Others({
 }
 
 export default async function Page({
-  params: { userId, writingId },
+  params: { authorId, writingId },
 }: {
-  params: { userId: string; writingId: string }
+  params: { authorId: string; writingId: string }
 }) {
-  const [target, _] = getQueryWritingPage(userId, writingId)
+  const [target, _] = getQueryWritingPage(authorId, writingId)
   const author: author = await getData(target)
 
   return (
@@ -348,7 +348,7 @@ export default async function Page({
       {/* others */}
       <Suspense fallback={<div>Loading...</div>}>
         <Others
-          userId={userId}
+          authorId={authorId}
           writingId={writingId}
           authorName={author.data.attributes.Name}
         />
