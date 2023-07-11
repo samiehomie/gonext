@@ -3,7 +3,7 @@ import type { author } from '@/types'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getEnglishDate } from '@/lib/utils'
-// TODO: Implement infinite loading
+// TODO: #7 Implement infinite loading
 
 export default function Content({ authorData }: { authorData: author }) {
   const author = authorData.data.attributes.Name

@@ -198,9 +198,12 @@ export default async function Page({
                 by
               </span>
               <span className="opacity-80 float-left text-[#666]">
-                <a href="#" className="text-[#fff] tracking-[-.05em]">
+                <Link
+                  href={`/${authorId}`}
+                  className="text-[#fff] tracking-[-.05em]"
+                >
                   {author.data.attributes.Name}
-                </a>
+                </Link>
               </span>
               <span
                 className="bg-white float-left w-[2px] h-[2px] align-top 
@@ -281,19 +284,22 @@ export default async function Page({
         <div className="w-[700px] relative m-auto pt-[31px]">
           <div>
             <strong className="block">
-              <a
-                href="#"
+              <Link
+                href={`/${authorId}`}
                 className="block text-[28px] font-normal overflow-hidden 
                         font-noto_sans_demlight text-ellipsis whitespace-nowrap w-[588px]"
               >
                 {author.data.attributes.Name}
-              </a>
+              </Link>
             </strong>
             <span className="text-[#666] block text-[13px] my-[1px] mx-[2px] font-noto_sans_demlight">
               <em className="screen-out absolute h-0 w-0">직업</em>
               {author.data.attributes.Job}
             </span>
-            <Link href={'#'} className="absolute right-0 top-[-22px]">
+            <Link
+              href={`/${authorId}`}
+              className="absolute right-0 top-[-22px]"
+            >
               <Image
                 src={
                   author.data.attributes.Profile?.data.attributes.url as string
@@ -305,11 +311,11 @@ export default async function Page({
               />
             </Link>
             <div className="text-[13px] text-[#666] mt-[21px]">
-              <a href="#">
+              <Link href={`/${authorId}`}>
                 <p className="text-[#959595] leading-[22px]">
                   {author.data.attributes.Introduction}
                 </p>
-              </a>
+              </Link>
             </div>
             <div className="mt-[34px] after:content-[''] after:clear-both after:block">
               <a href="#" className="text-[14px]">
