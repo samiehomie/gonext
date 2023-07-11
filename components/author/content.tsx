@@ -80,6 +80,7 @@ export default function Content({ authorData }: { authorData: author }) {
                         }
                         alt={writing.attributes.Title}
                         fill={true}
+                        className="object-cover"
                       />
                     </div>
                     <div className="w-[540px]">

@@ -25,12 +25,14 @@ export default function Article({
           className="float-right w-[120px] h-[120px] pl-[30px] 
                   mt-[-3px] overflow-hidden"
         >
-          <Image
-            src={writing.attributes.Cover?.data.attributes.url as string}
-            alt={writing.attributes.Title}
-            width={120}
-            height={120}
-          />
+          <div className="relative w-[120px] h-[120px]">
+            <Image
+              src={writing.attributes.Cover?.data.attributes.url as string}
+              alt={writing.attributes.Title}
+              fill={true}
+              className="object-cover"
+            />
+          </div>
         </div>
         <div className="overflow-hidden pl-[50px]">
           <strong

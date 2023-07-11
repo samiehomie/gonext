@@ -199,7 +199,7 @@ export default function Profile({ authorData }: { authorData: author }) {
                   {tabName === 'writings' &&
                     `글 ${authorData.data.attributes.writings?.data.length}`}
                   {tabName === 'books' &&
-                    `글 ${authorData.data.attributes.books?.data.length}`}
+                    `작품 ${authorData.data.attributes.books?.data.length}`}
                 </span>
               </button>
             </li>
