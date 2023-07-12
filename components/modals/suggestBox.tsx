@@ -3,51 +3,34 @@
 import { useState, useRef, useEffect, FormEvent } from 'react'
 import { getSearchQuery, regexInvalidQuery } from '@/lib/utils'
 import useSWR from 'swr'
-import qs from 'qs'
-import type { writings, books, authors } from '../../types'
+import type { writings, books, users } from '../../types'
 import Image from 'next/image'
 import { debounce } from 'lodash'
-
-const queryAuthors = qs.stringify(
-  {
-    fields: ['Name', 'Introduction'],
-    populate: {
-      Profile: { fields: ['url'] },
-    },
-    pagination: {
-      page: 1,
-      pageSize: 5,
-    },
-  },
-  {
-    encodeValuesOnly: true,
-  },
-)
+import { queryUsers } from '@/lib/queries'
+import Link from 'next/link'
 
 function SuggestList() {
-  const { data: authors }: { data: authors | undefined } = useSWR(
-    'authors?' + queryAuthors,
+  const { data: users }: { data: users | undefined } = useSWR(
+    'users?' + queryUsers,
   )
 
-  if (!authors) return null
+  if (!users) return null
 
   return (
     <ul className="text-[0px] leading-none text-center w-[1000px] ml-[-30px]">
-      {!authors ? (
+      {!users ? (
         <li></li>
       ) : (
-        authors.data.map((author) => (
+        users.map((user) => (
           <li
-            key={author.id}
+            key={user.id}
             className="inline-block h-[198px] w-[140px] align-top mx-[30px]
                     suggest-list transition-all duration-1000 ease-in-out"
           >
-            <a href="#" className="block">
+            <Link href={`/${user.id}`} className="block">
               <Image
-                src={
-                  author.attributes.Profile?.data.attributes.url as string
-                }
-                alt={author.attributes.Name}
+                src={user.profile?.url as string}
+                alt={user.username}
                 width={120}
                 height={120}
                 className="rounded-full m-auto block relative"
@@ -57,15 +40,15 @@ function SuggestList() {
                               overflow-hidden text-[#333] text-[15px] font-noto_sans_demlight 
                               whitespace-nowrap pt-[15px] font-extralight"
               >
-                {author.attributes.Name}
+                {user.username}
               </strong>
               <span
                 className="txt-writer text-[#666] text-[12px] h-[38px] w-[140px] 
                             text-ellipsis text-center overflow-hidden leading-[1.5]"
               >
-                {author.attributes.Introduction}
+                {user.introduction}
               </span>
-            </a>
+            </Link>
           </li>
         ))
       )}
@@ -74,7 +57,7 @@ function SuggestList() {
 }
 
 function SearchSide({ searchWord }: { searchWord: string }) {
-  const { queryBooks, queryAuthors } = getSearchQuery(searchWord)
+  const { queryBooks, queryUsers } = getSearchQuery(searchWord)
   const {
     data: booksData,
   }: {
@@ -82,14 +65,12 @@ function SearchSide({ searchWord }: { searchWord: string }) {
   } = useSWR(regexInvalidQuery.test(queryBooks) ? null : 'books?' + queryBooks)
 
   const {
-    data: authorsData,
+    data: usersData,
   }: {
-    data: authors | undefined
-  } = useSWR(
-    regexInvalidQuery.test(queryAuthors) ? null : 'authors?' + queryAuthors,
-  )
+    data: users | undefined
+  } = useSWR(regexInvalidQuery.test(queryUsers) ? null : 'users?' + queryUsers)
 
-  if (!booksData || !authorsData) return null
+  if (!booksData || !usersData) return null
 
   return (
     <div className="overflow-hidden w-[220px] text-[14px]">
@@ -115,20 +96,20 @@ function SearchSide({ searchWord }: { searchWord: string }) {
             <div className="pt-[8px] pb-[2px]" key={book.id}>
               <div className="pt-[11px] max-h-[298px] overflow-hidden suggest-list">
                 <div className="relative pl-[50px]">
-                  <a
-                    href="#"
+                  <Link
+                    href={`/book/${book.id}`}
                     className="rounded-[4px] absolute h-[36px] w-[36px] left-0 top-0 overflow-hidden"
                   >
                     <Image
                       src={
-                        book.attributes.Cover?.data.attributes.formats
-                          .small.url as string
+                        book.attributes.cover?.data.attributes.formats.small
+                          .url as string
                       }
-                      alt={book.attributes.Title}
+                      alt={book.attributes.title}
                       width={36}
                       height={36}
                     />
-                  </a>
+                  </Link>
                   <div className="table table-fixed	w-full min-h-[36px] overflow-hidden">
                     <div className="table-cell align-middle">
                       <a
@@ -136,7 +117,7 @@ function SearchSide({ searchWord }: { searchWord: string }) {
                         className="block overflow-hidden leading-[1.3] text-ellipsis 
                                 whitespace-nowrap text-[16px] w-[170px]"
                       >
-                        {book.attributes.Title}
+                        {book.attributes.title}
                       </a>
                     </div>
                   </div>
@@ -155,7 +136,7 @@ function SearchSide({ searchWord }: { searchWord: string }) {
                     mt-[2px] ml-[3px] bg-ico-brunch-sub2 bg-[-120px_0px]"
           ></span>
         </h3>
-        {!authorsData || authorsData.data.length === 0 ? (
+        {!usersData || usersData.length === 0 ? (
           <div className="pt-[8px] pb-[2px]">
             <div className="pt-[11px] max-h-[298px] overflow-hidden suggest-list">
               <span className="pb-[9px] block text-[#959595] text-[16px]">
@@ -164,33 +145,30 @@ function SearchSide({ searchWord }: { searchWord: string }) {
             </div>
           </div>
         ) : (
-          authorsData.data.map((author) => (
-            <div className="pt-[8px] pb-[2px]" key={author.id}>
+          usersData.map((user) => (
+            <div className="pt-[8px] pb-[2px]" key={user.id}>
               <div className="pt-[11px] max-h-[298px] overflow-hidden suggest-list">
                 <div className="relative pl-[50px]">
-                  <a
-                    href="#"
+                  <Link
+                    href={`/${user.id}`}
                     className="rounded-full absolute h-[36px] w-[36px] left-0 top-0 overflow-hidden"
                   >
                     <Image
-                      src={
-                        author.attributes.Profile?.data.attributes.formats
-                          .thumbnail.url as string
-                      }
-                      alt={author.attributes.Name}
+                      src={user.profile?.formats.thumbnail.url as string}
+                      alt={user.username}
                       width={36}
                       height={36}
                     />
-                  </a>
+                  </Link>
                   <div className="table table-fixed	w-full min-h-[36px] overflow-hidden">
                     <div className="table-cell align-middle">
-                      <a
-                        href="#"
+                      <Link
+                        href={`/${user.id}`}
                         className="block overflow-hidden leading-[1.3] text-ellipsis 
                                 whitespace-nowrap text-[16px] w-[170px]"
                       >
-                        {author.attributes.Name}
-                      </a>
+                        {user.username}
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -235,22 +213,24 @@ function SearchList({ searchWord }: { searchWord: string }) {
               </div>
             </div>
           ) : (
-            writingData.data.slice(0, 7).map((writing) => (
+            writingData.data.map((writing) => (
               <li key={writing.id} className="mt-[26px] box-border">
-                <a href="#">
+                <Link
+                  href={`/${writing.attributes.user?.data.id}/${writing.id}`}
+                >
                   <div className="max-w-[620px] overflow-hidden whitespace-nowrap text-ellipsis">
                     <strong
                       className="leading-none text-[20px] font-normal 
                       overflow-hidden whitespace-nowrap text-ellipsis"
                       dangerouslySetInnerHTML={{
-                        __html: writing.attributes.Title.replaceAll(
+                        __html: writing.attributes.title.replaceAll(
                           searchWord,
                           `<b style="color: #00c6be; font-weight: normal">${searchWord}</b>`,
                         ),
                       }}
                     />
                   </div>
-                </a>
+                </Link>
               </li>
             ))
           )}

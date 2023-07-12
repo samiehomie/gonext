@@ -1,19 +1,19 @@
 import Profile from '@/components/author/profile'
-import { queryAuthor } from '@/lib/queries'
+import { queryUser } from '@/lib/queries'
 import { getData } from '@/lib/fetchData'
-import { author } from '@/types'
+import { user } from '@/types'
 import TopNavigation from '@/components/navigations/topNavigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import Content from '@/components/author/content'
 
 export default async function AuthorPage({
-  params: { authorId },
+  params: { userId },
 }: {
-  params: { authorId: string }
+  params: { userId: string }
 }) {
-  const authorData: author = await getData(
-    `${process.env.NEXT_PUBLIC_DB_URL}/api/authors/${authorId}?${queryAuthor}`,
+  const userData: user = await getData(
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${userId}?${queryUser}`,
   )
   return (
     <>
@@ -24,13 +24,10 @@ export default async function AuthorPage({
               className="text-[#666] font-noto_sans_light text-[16.5px] leading-none
                       font-normal whitespace-nowrap align-middle table-cell tracking-tight"
             >
-              <Link href={`/${authorId}`}>
+              <Link href={`/${userId}`}>
                 <Image
-                  src={
-                    authorData.data.attributes.Profile?.data.attributes.formats
-                      .small.url as string
-                  }
-                  alt={authorData.data.attributes.Name}
+                  src={userData.profile?.formats.small.url as string}
+                  alt={userData.username}
                   width={30}
                   height={30}
                   className="rounded-full inline-block mr-[6px]"
@@ -39,15 +36,15 @@ export default async function AuthorPage({
                   className="text-[#333] inline-block pt-[5px] align-top 
                               whitespace-nowrap font-noto_sans_demlight text-[17px] tracking-[-1px]"
                 >
-                  {authorData.data.attributes.Name}
+                  {userData.username}
                 </span>
               </Link>
             </h2>
           </div>
         </div>
       </TopNavigation>
-      <Profile authorData={authorData} />
-      <Content authorData={authorData} />
+      <Profile userData={userData} />
+      <Content userData={userData} />
     </>
   )
 }

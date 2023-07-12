@@ -1,13 +1,16 @@
 import Tag from '../tag'
-import type { author } from '@/types'
+import type { author, user } from '@/types'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getEnglishDate } from '@/lib/utils'
 // TODO: #7 Implement infinite loading
 
-export default function Content({ authorData }: { authorData: author }) {
-  const author = authorData.data.attributes.Name
-  const authorId = authorData.data.id
+export default function Content({ userData }: { userData: user }) {
+  const user = userData.username
+  const userId = userData.id
+
+  if (!userData.writings) return null
+
   return (
     <main>
       <div className="overflow-hidden font-noto_sans_demlight">
@@ -16,10 +19,10 @@ export default function Content({ authorData }: { authorData: author }) {
           <div className="pt-[34px] m-auto w-[700px] animation-up">
             <strong className="block text-[12px] font-normal">소개</strong>
             <p className="text-[#666] text-[13px] leading-[24px] pt-[22px]">
-              {authorData.data.attributes.Introduction}
+              {userData.introduction}
             </p>
             <ul className="overflow-hidden pt-[13px]">
-              {authorData.data.attributes.Tags.map((tag, index) => (
+              {userData.tags.map((tag, index) => (
                 <li key={`${tag + index}`} className="float-left mr-[8px]">
                   <Tag tagName={tag} />
                 </li>
@@ -46,39 +49,39 @@ export default function Content({ authorData }: { authorData: author }) {
           <h3 className="screen-out">글목록</h3>
           <div className="overflow-hidden">
             <ul className="mt-[7px]">
-              {authorData.data.attributes.writings?.data.map((writing) => (
+              {userData.writings.map((writing) => (
                 <li
                   key={writing.id}
                   className="relative border-b border-[#eee] p-[24px_0px_27px] animation-up"
                 >
-                  {writing.attributes.book?.data !== null && (
+                  {writing.book !== null && (
                     <Link
-                      href={`/book/${writing.attributes.book?.data.id}`}
+                      href={`/book/${writing.book.id}`}
                       className=" inline-block text-[13px] m-[3px_0px_11px] align-top text-[#00c6be]"
                     >
                       <em
                         className="not-italic font-normal border-b border-[#00c6be] 
                                   inline-block leading-[14px] min-w-[20px]"
                       >
-                        {writing.attributes.book?.data.attributes.Title}
+                        {writing.book.title}
                       </em>
                     </Link>
                   )}
                   <Link
-                    href={`/${authorId}/${writing.id}`}
+                    href={`/${userId}/${writing.id}`}
                     className="min-h-[112px] overflow-visible clear-both block 
                               after:block after:clear-both after:content-['']"
                   >
                     <strong className="text-[20px] font-normal tracking-[-1px] whitespace-nowrap">
-                      {writing.attributes.Title}
+                      {writing.title}
                     </strong>
                     <div className="mt-[5px] overflow-hidden absolute right-0 top-[25px] w-[120px] h-[120px]">
                       <Image
                         src={
-                          writing.attributes.Cover?.data.attributes.formats
+                          writing.cover?.formats
                             .small.url as string
                         }
-                        alt={writing.attributes.Title}
+                        alt={writing.title}
                         fill={true}
                         className="object-cover"
                       />
@@ -89,11 +92,11 @@ export default function Content({ authorData }: { authorData: author }) {
                                   overflow-hidden pt-[5px] text-ellipsis"
                       >
                         <em className="not-italic font-normal text-[#666] pt-[6px]">
-                          {writing.attributes.Subtitle}
+                          {writing.subtitle}
                         </em>
                         <span className="w-[1px] align-top h-[12px] inline-block bg-[#eee] m-[4px_3px_0px]"></span>
                         <span className="word-wrap-break break-words text-[#959595]">
-                          {writing.attributes.Content.slice(0, 200)}
+                          {writing.content.slice(0, 200)}
                         </span>
                       </div>
                     </div>
@@ -102,7 +105,7 @@ export default function Content({ authorData }: { authorData: author }) {
                       <span className="float-left">0</span>
                       <span className="float-left bg-[#ddd] inline-block h-[2px] w-[2px] align-top m-[9px_5px_0px_6px]"></span>
                       <span className="float-left text-[#959595]">
-                        {getEnglishDate(writing.attributes.publishedAt)}
+                        {getEnglishDate(writing.publishedAt)}
                       </span>
                     </span>
                   </Link>
@@ -117,7 +120,7 @@ export default function Content({ authorData }: { authorData: author }) {
         >
           <h3 className="screen-out">매거진</h3>
           <div className="w-[735px] leading-none text-[0px]">
-            {authorData.data.attributes.books?.data.map((book) => (
+            {userData.books?.map((book) => (
               <div
                 key={book.id}
                 className="mt-[38px] inline-block w-[210px] align-top relative 
@@ -129,9 +132,9 @@ export default function Content({ authorData }: { authorData: author }) {
                               pt-[63px] rounded-[2px_6px_6px_2px]"
                 >
                   <Image
-                    src={book.attributes.Cover?.data.attributes.url as string}
+                    src={book.cover?.url as string}
                     fill={true}
-                    alt={book.attributes.Title}
+                    alt={book.title}
                     className="rounded-[2px_6px_6px_2px]"
                   />
                   <div className="bg-white h-[160px] mx-[46px] relative z-[1]">
@@ -139,14 +142,14 @@ export default function Content({ authorData }: { authorData: author }) {
                       className="text-left p-[8px_12px_0px] max-h-[115px] leading-[24px] 
                                 font-normal text-[17px] text-[#666] word-wrap-break display-box break-keep"
                     >
-                      {book.attributes.Title}
+                      {book.title}
                     </strong>
                     <span
                       className="txt-writer bottom-[10px] box-border text-[#959595] text-[11px] 
                                 left-0 leading-[16px] max-h-[32px] p-[0px_16px_0px_12px] absolute w-full 
                                 text-ellipsis text-left overflow-hidden break-all"
                     >
-                      {author}
+                      {user}
                     </span>
                   </div>
                   <span
@@ -175,7 +178,7 @@ export default function Content({ authorData }: { authorData: author }) {
                   href={`/book/${book.id}`}
                   className="txt-writer break-words overflow-hidden text-[18px] leading-[27px] max-h-[54px] pt-[4px]"
                 >
-                  <span>{book.attributes.Title}</span>
+                  <span>{book.title}</span>
                 </Link>
                 <dl className="block pt-[6px]">
                   <dt className="inline-block align-top mt-[3px]">
@@ -188,7 +191,7 @@ export default function Content({ authorData }: { authorData: author }) {
                   </dt>
                   <dd className="inline-block align-top text-[#959595] text-[12px] leading-[18px] pl-[2px]">
                     <em className="not-italic font-normal">
-                      {book.attributes.writings?.data.length}
+                      {book.writings?.length}
                     </em>
                     화
                   </dd>

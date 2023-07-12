@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { author } from '@/types'
+import { author, user } from '@/types'
 import icoPlus from '@/public/ico-plus.png'
 
 function MoreControl() {
@@ -31,7 +31,7 @@ function getContent() {
   return Object.keys(initialState).map((key) => document.getElementById(key))
 }
 
-export default function Profile({ authorData }: { authorData: author }) {
+export default function Profile({ userData }: { userData: user }) {
   const [zoom, setZoom] = useState(false)
   const [more, setMore] = useState(false)
   const [tabs, setTabs] = useState({ ...initialState, author: true })
@@ -60,7 +60,7 @@ export default function Profile({ authorData }: { authorData: author }) {
 
   return (
     <header className="bg-white font-noto_sans_demlight text-[#333]">
-      <h2 className="screen-out">{authorData.data.attributes.Name}</h2>
+      <h2 className="screen-out">{userData.username}</h2>
       <div className=" bg-[#f8f8f8] h-[120px] relative"></div>
       <div
         className="w-[700px] relative pt-[35px] mx-auto mb-[97px] after:block
@@ -76,11 +76,8 @@ export default function Profile({ authorData }: { authorData: author }) {
         >
           <div className="relative zoom-motion h-full">
             <Image
-              src={
-                authorData.data.attributes.Profile?.data.attributes
-                  .url as string
-              }
-              alt={authorData.data.attributes.Name}
+              src={userData.profile?.url as string}
+              alt={userData.username}
               width={500}
               height={500}
               className="z-[-1] absolute top-[50%] left-1/2 translate-x-[-250px] 
@@ -90,10 +87,8 @@ export default function Profile({ authorData }: { authorData: author }) {
         </div>
         <div className="w-[100px] absolute h-[100px] overflow-hidden right-0 top-[-50px]">
           <Image
-            src={
-              authorData.data.attributes.Profile?.data.attributes.url as string
-            }
-            alt={authorData.data.attributes.Name}
+            src={userData.profile?.url as string}
+            alt={userData.username}
             width={100}
             height={100}
             className="rounded-full cursor-zoom-in"
@@ -105,12 +100,12 @@ export default function Profile({ authorData }: { authorData: author }) {
         </div>
         <div>
           <strong className="block text-[28px] font-normal leading-[34px] pr-[170px]">
-            {authorData.data.attributes.Name}
+            {userData.username}
           </strong>
           <span className="text-[#959595] block text-[13px] leading-[20px] pt-[5px]">
             <em className="screen-out">직업</em>
             <span className="text-[#959595] text-[13px] leading-[20px]">
-              {authorData.data.attributes.Job}
+              {userData.job}
             </span>
           </span>
           <dl className="text-[#959595] text-[12px] overflow-hidden pt-[22px] pr-[200px]">
@@ -196,10 +191,8 @@ export default function Profile({ authorData }: { authorData: author }) {
               >
                 <span className="inline-block px-[7px] relative text-[15px] text-center">
                   {tabName === 'author' && '작가설명'}
-                  {tabName === 'writings' &&
-                    `글 ${authorData.data.attributes.writings?.data.length}`}
-                  {tabName === 'books' &&
-                    `작품 ${authorData.data.attributes.books?.data.length}`}
+                  {tabName === 'writings' && `글 ${userData.writings?.length}`}
+                  {tabName === 'books' && `작품 ${userData.books?.length}`}
                 </span>
               </button>
             </li>

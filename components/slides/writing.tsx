@@ -14,7 +14,7 @@ export default function Writing({
   return (
     <Link
       key={writing.id}
-      href={`/${writing.attributes.author?.data.id}/${writing.id}`}
+      href={`/${writing.attributes.user?.data.id}/${writing.id}`}
       className={`${
         boxType === 'hor'
           ? 'w-1/2 h-[260px]'
@@ -28,12 +28,12 @@ export default function Writing({
       } group block relative float-left overflow-hidden`}
     >
       <Image
-        src={writing.attributes.Cover?.data.attributes.formats.small.url as string}
+        src={writing.attributes.cover?.data.attributes.formats.small.url as string}
         fill={true}
         className="object-cover object-cneter 
                         transition-transform duration-300
                         group-hover:scale-110"
-        alt={writing.attributes.Title}
+        alt={writing.attributes.title}
       />
       <div
         className="table h-full w-full z-[2]
@@ -41,7 +41,7 @@ export default function Writing({
                         text-center text-[#fff]"
       >
         <div className="inline-block align-middle max-w-[222.6px] break-keep">
-          <strong className="title-pic">{writing.attributes.Title}</strong>
+          <strong className="title-pic">{writing.attributes.title}</strong>
           {/* summary */}
           <span
             className={`${
@@ -49,9 +49,9 @@ export default function Writing({
             } font-noto_sans_demlight 
                             leading-[20px] pt-[9px]`}
           >
-            {removeMarkdownImages(writing.attributes.Content).slice(0, 20)}
+            {removeMarkdownImages(writing.attributes.content).slice(0, 20)}
             <br />
-            {removeMarkdownImages(writing.attributes.Content).slice(20, 34) +
+            {removeMarkdownImages(writing.attributes.content).slice(20, 34) +
               '...'}
           </span>
           <span
@@ -65,7 +65,7 @@ export default function Writing({
             >
               by
             </span>
-            {` ${writing.attributes.author?.data.attributes.Name}`}
+            {` ${writing.attributes.user?.data.username}`}
           </span>
         </div>
         <div className="h-full overflow-hidden inline-block align-middle"></div>

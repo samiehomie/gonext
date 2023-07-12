@@ -70,7 +70,7 @@ function OverviewSlide({
               className="break-word text-[#666] block text-[26px] 
                   font-normal leading-[35px]"
             >
-              {bookData.data.attributes.Title}
+              {bookData.data.attributes.title}
             </strong>
           </div>
           <div className="pt-[-3px]">
@@ -114,7 +114,7 @@ function OverviewSlide({
             >
               이런분께 추천드려요!
             </strong>
-            {bookData.data.attributes.Summary.map((sentence, index) => (
+            {bookData.data.attributes.summary.map((sentence, index) => (
               <span
                 className="break-word pl-[17px] text-[13px] text-[#666] block 
                       leading-[20px] relative 
@@ -159,10 +159,10 @@ function OverviewSlide({
             브랜치북 소개
           </strong>
           <p className="break-word pt-[20px] text-[#666] text-[13px] leading-[23px]">
-            {bookData.data.attributes.Introduction}
+            {bookData.data.attributes.introduction}
           </p>
           <div className="text-[0px] after:content-[''] after:block after:clear-both">
-            {bookData.data.attributes.Tags.map((tag, index) => (
+            {bookData.data.attributes.tags.map((tag, index) => (
               <span
                 key={index}
                 className="relative block float-left p-[1px] mt-[8px] mr-[8px]"
@@ -189,14 +189,14 @@ function OverviewSlide({
       {/* STEP 3 */}
       {step === 'step3' && (
         <Link
-          href={`/${bookData.data.attributes.author?.data.id}`}
+          href={`/${bookData.data.attributes.user?.data.id}`}
           className={`block z-[50] bg-white
                      box-border h-[450px] relative w-full border-l border-[#eee]`}
         >
           <div className="relative w-full h-[97px] block">
             <Image
               src={
-                bookData.data.attributes.Cover?.data.attributes.url as string
+                bookData.data.attributes.cover?.data.attributes.url as string
               }
               alt="book cover"
               fill={true}
@@ -211,7 +211,7 @@ function OverviewSlide({
             >
               <Image
                 src={
-                  bookData.data.attributes.author?.data.attributes.Profile?.data
+                  bookData.data.attributes.user?.data.attributes.profile.data
                     .attributes.url as string
                 }
                 alt="profile"
@@ -225,20 +225,20 @@ function OverviewSlide({
                 className="vertical-three-box break-words text-ellipsis overflow-hidden 
                             leading-[24px] font-normal text-[18px] text-[#333] pr-[110px]"
               >
-                {bookData.data.attributes.author?.data.attributes.Name}
+                {bookData.data.attributes.user?.data.attributes.username}
               </strong>
               <span className="block pt-[5px]">
                 <span>
                   <em className="screen-out">직업</em>
                   <span className="text-[#666] text-[13px] leading-[19px]">
-                    {bookData.data.attributes.author?.data.attributes.Job}
+                    {bookData.data.attributes.user?.data.attributes.job}
                   </span>
                 </span>
               </span>
             </div>
             <div className="p-[22px_33px_0px]">
               <p className="break-word pt-[1px] text-[#666] text-[13px] leading-[22px]">
-                {bookData.data.attributes.author?.data.attributes.Introduction}
+                {bookData.data.attributes.user?.data.attributes.introduction}
               </p>
             </div>
           </div>

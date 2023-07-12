@@ -10,9 +10,9 @@ import Link from 'next/link'
 
 function calcHeight(data: writing['data'], height: number) {
   return (
-    (data.attributes.Cover?.data.attributes.formats.small?.height as number) *
+    (data.attributes.cover?.data.attributes.formats.small?.height as number) *
     (height /
-      (data.attributes.Cover?.data.attributes.formats.small?.width as number))
+      (data.attributes.cover?.data.attributes.formats.small?.width as number))
   )
 }
 
@@ -117,28 +117,28 @@ export default function RecommendArticle({
                         align-top float-left"
               >
                 <Link
-                  href={`/${writing.attributes.author?.data.id}/${writing.id}`}
+                  href={`/${writing.attributes.user?.data.id}/${writing.id}`}
                   className="block"
                 >
                   <div className="mb-[22px] max-h-[320px] overflow-hidden">
                     <Image
                       src={
-                        writing.attributes.Cover?.data.attributes.formats.small
+                        writing.attributes.cover?.data.attributes.formats.small
                           ?.url as string
                       }
-                      alt={writing.attributes.Title}
+                      alt={writing.attributes.title}
                       width={240}
                       height={calcHeight(writing, 240)}
                     />
                   </div>
                   <strong className="tit_subject">
-                    {writing.attributes.Title}
+                    {writing.attributes.title}
                   </strong>
                   <p
                     className="text-[#959595] text-[12px] tracking-[-.025em] 
                             leading-[20px] pt-[10px] text-justify break-all"
                   >
-                    {removeMarkdownImages(writing.attributes.Content)
+                    {removeMarkdownImages(writing.attributes.content)
                       .slice(0, 200)
                       .replace(/\S+$/, '')}
                   </p>
@@ -149,7 +149,7 @@ export default function RecommendArticle({
                     <span className="mt-[3px] text-[#bfbfbf] italic font-[Georgia]">
                       by
                     </span>
-                    {` ${writing.attributes.author?.data.attributes.Name}`}
+                    {` ${writing.attributes.user?.data.username}`}
                   </span>
                 </Link>
               </li>

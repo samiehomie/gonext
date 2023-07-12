@@ -71,7 +71,7 @@ export default function Slides() {
           {writingsWithBook.map((writing) => (
             <Link
               key={writing.id}
-              href={`/${writing.attributes.author?.data.id as number}/${
+              href={`/${writing.attributes.user?.data.id as number}/${
                 writing.id
               }`}
               className="group block w-1/2 h-[260px]
@@ -79,14 +79,14 @@ export default function Slides() {
             >
               <Image
                 src={
-                  writing.attributes.Cover?.data.attributes.formats.small
+                  writing.attributes.cover?.data.attributes.formats.small
                     .url as string
                 }
                 fill={true}
                 className="object-cover object-cneter 
                           transition-transform duration-300
                           group-hover:scale-110"
-                alt={writing.attributes.Title}
+                alt={writing.attributes.title}
               />
               <div
                 className="table h-full w-full text-[#fff] text-center
@@ -94,7 +94,7 @@ export default function Slides() {
               >
                 <div className="inline-block align-middle max-w-[222.6px] break-keep">
                   <strong className="title-pic">
-                    {writing.attributes.Title}
+                    {writing.attributes.title}
                   </strong>
                   <span
                     className="w-[200px] block m-auto overflow-hidden pt-[30px]
@@ -108,7 +108,7 @@ export default function Slides() {
                       by
                     </span>
                     {` ${
-                      writing.attributes.author?.data.attributes.Name as string
+                      writing.attributes.user?.data.username as string
                     }`}
                   </span>
                 </div>

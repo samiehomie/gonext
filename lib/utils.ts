@@ -3,12 +3,12 @@ import qs from 'qs'
 export function getWritingsQuery(pageSize: number, page: number = 1) {
   return qs.stringify(
     {
-      fields: ['Title', 'Subtitle', 'Content'],
+      fields: ['title', 'subtitle', 'content'],
       populate: {
-        author: {
-          fields: ['Name'],
+        user: {
+          fields: ['username'],
         },
-        Cover: {
+        cover: {
           fields: ['formats'],
         },
       },
@@ -26,8 +26,13 @@ export function getWritingsQuery(pageSize: number, page: number = 1) {
 export function getSearchQuery(searchWord: string) {
   const queryWritings = qs.stringify(
     {
-      fields: ['Title'],
-      filters: { Title: { $contains: searchWord } },
+      fields: ['title'],
+      filters: { title: { $contains: searchWord } },
+      populate: {
+        user: {
+          fields: ['username'],
+        },
+      },
       pagination: {
         page: 1,
         pageSize: 7,
@@ -39,13 +44,13 @@ export function getSearchQuery(searchWord: string) {
   )
   const queryBooks = qs.stringify(
     {
-      fields: ['Title'],
+      fields: ['title'],
       populate: {
-        Cover: {
+        cover: {
           fields: ['formats'],
         },
       },
-      filters: { Title: { $contains: searchWord } },
+      filters: { title: { $contains: searchWord } },
       pagination: {
         page: 1,
         pageSize: 3,
@@ -56,19 +61,17 @@ export function getSearchQuery(searchWord: string) {
       encodeValuesOnly: true,
     },
   )
-  const queryAuthors = qs.stringify(
+  const queryUsers = qs.stringify(
     {
-      fields: ['Name'],
+      fields: ['username'],
       populate: {
-        Profile: {
+        profile: {
           fields: ['formats'],
         },
       },
-      filters: { Name: { $contains: searchWord } },
-      pagination: {
-        page: 1,
-        pageSize: 3,
-      },
+      filters: { username: { $contains: searchWord } },
+      start: 0,
+      limit: 3,
     },
     {
       encodeValuesOnly: true,
@@ -77,7 +80,7 @@ export function getSearchQuery(searchWord: string) {
   return {
     queryWritings,
     queryBooks,
-    queryAuthors,
+    queryUsers,
   }
 }
 

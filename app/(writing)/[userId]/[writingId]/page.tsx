@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { getQueryWritingPage } from '@/lib/queries'
 import { getData } from '@/lib/fetchData'
-import type { author, writing, writings } from '@/types'
+import type { author, writing, writings, user, writingsForUser, writingForUser } from '@/types'
 import Markdown from '@/components/Markdown'
 import Image from 'next/image'
 import { getEnglishDate } from '@/lib/utils'
@@ -12,21 +12,21 @@ import Link from 'next/link'
 // TODO: #5 Add anchor using rehype library
 
 async function Others({
-  authorId,
+  userId,
   writingId,
-  authorName,
+  userName,
 }: {
-  authorId: string
+  userId: string
   writingId: string
-  authorName: string
+  userName: string
 }) {
-  const [_, others] = getQueryWritingPage(authorId, writingId)
-  const otherWritings: author = await getData(others)
-  const writings: writings = otherWritings.data.attributes.writings!
-  const prev: undefined | writing['data'] = writings.data
+  const [_, others] = getQueryWritingPage(userId, writingId)
+  const otherWritings: user = await getData(others)
+  const writings: writingsForUser = otherWritings.writings!
+  const prev: undefined | writingForUser = writings
     .filter((w) => w.id < Number(writingId))
     .at(-1)
-  const next: undefined | writing['data'] = writings.data.filter(
+  const next: undefined | writingForUser = writings.filter(
     (w) => w.id > Number(writingId),
   )[0]
   return (
@@ -42,19 +42,19 @@ async function Others({
           className="m-auto relative w-[1020px] 
                 after:content-[''] after:block after:clear-both"
         >
-          {writings?.data.map((writing) => (
+          {writings?.map((writing) => (
             <li
               key={writing.id}
               className="float-left w-[300px] mx-[20px] mb-[35px]"
             >
-              <Link href={`/${authorId}/${writing.id}`} className="block">
+              <Link href={`/${userId}/${writing.id}`} className="block">
                 <div className="relative w-full h-[170px]">
                   <Image
                     src={
-                      writing.attributes.Cover?.data.attributes.url as string
+                      writing.cover?.url as string
                     }
                     fill={true}
-                    alt={writing.attributes.Title}
+                    alt={writing.title}
                     className="object-cover top-0 left-0"
                   />
                 </div>
@@ -62,23 +62,21 @@ async function Others({
                   className="txt-writer font-serif_mj font-normal overflow-hidden text-[24px] 
                         leading-[32px] mt-[26px] max-h-[62px] text-ellipsis text-[#333]"
                 >
-                  {writing.attributes.Title}
+                  {writing.title}
                 </strong>
                 <span
                   className="vertical-three-box text-[13px] mt-[8px] 
                         overflow-hidden text-ellipsis max-h-[66px]"
                 >
                   <span className="relative leading-[24px] inline text-[#959595] text-[13px]">
-                    {writing.attributes.Content}
+                    {writing.content}
                   </span>
                 </span>
                 <span className="block mt-[15px]">
                   <span className="mr-[2px] italic text-[12px] text-[#bbb] font-[Georgia]">
                     by
                   </span>
-                  <span className="text-[13px] text-[#959595]">
-                    {authorName}
-                  </span>
+                  <span className="text-[13px] text-[#959595]">{userName}</span>
                 </span>
               </Link>
             </li>
@@ -100,7 +98,7 @@ async function Others({
       <div className="bg-white w-full z-[100] fixed bottom-0 h-[59px] border-t border-[#eee]">
         {prev && (
           <Link
-            href={`/${authorId}/${prev.id}`}
+            href={`/${userId}/${prev.id}`}
             className="float-left h-full px-[30px]"
           >
             <span
@@ -113,13 +111,13 @@ async function Others({
               className="inline-block text-[15px] font-normal 
                       leading-[60px] overflow-hidden max-w-[350px] text-ellipsis whitespace-nowrap"
             >
-              {prev.attributes.Title}
+              {prev.title}
             </strong>
           </Link>
         )}
         {next && (
           <Link
-            href={`/${authorId}/${next.id}`}
+            href={`/${userId}/${next.id}`}
             className="float-right h-full px-[30px]"
           >
             <span
@@ -132,7 +130,7 @@ async function Others({
               className="inline-block text-[15px] font-normal 
                     leading-[60px] overflow-hidden max-w-[350px] text-ellipsis whitespace-nowrap"
             >
-              {next.attributes.Title}
+              {next.title}
             </strong>
           </Link>
         )}
@@ -142,12 +140,14 @@ async function Others({
 }
 
 export default async function Page({
-  params: { authorId, writingId },
+  params: { userId, writingId },
 }: {
-  params: { authorId: string; writingId: string }
+  params: { userId: string; writingId: string }
 }) {
-  const [target, _] = getQueryWritingPage(authorId, writingId)
-  const author: author = await getData(target)
+  const [target, _] = getQueryWritingPage(userId, writingId)
+  const user: user = await getData(target)
+
+  if (!user.writings) return null
 
   return (
     <div className="font-noto_sans_demlight">
@@ -158,13 +158,9 @@ export default async function Page({
           <div className="relative w-full h-[450px]">
             <Image
               src={
-                author.data.attributes.writings?.data[0].attributes.Cover?.data
-                  .attributes.url as string
+                user.writings[0].cover?.url as string
               }
-              alt={
-                author.data.attributes.writings?.data[0].attributes
-                  .Title as string
-              }
+              alt={user.writings[0].title as string}
               fill={true}
               className=" object-cover"
             />
@@ -178,13 +174,13 @@ export default async function Page({
                 className=" text-[34pt] font-serif_mj 
                             leading-[40pt] tracking-[-.01em] break-words"
               >
-                {author.data.attributes.writings?.data[0].attributes.Title}
+                {user.writings[0].title}
               </h1>
               <p
                 className="tracking-[-.03em] text-[12pt] leading-[18pt] 
                           opacity-80 break-words pt-[6px]"
               >
-                {author.data.attributes.writings?.data[0].attributes.Subtitle}
+                {user.writings[0].subtitle}
               </p>
             </div>
             <div
@@ -199,10 +195,10 @@ export default async function Page({
               </span>
               <span className="opacity-80 float-left text-[#666]">
                 <Link
-                  href={`/${authorId}`}
+                  href={`/${userId}`}
                   className="text-[#fff] tracking-[-.05em]"
                 >
-                  {author.data.attributes.Name}
+                  {user.username}
                 </Link>
               </span>
               <span
@@ -213,10 +209,7 @@ export default async function Page({
                 className="opacity-50 float-left text-[#fff] 
                           wordspacing-60 tracking-[-.05em] font-sans"
               >
-                {getEnglishDate(
-                  author.data.attributes.writings?.data[0].attributes
-                    .Created as string,
-                )}
+                {getEnglishDate(user.writings[0].created as string)}
               </span>
             </div>
           </div>
@@ -228,12 +221,7 @@ export default async function Page({
             className="mb-[-5px] bg-white relative z-[10] pt-[40px] 
                     break-words overflow-hidden"
           >
-            <Markdown
-              content={
-                author.data.attributes.writings?.data[0].attributes
-                  .Content as string
-              }
-            />
+            <Markdown content={user.writings[0].content as string} />
           </div>
           {/* tags */}
           <div>
@@ -246,18 +234,13 @@ export default async function Page({
                   keyword
                 </strong>
                 <ul className="float-left">
-                  {author.data.attributes.writings?.data[0].attributes.Tags.map(
-                    (tag, i) => (
-                      <li
-                        key={tag + i}
-                        className="float-left mb-[8px] mr-[8px]"
-                      >
-                        <a href="#" className="writing-tag tracking-[-.5px]">
-                          {tag}
-                        </a>
-                      </li>
-                    ),
-                  )}
+                  {user.writings[0].tags.map((tag, i) => (
+                    <li key={tag + i} className="float-left mb-[8px] mr-[8px]">
+                      <a href="#" className="writing-tag tracking-[-.5px]">
+                        {tag}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <span className="inline-block ">
@@ -285,35 +268,33 @@ export default async function Page({
           <div>
             <strong className="block">
               <Link
-                href={`/${authorId}`}
+                href={`/${userId}`}
                 className="block text-[28px] font-normal overflow-hidden 
                         font-noto_sans_demlight text-ellipsis whitespace-nowrap w-[588px]"
               >
-                {author.data.attributes.Name}
+                {user.username}
               </Link>
             </strong>
             <span className="text-[#666] block text-[13px] my-[1px] mx-[2px] font-noto_sans_demlight">
               <em className="screen-out absolute h-0 w-0">직업</em>
-              {author.data.attributes.Job}
+              {user.job}
             </span>
             <Link
-              href={`/${authorId}`}
+              href={`/${userId}`}
               className="absolute right-0 top-[-22px]"
             >
               <Image
-                src={
-                  author.data.attributes.Profile?.data.attributes.url as string
-                }
-                alt={author.data.attributes.Name}
+                src={user.profile?.url as string}
+                alt={user.username}
                 width={100}
                 height={100}
                 className="rounded-full align-top"
               />
             </Link>
             <div className="text-[13px] text-[#666] mt-[21px]">
-              <Link href={`/${authorId}`}>
+              <Link href={`/${userId}`}>
                 <p className="text-[#959595] leading-[22px]">
-                  {author.data.attributes.Introduction}
+                  {user.introduction}
                 </p>
               </Link>
             </div>
@@ -354,9 +335,9 @@ export default async function Page({
       {/* others */}
       <Suspense fallback={<div>Loading...</div>}>
         <Others
-          authorId={authorId}
+          userId={userId}
           writingId={writingId}
-          authorName={author.data.attributes.Name}
+          userName={user.username}
         />
       </Suspense>
     </div>

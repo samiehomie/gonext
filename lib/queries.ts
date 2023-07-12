@@ -2,12 +2,12 @@ import qs from 'qs'
 
 export const queryWritings = qs.stringify(
   {
-    fields: ['Title', 'Subtitle', 'Content'],
+    fields: ['title', 'subtitle', 'content'],
     populate: {
-      author: {
-        fields: ['Name'],
+      user: {
+        fields: ['username'],
       },
-      Cover: {
+      cover: {
         fields: ['formats'],
       },
     },
@@ -22,28 +22,28 @@ export const queryWritings = qs.stringify(
 
 export const queryBook = qs.stringify(
   {
-    fields: ['Title', 'publishedAt', 'Introduction', 'Summary', 'Tags'],
+    fields: ['title', 'publishedAt', 'introduction', 'summary', 'tags'],
     populate: {
-      author: {
-        fields: ['name', 'Introduction', 'Job'],
+      user: {
+        fields: ['username', 'introduction', 'job'],
         populate: {
-          Profile: {
+          profile: {
             fields: ['formats', 'url'],
           },
         },
       },
       writings: {
-        fields: ['Title', 'Content', 'Subtitle'],
+        fields: ['title', 'content', 'subtitle'],
         populate: {
-          Cover: {
+          cover: {
             fields: ['formats', 'url'],
           },
-          author: {
-            fields: ['Name'],
+          user: {
+            fields: ['username'],
           },
         },
       },
-      Cover: {
+      cover: {
         fields: ['formats', 'url'],
       },
     },
@@ -53,32 +53,32 @@ export const queryBook = qs.stringify(
   },
 )
 
-export const queryAuthor = qs.stringify(
+export const queryUser = qs.stringify(
   {
-    fields: ['Name', 'Introduction', 'Job', 'Tags'],
+    fields: ['username', 'introduction', 'job', 'tags'],
     populate: {
-      Profile: {
+      profile: {
         fields: ['formats', 'url'],
       },
       writings: {
-        fields: ['Title', 'Content', 'Subtitle', 'publishedAt'],
+        fields: ['title', 'content', 'subtitle', 'publishedAt'],
         populate: {
-          Cover: {
+          cover: {
             fields: ['formats', 'url'],
           },
           book: {
-            fields: ['Title'],
+            fields: ['title'],
           },
         },
       },
       books: {
-        fields: ['Title'],
+        fields: ['title'],
         populate: {
-          Cover: {
+          cover: {
             fields: ['formats', 'url'],
           },
           writings: {
-            fields: ['Title'],
+            fields: ['title'],
           },
         },
       },
@@ -90,12 +90,12 @@ export const queryAuthor = qs.stringify(
 )
 
 export function getQueryWritingPage(userId: string, writingId: string) {
-  const url = `${process.env.NEXT_PUBLIC_DB_URL}/api/authors/${userId}?`
+  const url = `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${userId}?`
   const target = qs.stringify(
     {
-      fields: ['Name', 'Introduction', 'Job'],
+      fields: ['username', 'introduction', 'job'],
       populate: {
-        Profile: {
+        profile: {
           fields: 'url',
         },
         writings: {
@@ -104,9 +104,9 @@ export function getQueryWritingPage(userId: string, writingId: string) {
               $eq: writingId,
             },
           },
-          fields: ['Title', 'Content', 'Created', 'Subtitle', 'Tags'],
+          fields: ['title', 'content', 'created', 'subtitle', 'tags'],
           populate: {
-            Cover: {
+            cover: {
               fields: 'url',
             },
           },
@@ -119,9 +119,9 @@ export function getQueryWritingPage(userId: string, writingId: string) {
   )
   const others = qs.stringify(
     {
-      fields: ['Name', 'Introduction', 'Job'],
+      fields: ['username', 'introduction', 'job'],
       populate: {
-        Profile: {
+        profile: {
           fields: 'url',
         },
         writings: {
@@ -130,9 +130,9 @@ export function getQueryWritingPage(userId: string, writingId: string) {
               $ne: writingId,
             },
           },
-          fields: ['Title', 'Content', 'Created', 'Subtitle', 'Tags'],
+          fields: ['title', 'content', 'created', 'subtitle', 'tags'],
           populate: {
-            Cover: {
+            cover: {
               fields: 'url',
             },
           },
@@ -148,6 +148,20 @@ export function getQueryWritingPage(userId: string, writingId: string) {
   )
   return [url + target, url + others]
 }
+
+export const queryUsers = qs.stringify(
+  {
+    fields: ['username', 'introduction'],
+    populate: {
+      profile: { fields: ['url'] },
+    },
+    start: 0,
+    limit: 5,
+  },
+  {
+    encodeValuesOnly: true,
+  },
+)
 
 export const urlBook = `${process.env.NEXT_PUBLIC_DB_URL}/api/books/1?`
 export const urlWritings = `${process.env.NEXT_PUBLIC_DB_URL}/api/writings?`

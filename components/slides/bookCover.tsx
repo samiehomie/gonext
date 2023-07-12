@@ -4,15 +4,15 @@ import { book } from '@/types'
 export default function BookCover({
   bookData,
   isBookPage = false,
-  isAuthorPage = false
+  isAuthorPage = false,
 }: {
   bookData: book
   isBookPage?: boolean
   isAuthorPage?: boolean
 }) {
-  const { Title: title, Cover: cover } = bookData.data.attributes
+  const { title, cover } = bookData.data.attributes
   const imgUrl = cover?.data.attributes.url
-  const author = bookData.data.attributes.author?.data
+  const user = bookData.data.attributes.user?.data
   return (
     <div
       className={`absolute shadow-[0_10px_20px_0_rgba(0,0,0,.1)] overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0
@@ -70,7 +70,7 @@ export default function BookCover({
               text-[11px] leading-[16px] `
           }`}
         >
-          {author?.attributes.Name}
+          {user?.attributes.username}
         </span>
       </div>
       <span

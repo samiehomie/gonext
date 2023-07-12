@@ -3,7 +3,7 @@ import { useState } from 'react'
 import useSWR from 'swr'
 import { regexInvalidQuery } from '@/lib/utils'
 import qs from 'qs'
-import type { authors } from '@/types'
+import type { authors, users } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -16,18 +16,17 @@ function getRandomElementExcept(arr: string[], except: string) {
 const getFilterdUrl = (tag: string) => {
   const queryTags = qs.stringify(
     {
-      fields: ['Name', 'Introduction', 'Job', 'Tags'],
+      fields: ['username', 'introduction', 'job', 'tags'],
       populate: {
-        Profile: {
+        profile: {
           fields: ['url'],
         },
       },
       filters: {
-        Tags: { $contains: tag },
+        tags: { $contains: tag },
       },
-      pagination: {
-        pageSize: 6,
-      },
+      start: 0,
+      limit: 6,
     },
     {
       encodeValuesOnly: true,
@@ -52,11 +51,11 @@ function AuthorsGroup({
   tagsState: typeof initialState
 }) {
   const query = getFilterdUrl(tag)
-  const { data: authors }: { data: authors | undefined } = useSWR(
-    regexInvalidQuery.test(query) ? null : 'authors?' + query,
+  const { data: users }: { data: users | undefined } = useSWR(
+    regexInvalidQuery.test(query) ? null : 'users?' + query,
   )
-
-  if (!authors) return null
+  console.log('url', query)
+  if (!users) return null
 
   return (
     <ul
@@ -66,38 +65,38 @@ function AuthorsGroup({
           : 'after:content-[""] after:block after:clear-both'
       }`}
     >
-      {authors.data.map((author) => (
+      {users.map((user) => (
         <li
-          key={author.id}
+          key={user.id}
           className="float-left h-full mb-[15px] relative text-center w-[310px]"
         >
           <Link
-            href={`/${author.id}`}
+            href={`/${user.id}`}
             className="bg-[#fff] block min-h-[288px] py-[46px] px-[40px]"
           >
             <Image
-              src={author.attributes.Profile?.data.attributes.url as string}
-              alt={author.attributes.Name}
+              src={user.profile?.url as string}
+              alt={user.username}
               width={80}
               height={80}
               className="m-auto rounded-full"
             />
             <strong className="font-serif_mj tit_writer block overflow-hidden text-ellipsis">
-              {author.attributes.Name}
+              {user.username}
             </strong>
             <span
               className="text-[#666] block overflow-hidden
                       font-thin mt-[4px] tracking-[-.02em] 
                       text-ellipsis whitespace-nowrap text-[12px]"
             >
-              {author.attributes.Job}
+              {user.job}
             </span>
             <span
               className="block h-[60px] text-[#959595] overflow-hidden
                       text-[12px] leading-[20px] mt-[16px]  
                       text-ellipsis break-all"
             >
-              {author.attributes.Introduction}
+              {user.introduction}
             </span>
           </Link>
           {/* weekly_writer_tags */}
@@ -114,7 +113,7 @@ function AuthorsGroup({
                       text-[12px] tracking-[-1px] py-[4px] px-[10px] 
                       inline-block leading-[18px] mx-[2px] overflow-hidden"
             >
-              {getRandomElementExcept(author.attributes.Tags, tag)}
+              {getRandomElementExcept(user.tags, tag)}
             </button>
             <button
               className="h-[28px] w-[35px] rounded-[20px] indent-[-9999px] 

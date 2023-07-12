@@ -12,7 +12,7 @@ export default function Article({
   return (
     <div className="m-auto w-[1000px] animation-up-late">
       <Link
-        href={`/${writing.attributes.author?.data.id}/${writing.id}`}
+        href={`/${writing.attributes.user?.data.id}/${writing.id}`}
         className="float-right h-[146px] mr-[150px] w-[700px] relative pt-[32px]"
       >
         <em
@@ -27,8 +27,8 @@ export default function Article({
         >
           <div className="relative w-[120px] h-[120px]">
             <Image
-              src={writing.attributes.Cover?.data.attributes.url as string}
-              alt={writing.attributes.Title}
+              src={writing.attributes.cover?.data.attributes.url as string}
+              alt={writing.attributes.title}
               fill={true}
               className="object-cover"
             />
@@ -39,7 +39,7 @@ export default function Article({
             className="block text-[20px] font-normal tracking-[-1px] leading-[25px] 
                     overflow-hidden pt-[1px] text-ellipsis break-words w-full text-[#333]"
           >
-            {writing.attributes.Title}
+            {writing.attributes.title}
           </strong>
           <p
             className="txt-writer text-[#959595] text-[14px] h-[40px] tracking-[-1px] 
@@ -50,9 +50,9 @@ export default function Article({
                       leading-[21px] tracking-[-1px] after:text-[#ddd] after:content-["ㅣ"]
                       after:inline-block after:mx-[4px]`}
             >
-              {writing.attributes.Subtitle}
+              {writing.attributes.subtitle}
             </em>
-            <span>{writing.attributes.Content.slice(0, 200)}</span>
+            <span>{writing.attributes.content.slice(0, 200)}</span>
           </p>
         </div>
         <dl
