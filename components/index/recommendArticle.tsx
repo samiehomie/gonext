@@ -149,7 +149,7 @@ export default function RecommendArticle({
                     <span className="mt-[3px] text-[#bfbfbf] italic font-[Georgia]">
                       by
                     </span>
-                    {` ${writing.attributes.user?.data.username}`}
+                    {` ${writing.attributes.user?.data.attributes.username}`}
                   </span>
                 </Link>
               </li>

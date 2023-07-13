@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { getQueryWritingPage } from '@/lib/queries'
 import { getData } from '@/lib/fetchData'
-import type { author, writing, writings, user, writingsForUser, writingForUser } from '@/types'
+import type { user, writingsInUser, writingInUser } from '@/types'
 import Markdown from '@/components/Markdown'
 import Image from 'next/image'
 import { getEnglishDate } from '@/lib/utils'
@@ -22,11 +22,11 @@ async function Others({
 }) {
   const [_, others] = getQueryWritingPage(userId, writingId)
   const otherWritings: user = await getData(others)
-  const writings: writingsForUser = otherWritings.writings!
-  const prev: undefined | writingForUser = writings
+  const writings: writingsInUser = otherWritings.writings!
+  const prev: undefined | writingInUser = writings
     .filter((w) => w.id < Number(writingId))
     .at(-1)
-  const next: undefined | writingForUser = writings.filter(
+  const next: undefined | writingInUser = writings.filter(
     (w) => w.id > Number(writingId),
   )[0]
   return (
@@ -50,9 +50,7 @@ async function Others({
               <Link href={`/${userId}/${writing.id}`} className="block">
                 <div className="relative w-full h-[170px]">
                   <Image
-                    src={
-                      writing.cover?.url as string
-                    }
+                    src={writing.cover?.url as string}
                     fill={true}
                     alt={writing.title}
                     className="object-cover top-0 left-0"
@@ -157,9 +155,7 @@ export default async function Page({
           {/* Cover image */}
           <div className="relative w-full h-[450px]">
             <Image
-              src={
-                user.writings[0].cover?.url as string
-              }
+              src={user.writings[0].cover?.url as string}
               alt={user.writings[0].title as string}
               fill={true}
               className=" object-cover"
@@ -279,10 +275,7 @@ export default async function Page({
               <em className="screen-out absolute h-0 w-0">직업</em>
               {user.job}
             </span>
-            <Link
-              href={`/${userId}`}
-              className="absolute right-0 top-[-22px]"
-            >
+            <Link href={`/${userId}`} className="absolute right-0 top-[-22px]">
               <Image
                 src={user.profile?.url as string}
                 alt={user.username}
