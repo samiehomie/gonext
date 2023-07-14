@@ -3,7 +3,7 @@ import { useState } from 'react'
 import useSWR from 'swr'
 import { regexInvalidQuery } from '@/lib/utils'
 import qs from 'qs'
-import type { authors, users } from '@/types'
+import type { users } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -54,7 +54,7 @@ function AuthorsGroup({
   const { data: users }: { data: users | undefined } = useSWR(
     regexInvalidQuery.test(query) ? null : 'users?' + query,
   )
-  console.log('url', query)
+
   if (!users) return null
 
   return (

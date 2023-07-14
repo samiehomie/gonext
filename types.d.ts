@@ -296,7 +296,7 @@ export type writing = {
       createdAt: string
       updatedAt: string
       publishedAt: string
-      user?: typeof tempUser
+      user?: userAsChild
       book?: book
       cover?: {
         data: {

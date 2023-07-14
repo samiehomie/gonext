@@ -15,6 +15,7 @@ module.exports = {
         'ico-brunch-sub': "url('../public/ico-brunch-sub.png')",
         'ico-brunch-sub2': "url('../public/ico-brunch-sub2.png')",
         'ico-brunch-sub3': "url('../public/ico-brunch-sub3.png')",
+        'ico-brunch-common': "url('../public/ico-comm.png')",
         'ico-weekly': "url('../public/ico-weekly.png')",
         'ico-brunch-discover': "url('../public/ico-brunch-discover.png')",
         'ico-article-buttons': "url('../public/ico-article-btn.png')",

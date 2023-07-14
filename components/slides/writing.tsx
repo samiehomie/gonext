@@ -28,7 +28,9 @@ export default function Writing({
       } group block relative float-left overflow-hidden`}
     >
       <Image
-        src={writing.attributes.cover?.data.attributes.formats.small.url as string}
+        src={
+          writing.attributes.cover?.data.attributes.formats.small.url as string
+        }
         fill={true}
         className="object-cover object-cneter 
                         transition-transform duration-300
@@ -36,7 +38,7 @@ export default function Writing({
         alt={writing.attributes.title}
       />
       <div
-        className="table h-full w-full z-[2]
+        className="block h-full w-full z-[2]
                         absolute left-1/2 ml-[-50%] top-0 
                         text-center text-[#fff]"
       >
@@ -65,7 +67,7 @@ export default function Writing({
             >
               by
             </span>
-            {` ${writing.attributes.user?.data.username}`}
+            {` ${writing.attributes.user?.data.attributes.username}`}
           </span>
         </div>
         <div className="h-full overflow-hidden inline-block align-middle"></div>

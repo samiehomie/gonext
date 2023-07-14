@@ -53,7 +53,6 @@ const components = {
     )
   },
   p: async (props: paraTextAttrsMDX | paraImgAttrsMDX) => {
-    console.log('p', props)
     if (
       props.children instanceof Object &&
       Object.hasOwn(props.children, 'type') &&

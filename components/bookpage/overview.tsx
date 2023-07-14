@@ -211,7 +211,7 @@ function OverviewSlide({
             >
               <Image
                 src={
-                  bookData.data.attributes.user?.data.attributes.profile.data
+                  bookData.data.attributes.user?.data.attributes.profile?.data
                     .attributes.url as string
                 }
                 alt="profile"
@@ -356,7 +356,6 @@ export default function Overview({
             </button>
           </div>
         </div>
-        <div className="w-full h-[5000px]"></div>
       </div>
       {isOpen && children}
     </>

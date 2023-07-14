@@ -6,7 +6,6 @@ import SlidesShow from '../slides/slidesShow'
 import WritersWeekly from './writersWeekly'
 import Keywords from './keywords'
 import RecommendArticle from './recommendArticle'
-import { SWRConfig } from 'swr'
 import IndexStart from '../modals/indexStart'
 
 function MainContent({ children }: { children: ReactElement }) {
@@ -84,46 +83,34 @@ export default function IndexContainer() {
   }, [onTop])
 
   return (
-    <SWRConfig
-      value={{
-        fetcher: (query: string) =>
-          fetch(`${process.env.NEXT_PUBLIC_DB_URL}/api/${query}`).then((res) =>
-            res.json(),
-          ),
-      }}
-    >
-      <div className={`relative overflow-hidden`}>
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault()
-            window.scrollTo(0, 0)
-            setOnTop(false)
-          }}
-          className={`block bg-ico-brunch-discover bg-[0px_-90px] 
+    <div className={`relative overflow-hidden`}>
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault()
+          window.scrollTo(0, 0)
+          setOnTop(false)
+        }}
+        className={`block bg-ico-brunch-discover bg-[0px_-90px] 
                     fixed h-[31px] w-[60px] z-[15] right-[40px] transition-[bottom] duration-500 ease-linear 
                     ${onTop ? 'bottom-[40px]' : 'bottom-[-80px]'}`}
-        ></a>
+      ></a>
 
-        {onStart && <IndexStart setOnStart={setOnStart} />}
-        {!onSearch && <TopBanner />}
-        <IndexTopNavigation
-          onSearch={onSearch}
-          setOnSearch={setOnSearch}
-          setOnStart={setOnStart}
-          
-        />
-        {!onSearch && (
-          <MainContent>
-            <SlidesShow page={page} setPage={setPage} />
-          </MainContent>
-        )}
-        {!onSearch && <Keywords />}
-        {!onSearch && <WritersWeekly />}
-        {!onSearch && (
-          <RecommendArticle cursor={cursor} setCursor={setCursor} />
-        )}
-      </div>
-    </SWRConfig>
+      {onStart && <IndexStart setOnStart={setOnStart} />}
+      {!onSearch && <TopBanner />}
+      <IndexTopNavigation
+        onSearch={onSearch}
+        setOnSearch={setOnSearch}
+        setOnStart={setOnStart}
+      />
+      {!onSearch && (
+        <MainContent>
+          <SlidesShow page={page} setPage={setPage} />
+        </MainContent>
+      )}
+      {!onSearch && <Keywords />}
+      {!onSearch && <WritersWeekly />}
+      {!onSearch && <RecommendArticle cursor={cursor} setCursor={setCursor} />}
+    </div>
   )
 }

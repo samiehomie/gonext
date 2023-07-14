@@ -89,7 +89,7 @@ export default function Slides() {
                 alt={writing.attributes.title}
               />
               <div
-                className="table h-full w-full text-[#fff] text-center
+                className="block h-full w-full text-[#fff] text-center
                           absolute left-1/2 ml-[-50%] top-0 z-[2]"
               >
                 <div className="inline-block align-middle max-w-[222.6px] break-keep">
@@ -108,7 +108,8 @@ export default function Slides() {
                       by
                     </span>
                     {` ${
-                      writing.attributes.user?.data.username as string
+                      writing.attributes.user?.data.attributes
+                        .username as string
                     }`}
                   </span>
                 </div>
