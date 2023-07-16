@@ -1,8 +1,10 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import GitHubIco from '../gitHubico'
+import { startModalContext, startStateType } from '../userContext'
+import { usePathname } from 'next/navigation'
 
 function PageButton({
   page,
@@ -40,6 +42,7 @@ function PageButton({
 }
 
 function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
+  const pathName = usePathname()
   return (
     <div
       className="w-[50%] h-full inline-block box-border 
@@ -50,7 +53,7 @@ function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
           브런치스토리 시작하기
         </strong>
         <Link
-          href={`/auth/github`}
+          href={`/api/auth/github?back=${pathName}`}
           className="bg-[#231F20] box-border rounded-[5px] text-[#333] block text-[16px] 
                       h-[60px] leading-[61px] mt-[14px] text-center w-full"
         >
@@ -106,12 +109,9 @@ function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
   )
 }
 
-export default function IndexStart({
-  setOnStart,
-}: {
-  setOnStart: (arg: boolean) => void
-}) {
+export default function IndexStart() {
   const [page, setPage] = useState(0)
+  const [onStart, setOnStart] = useContext(startModalContext) as startStateType
 
   const handlePage = useCallback(
     (page: number, plus: number, direct = false) => {
@@ -127,7 +127,11 @@ export default function IndexStart({
   }, [page, handlePage])
 
   return (
-    <div className="block bg-[rgba(0,0,0,.3)] h-full w-full fixed left-0 top-0 z-[1002]">
+    <div
+      className={`${
+        onStart ? 'block' : 'hidden'
+      } bg-[rgba(0,0,0,.3)] h-full w-full fixed left-0 top-0 z-[1002]`}
+    >
       <h2 className="screen-out">브런치 로그인</h2>
       <div
         className="bg-white rounded-[15px] inline-block h-[610px] w-[1000px] 

@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import jwt, { JwtPayload } from 'jsonwebtoken'
+let reqRef: string | undefined
 export async function middleware(req: NextRequest) {
-  let reqUrl: string | undefined
-  if (req.nextUrl.pathname.startsWith('/auth/github')) {
-    reqUrl = req.url
-    await fetch(`${process.env.NEXT_PUBLIC_AUTH_GITHUB}`)
+  if (req.nextUrl.pathname.startsWith('/api/auth/github')) {
+    reqRef = `${process.env.FRONT_END_URL}${req.nextUrl.searchParams.get(
+      'back',
+    )}`
+
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_AUTH_GITHUB}`)
   }
 
   if (req.nextUrl.pathname.startsWith('/auth/github/redirect')) {
@@ -23,18 +26,18 @@ export async function middleware(req: NextRequest) {
         throw new Error('Failed to fetch user data')
       }
       const data = await res.json()
+      console.log(data)
       const { exp } = jwt.decode(data.jwt) as JwtPayload
       const expires = new Date((exp as number) * 1000).toUTCString()
-      return NextResponse.redirect(`${reqUrl || process.env.FRONT_END_URL}`, {
+
+      return NextResponse.redirect(`${reqRef || process.env.FRONT_END_URL}`, {
         headers: {
-          'Set-Cookie': `userjwt=${data.jwt}; path=/; HttpOnly=true; Domain=${process.env.DOMAIN}; Expires=${expires}`,
+          'Set-Cookie': `userjwt=${data.jwt}; path=/; Domain=${process.env.DOMAIN}; Expires=${expires}`,
         },
       })
     } catch (error) {
       console.error(error)
-      return NextResponse.redirect(`${reqUrl || process.env.FRONT_END_URL}`, {
-        status: 400,
-      })
+      return NextResponse.redirect(`${reqRef || process.env.FRONT_END_URL}`)
     }
   }
 }

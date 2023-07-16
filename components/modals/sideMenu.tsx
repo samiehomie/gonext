@@ -1,7 +1,9 @@
 'use client'
 import Image from 'next/image'
-import { useEffect } from 'react'
-
+import { useEffect, useContext } from 'react'
+import { getCookie } from 'cookies-next'
+import Jwt from 'jsonwebtoken'
+import { userDataContext, usertStateType } from '../userContext'
 export default function SideMenu({
   onSide,
   setOnStart,
@@ -23,6 +25,19 @@ export default function SideMenu({
       }
     })
   }, [onSide, setOnSide])
+  const [user, setUser] = useContext(userDataContext) as usertStateType
+  if (user) {
+    return (
+      <div
+        id="side-menu"
+        className={`bg-white border-r border-[#ddd] h-full w-[260px] 
+                  fixed text-center top-0 z-[1000] transition-all 
+                  duration-300 ease-in ${onSide ? 'ml-o' : 'ml-[-261px]'}`}
+      >
+        {user}
+      </div>
+    )
+  }
   return (
     <div
       id="side-menu"

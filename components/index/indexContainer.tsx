@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, ReactElement } from 'react'
+import { useState, useEffect, ReactElement, useContext } from 'react'
 import TopBanner from '../banners/topBanner'
 import IndexTopNavigation from '../navigations/indexTopNavigation'
 import SlidesShow from '../slides/slidesShow'
@@ -7,6 +7,7 @@ import WritersWeekly from './writersWeekly'
 import Keywords from './keywords'
 import RecommendArticle from './recommendArticle'
 import IndexStart from '../modals/indexStart'
+import { startModalContext, startStateType } from '../userContext'
 
 function MainContent({ children }: { children: ReactElement }) {
   return (
@@ -56,10 +57,10 @@ function MainContent({ children }: { children: ReactElement }) {
 
 export default function IndexContainer() {
   const [onSearch, setOnSearch] = useState(false)
-  const [onStart, setOnStart] = useState(false)
   const [onTop, setOnTop] = useState(false)
   const [cursor, setCursor] = useState(0)
   const [page, setPage] = useState(0)
+  const [onStart, setOnStart] = useContext(startModalContext) as startStateType
 
   useEffect(() => {
     const winScroll =
@@ -83,7 +84,7 @@ export default function IndexContainer() {
   }, [onTop])
 
   return (
-    <div className={`relative overflow-hidden`}>
+    <div>
       <a
         href="#"
         onClick={(e) => {
@@ -96,13 +97,8 @@ export default function IndexContainer() {
                     ${onTop ? 'bottom-[40px]' : 'bottom-[-80px]'}`}
       ></a>
 
-      {onStart && <IndexStart setOnStart={setOnStart} />}
       {!onSearch && <TopBanner />}
-      <IndexTopNavigation
-        onSearch={onSearch}
-        setOnSearch={setOnSearch}
-        setOnStart={setOnStart}
-      />
+      <IndexTopNavigation onSearch={onSearch} setOnSearch={setOnSearch} />
       {!onSearch && (
         <MainContent>
           <SlidesShow page={page} setPage={setPage} />

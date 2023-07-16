@@ -9,6 +9,8 @@ import {
   notoSansThin,
 } from '@/lib/fonts'
 import { cn } from '@/lib/utils'
+import { StartModalProvider } from '@/components/userContext'
+import IndexStart from '@/components/modals/indexStart'
 
 export const metadata = {
   title: 'Next brunch',
@@ -33,7 +35,14 @@ export default function RootLayout({
           notoSansThin.variable,
         )}
       >
-        <SwrProvider>{children}</SwrProvider>
+        <SwrProvider>
+          <StartModalProvider>
+            <div className={`relative overflow-hidden`}>
+              <IndexStart />
+              {children}
+            </div>
+          </StartModalProvider>
+        </SwrProvider>
       </body>
     </html>
   )

@@ -1,22 +1,22 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import SuggestBox from '../modals/suggestBox'
 import SideMenu from '../modals/sideMenu'
 import Link from 'next/link'
+import { startModalContext, startStateType } from '../userContext'
 
 // TODO: #1 Implement search modal and right hidden menu
 
 export default function IndexTopNavigation({
   onSearch,
   setOnSearch,
-  setOnStart,
 }: {
   onSearch: boolean
   setOnSearch: (onSearch: boolean) => void
-  setOnStart: (onSearch: boolean) => void
 }) {
   const [isFloat, setIsFloat] = useState(false)
   const [onSide, setOnSide] = useState(false)
+  const [_, setOnStart] = useContext(startModalContext) as startStateType
   function handlerDown() {
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop
