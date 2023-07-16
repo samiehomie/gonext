@@ -50,7 +50,7 @@ function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
           브런치스토리 시작하기
         </strong>
         <Link
-          href={`${process.env.NEXT_PUBLIC_AUTH_GITHUB}`}
+          href={`/auth/github`}
           className="bg-[#231F20] box-border rounded-[5px] text-[#333] block text-[16px] 
                       h-[60px] leading-[61px] mt-[14px] text-center w-full"
         >
