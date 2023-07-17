@@ -1,10 +1,20 @@
-import NextAuth, { AuthOptions, SessionOptions } from 'next-auth'
-import GitHub from 'next-auth/providers/github'
+import NextAuth, { NextAuthOptions } from 'next-auth'
+import GitHub, { GithubProfile } from 'next-auth/providers/github'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-const options: AuthOptions = {
+const options: NextAuthOptions = {
+  secret: process.env.JWT_SECRET as string,
   providers: [
     GitHub({
+      authorization: {
+        url: 'https://github.com/login/oauth/authorize',
+        params: { scope: 'read:user user:email' },
+      },
+      profile: (profile: GithubProfile) => ({
+        id: profile.id.toString(),
+        email: profile.email,
+      }),
+      checks: 'none',
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
       client: {
@@ -17,11 +27,9 @@ const options: AuthOptions = {
     }),
   ],
   // @ts-ignore
-  database: process.env.NEXT_PUBLIC_DB_URL,
   session: {
     strategy: 'jwt',
   },
-  debug: true,
   callbacks: {
     // @ts-ignore
     async session({ session, token, user }) {
@@ -34,15 +42,13 @@ const options: AuthOptions = {
     },
     // @ts-ignore
     async jwt({ token, user, account, profile }) {
-      const isSignIn = user ? true : false
+      console.log('what', token, user)
 
-      if (isSignIn) {
+      if (user) {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_DB_URL}/api/auth/github/callback?access_token=${account?.accessToken}`,
+          `${process.env.NEXT_PUBLIC_DB_URL}/api/auth/github/callback?access_token=${account?.access_token}`,
         )
-
         const data = await response.json()
-
         token.jwt = data.jwt
         token.id = data.user.id
       }
