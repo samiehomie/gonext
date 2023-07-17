@@ -5,6 +5,7 @@ import Link from 'next/link'
 import GitHubIco from '../gitHubico'
 import { startModalContext, startStateType } from '../userContext'
 import { usePathname } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 function PageButton({
   page,
@@ -52,8 +53,12 @@ function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
         <strong className="block text-[22px] leading-[22px] mb-[18px] font-normal">
           브런치스토리 시작하기
         </strong>
-        <Link
+        <a
           href={`/api/auth/github?back=${pathName}`}
+          onClick={(e) => {
+            e.preventDefault()
+            signIn('github')
+          }}
           className="bg-[#231F20] box-border rounded-[5px] text-[#333] block text-[16px] 
                       h-[60px] leading-[61px] mt-[14px] text-center w-full"
         >
@@ -68,7 +73,7 @@ function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
           >
             GitHub 계정으로 로그인
           </span>
-        </Link>
+        </a>
       </div>
       <div className="py-[40px]">
         <strong className="block font-normal text-[15px]">
