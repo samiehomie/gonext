@@ -19,6 +19,7 @@ module.exports = {
         'ico-weekly': "url('../public/ico-weekly.png')",
         'ico-brunch-discover': "url('../public/ico-brunch-discover.png')",
         'ico-article-buttons': "url('../public/ico-article-btn.png')",
+        'ico-ico-sidebar': "url('../public/ico-sidebar.png')",
         'line-type-03': "url('../public/line-type-03.png')",
         'book-blur': "url('../public/bg-bookblur.png')",
         'book-cover': 'linear-gradient(-180deg, #f4f4f4, #dedede 82%)',

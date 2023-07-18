@@ -1,8 +1,8 @@
 'use client'
-import { getCookie } from 'cookies-next'
-import Jwt from 'jsonwebtoken'
 import { createContext, useState, useEffect } from 'react'
-
+import { usePathname } from 'next/navigation'
+import { getSession } from '@/authActions'
+import type { userSession } from '@/types'
 // TODO: #8 Use next-auth instead of cookies-next
 
 export type startStateType = [
@@ -11,8 +11,8 @@ export type startStateType = [
 ]
 
 export type usertStateType = [
-  number | null,
-  React.Dispatch<React.SetStateAction<number | null>>,
+  userSession | null,
+  React.Dispatch<React.SetStateAction<userSession | null>>,
 ]
 export const startModalContext = createContext<startStateType | null>(null)
 export const userDataContext = createContext<usertStateType | null>(null)
@@ -22,12 +22,21 @@ export function StartModalProvider({
   children: React.ReactNode
 }) {
   const [onStart, setOnStart] = useState(false)
-  const [user, setUser] = useState<number | null>(null)
+  const [user, setUser] = useState<userSession | null>(null)
+  const pathname = usePathname()
+
   useEffect(() => {
-    const userToken = getCookie('userjwt')
-    const { id } = Jwt.decode(userToken as string) as any
-    setUser(id)
-  }, [])
+    async function session() {
+      const session = await getSession()
+      if (session.userjwt && session.username) {
+        setUser(session)
+      } else {
+        setUser(null)
+      }
+    }
+    session()
+  }, [pathname])
+
   return (
     <startModalContext.Provider value={[onStart, setOnStart]}>
       <userDataContext.Provider value={[user, setUser]}>

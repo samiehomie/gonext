@@ -2,6 +2,12 @@ import qs from 'qs'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
+export const domain = process.env.NODE_ENV === 'development' ?
+process.env.LOCAL_DOMAIN : process.env.REAL_DOMAIN
+
+export const frontUrl = process.env.NODE_ENV === 'development' ?
+process.env.FRONT_LOCAL_URL : process.env.FRONT_REAL_URL
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }

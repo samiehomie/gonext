@@ -1,5 +1,6 @@
 export type imageSizes = 'thumbnail' | 'small' | 'medium' | 'large'
-
+export type userSession = { userjwt: string|undefined; username: string|undefined }
+export type jwtSession = { id: number; iat: number; exp: number}
 export type userAsChild = {
   data: {
     id: number

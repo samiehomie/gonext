@@ -6,6 +6,7 @@ import qs from 'qs'
 import type { users } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
+import defaultProfile from '@/public/default.jpg'
 
 function getRandomElementExcept(arr: string[], except: string) {
   const filteredArr = arr.filter((el) => el !== except)
@@ -75,7 +76,7 @@ function AuthorsGroup({
             className="bg-[#fff] block min-h-[288px] py-[46px] px-[40px]"
           >
             <Image
-              src={user.profile?.url as string}
+              src={user.profile ? user.profile.url : defaultProfile}
               alt={user.username}
               width={80}
               height={80}
