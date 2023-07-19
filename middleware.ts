@@ -4,6 +4,7 @@ import { getIronSession } from 'iron-session/edge'
 import { domain, frontUrl } from '@/lib/utils'
 import { jwtVerify, type JWTVerifyResult } from 'jose'
 
+
 export const middleware = async (req: NextRequest) => {
   if (req.nextUrl.pathname === '/api/auth/github/session') {
     const res = NextResponse.next()
@@ -14,6 +15,7 @@ export const middleware = async (req: NextRequest) => {
         secure: process.env.NODE_ENV === 'production',
       },
     })
+
     console.log('session->', session.user)
     return NextResponse.json(session.user || {}, { status: 200 })
   }

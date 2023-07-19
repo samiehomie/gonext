@@ -3,6 +3,7 @@ import { createContext, useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import type { userSession } from '@/types'
 import { frontUrl } from '@/lib/utils'
+import { garbageCookiesDelete } from '@/garbageCookiesAction'
 // TODO: #8 Use next-auth instead of cookies-next
 
 export type startStateType = [
@@ -31,7 +32,7 @@ export function StartModalProvider({
         headers: { Accept: 'application / json' },
       })
       const userData: userSession = await response.json()
-      console.log('w', userData)
+      await garbageCookiesDelete()
       if (userData && userData.jwt) {
         setUser(userData)
       } else {
