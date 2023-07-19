@@ -16,7 +16,6 @@ export default function LogOut({ children }: { children: ReactNode }) {
         e.preventDefault()
         logOut()
         setUser(null)
-        redirect(frontUrl + pathname)
       }}
     >
       {children}

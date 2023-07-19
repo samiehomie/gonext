@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import { useEffect, useContext, ReactNode } from 'react'
 import { userDataContext, type usertStateType } from '../userContext'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import type { user, jwtSession, userSession } from '@/types'
 import useSWR from 'swr'
 import Link from 'next/link'
@@ -10,6 +10,7 @@ import { queryUser } from '@/lib/queries'
 import defaultProfile from '@/public/default.jpg'
 import { domain } from '@/lib/utils'
 import LogOut from '../logOut'
+import { parseJwtId } from '@/authActions'
 
 function InnerContainer({
   children,
@@ -88,18 +89,17 @@ function CommonContent() {
 }
 
 function UserProfile({ user }: { user: userSession }) {
-  const { userjwt, username } = user
-  console.log('jwt', jwt.decode(userjwt as string))
-  const { id: userId } = jwt.decode(userjwt as string) as jwtSession
+  const { username, userid } = user
+
   const {
     data: userData,
   }: {
     data: user | undefined
-  } = useSWR(`users/${userId}?` + queryUser)
+  } = useSWR(`users/${userid}?` + queryUser)
   const imgUrl = userData?.profile?.url || defaultProfile
   return (
     <div className="bg-[#f6f6f6] h-[239px] overflow-hidden realtive font-noto_sans_light">
-      <Link href={`/${userId}`}>
+      <Link href={`/${userid}`}>
         <div className="w-[60px] m-[40px_auto_0px]">
           <Image
             src={imgUrl}
@@ -120,7 +120,7 @@ function UserProfile({ user }: { user: userSession }) {
             className="text-[#959595] inline-block font-[Georgia] text-[12px] italic mt-[6.5px] 
                       overflow-hidden text-ellipsis align-top whitespace-nowrap w-[212px]"
           >
-            {`${domain}/${userId}`}
+            {`${domain}/${userid}`}
           </p>
         </div>
       </Link>
