@@ -1,8 +1,8 @@
 'use client'
 import { createContext, useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { getSession } from '@/authActions'
 import type { userSession } from '@/types'
+import { frontUrl } from '@/lib/utils'
 // TODO: #8 Use next-auth instead of cookies-next
 
 export type startStateType = [
@@ -27,9 +27,13 @@ export function StartModalProvider({
 
   useEffect(() => {
     async function session() {
-      const session = await getSession()
-      if (session.userjwt && session.username) {
-        setUser(session)
+      const response = await fetch(`${frontUrl}/api/auth/github/session`, {
+        headers: { Accept: 'application / json' },
+      })
+      const userData: userSession = await response.json()
+      console.log('w', userData)
+      if (userData && userData.jwt) {
+        setUser(userData)
       } else {
         setUser(null)
       }
