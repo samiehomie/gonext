@@ -69,10 +69,13 @@ export const queryUser = qs.stringify(
           book: {
             fields: ['title'],
           },
+          user: {
+            fields: ['username'],
+          },
         },
       },
       books: {
-        fields: ['title'],
+        fields: ['title', 'publishedAt', 'introduction', 'summary', 'tags'],
         populate: {
           cover: {
             fields: ['formats', 'url'],
@@ -149,7 +152,7 @@ export function getQueryWritingPage(userId: string, writingId: string) {
   return [url + target, url + others]
 }
 
-export const queryUsers = qs.stringify(
+export const queryUsersFive = qs.stringify(
   {
     fields: ['username', 'introduction'],
     populate: {

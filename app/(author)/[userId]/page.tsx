@@ -1,7 +1,7 @@
 import Profile from '@/components/author/profile'
 import { queryUser } from '@/lib/queries'
 import { getData } from '@/lib/fetchData'
-import { user } from '@/types'
+import { user, users } from '@/types'
 import TopNavigation from '@/components/navigations/topNavigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -12,9 +12,9 @@ export default async function AuthorPage({
 }: {
   params: { userId: string }
 }) {
-  const userData: user = await getData(
-    `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${userId}?${queryUser}`,
-  )
+  const userData: user = await fetch(
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${userId}?${queryUser}`, { next: { tags: ['userPage']}}
+  ).then(res => res.json())
   return (
     <>
       <TopNavigation inBookPage={true}>
@@ -47,4 +47,14 @@ export default async function AuthorPage({
       <Content userData={userData} />
     </>
   )
+}
+
+export const revalidate = 3600
+
+export async function generateStaticParams() {
+  const reqUrl = `${process.env.NEXT_PUBLIC_DB_URL}/api/users?${queryUser}`
+  const users: users = await fetch(reqUrl).then((res) => res.json())
+  return users.map((user) => ({
+    userId: `${user.id}`,
+  }))
 }

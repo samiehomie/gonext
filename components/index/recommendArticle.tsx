@@ -82,6 +82,7 @@ export default function RecommendArticle({
   }, [])
 
   if (!writings) return null
+  console.log('w', writings)
   const pageCount = writings[0].meta.pagination?.pageCount as number
 
   return (

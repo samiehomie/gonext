@@ -76,6 +76,7 @@ export default function Profile({ userData }: { userData: user }) {
         >
           <div className="relative zoom-motion h-full">
             <Image
+              priority
               src={userData.profile?.url as string}
               alt={userData.username}
               width={500}

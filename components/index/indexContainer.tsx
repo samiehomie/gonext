@@ -6,8 +6,7 @@ import SlidesShow from '../slides/slidesShow'
 import WritersWeekly from './writersWeekly'
 import Keywords from './keywords'
 import RecommendArticle from './recommendArticle'
-import IndexStart from '../modals/indexStart'
-import { startModalContext, startStateType } from '../userContext'
+
 
 function MainContent({ children }: { children: ReactElement }) {
   return (
@@ -60,7 +59,7 @@ export default function IndexContainer() {
   const [onTop, setOnTop] = useState(false)
   const [cursor, setCursor] = useState(0)
   const [page, setPage] = useState(0)
-  const [onStart, setOnStart] = useContext(startModalContext) as startStateType
+
 
   useEffect(() => {
     const winScroll =

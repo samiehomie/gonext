@@ -3,7 +3,7 @@ import { createContext, useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import type { userSession } from '@/types'
 import { frontUrl } from '@/lib/utils'
-import { garbageCookiesDelete } from '@/garbageCookiesAction'
+import { garbageCookiesDelete } from '@/actions'
 // TODO: #8 Use next-auth instead of cookies-next
 
 export type startStateType = [

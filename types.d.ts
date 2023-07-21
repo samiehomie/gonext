@@ -15,8 +15,8 @@ export type userAsChild = {
       confirmed: boolean
       blocked: boolean
       job: string
-      tags: string[]
-      introduction: string
+      tags?: string[]
+      introduction?: string
       createdAt: string
       updatedAt: string
       profile?: {
@@ -78,6 +78,7 @@ export type writingInUser = {
   updatedAt: string
   publishedAt: string
   book: bookInUser
+  user: user
   cover: {
     id: number
     name: string
@@ -180,8 +181,8 @@ export type user = {
   confirmed: true
   blocked: false
   job: string
-  tags: string[]
-  introduction: string
+  tags?: string[]
+  introduction?: string
   createdAt: string
   updatedAt: string
   profile?: {

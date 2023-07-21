@@ -1,6 +1,6 @@
 import Overview from '@/components/bookpage/overview'
-import { book } from '@/types'
-import { queryBook } from '@/lib/queries'
+import { book, users } from '@/types'
+import { queryBook, queryUser } from '@/lib/queries'
 import { getData } from '@/lib/fetchData'
 import ArticleList from '@/components/bookpage/articleList'
 
@@ -20,4 +20,15 @@ export default async function BookPage({
       </Overview>
     </div>
   )
+}
+
+export const revalidate = 3600
+
+export async function generateStaticParams() {
+  const reqUrl = `${process.env.NEXT_PUBLIC_DB_URL}/api/users?${queryUser}`
+  const users: users = await fetch(reqUrl).then((res) => res.json())
+  const books = users.flatMap((user) => user.books)
+  return books.map((book) => ({
+    bookId: `${book?.id}`,
+  }))
 }

@@ -1,5 +1,5 @@
 import Tag from '../tag'
-import type { author, user } from '@/types'
+import type { user } from '@/types'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getEnglishDate } from '@/lib/utils'
@@ -22,11 +22,12 @@ export default function Content({ userData }: { userData: user }) {
               {userData.introduction}
             </p>
             <ul className="overflow-hidden pt-[13px]">
-              {userData.tags.map((tag, index) => (
-                <li key={`${tag + index}`} className="float-left mr-[8px]">
-                  <Tag tagName={tag} />
-                </li>
-              ))}
+              {userData.tags &&
+                userData.tags.map((tag, index) => (
+                  <li key={`${tag + index}`} className="float-left mr-[8px]">
+                    <Tag tagName={tag} />
+                  </li>
+                ))}
             </ul>
           </div>
           <div
@@ -77,10 +78,7 @@ export default function Content({ userData }: { userData: user }) {
                     </strong>
                     <div className="mt-[5px] overflow-hidden absolute right-0 top-[25px] w-[120px] h-[120px]">
                       <Image
-                        src={
-                          writing.cover?.formats
-                            .small.url as string
-                        }
+                        src={writing.cover?.formats.small.url as string}
                         alt={writing.title}
                         fill={true}
                         className="object-cover"

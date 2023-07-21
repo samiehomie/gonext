@@ -1,5 +1,5 @@
 import './globals.css'
-import SwrProvider from '@/components/swrProvider'
+
 import {
   nanumMJ,
   sfBold,
@@ -35,14 +35,12 @@ export default function RootLayout({
           notoSansThin.variable,
         )}
       >
-        <SwrProvider>
-          <StartModalProvider>
-            <div className={`relative overflow-hidden`}>
-              <IndexStart />
-              {children}
-            </div>
-          </StartModalProvider>
-        </SwrProvider>
+        <StartModalProvider>
+          <div className={`relative overflow-hidden`}>
+            <IndexStart />
+            {children}
+          </div>
+        </StartModalProvider>
       </body>
     </html>
   )

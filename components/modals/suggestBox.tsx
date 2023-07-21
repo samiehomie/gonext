@@ -6,12 +6,12 @@ import useSWR from 'swr'
 import type { writings, books, users } from '../../types'
 import Image from 'next/image'
 import { debounce } from 'lodash'
-import { queryUsers } from '@/lib/queries'
+import { queryUsersFive } from '@/lib/queries'
 import Link from 'next/link'
 
 function SuggestList() {
   const { data: users }: { data: users | undefined } = useSWR(
-    'users?' + queryUsers,
+    'users?' + queryUsersFive,
   )
 
   if (!users) return null

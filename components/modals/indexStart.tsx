@@ -4,7 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import GitHubIco from '../gitHubico'
 import { startModalContext, startStateType } from '../userContext'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 
 function PageButton({
   page,
@@ -43,6 +44,15 @@ function PageButton({
 
 function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
   const pathName = usePathname()
+  const searchParams = useSearchParams()
+  const isSignin = searchParams?.has('signin')
+
+  useEffect(() => {
+    if (isSignin) {
+      setOnStart(true)
+    }
+  }, [isSignin, setOnStart])
+
   return (
     <div
       className="w-[50%] h-full inline-block box-border 
@@ -270,7 +280,9 @@ export default function IndexStart() {
           </div>
         </div>
         {/* item start */}
-        <StartItem setOnStart={setOnStart} />
+        <Suspense fallback={<></>}>
+          <StartItem setOnStart={setOnStart} />
+        </Suspense>
       </div>
     </div>
   )

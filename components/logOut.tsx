@@ -14,7 +14,7 @@ export default function LogOut({ children }: { children: ReactNode }) {
       onClick={(e) => {
         e.preventDefault()
         setUser(null)
-        router.replace('/api/auth/github/logout')
+        router.push(`/api/auth/github/logout?back=${pathname}`)
       }}
     >
       {children}

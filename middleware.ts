@@ -1,26 +1,34 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getIronSession } from 'iron-session/edge'
-import { domain, frontUrl } from '@/lib/utils'
+// import { domain, frontUrl } from '@/lib/utils'
 import { jwtVerify, type JWTVerifyResult } from 'jose'
 
-
+const frontUrl = 'http://localhost:3000'
+const domain = 'localhost'
 export const middleware = async (req: NextRequest) => {
-  if (req.nextUrl.pathname === '/api/auth/github/session') {
-    const res = NextResponse.next()
-    const session = await getIronSession(req, res, {
-      cookieName: 'user',
-      password: process.env.SESSION_SECRET as string,
-      cookieOptions: {
-        secure: process.env.NODE_ENV === 'production',
-      },
-    })
+  const res = NextResponse.next()
+  const session = await getIronSession(req, res, {
+    cookieName: 'user',
+    password: process.env.SESSION_SECRET as string,
+    cookieOptions: {
+      secure: process.env.NODE_ENV === 'production',
+    },
+  })
 
-    console.log('session->', session.user)
+  if (req.nextUrl.pathname === '/write') {
+    if (!session.user) {
+      const backUrl = session.backUrl || frontUrl
+      return NextResponse.redirect(`${backUrl}?signin`)
+    }
+    return res
+  }
+  if (req.nextUrl.pathname === '/api/auth/github/session') {
+    console.log(req.cookies)
     return NextResponse.json(session.user || {}, { status: 200 })
   }
   if (req.nextUrl.pathname === '/api/auth/github/callback') {
-    const res = NextResponse.next()
+    // const res = NextResponse.next()
     const session = await getIronSession(req, res, {
       cookieName: 'backUrl',
       password: process.env.SESSION_SECRET as string,
@@ -30,7 +38,7 @@ export const middleware = async (req: NextRequest) => {
     })
 
     if (req.nextUrl.search.startsWith('?error')) {
-      return NextResponse.rewrite(`${session.backUrl || frontUrl}`)
+      return NextResponse.redirect(`${session.backUrl || frontUrl}`)
     }
 
     if (req.nextUrl.search.startsWith('?access_token')) {
@@ -80,7 +88,7 @@ export const middleware = async (req: NextRequest) => {
         })
       } catch (error) {
         console.error(error)
-        return NextResponse.rewrite(`${session.backUrl || frontUrl}`)
+        return NextResponse.redirect(`${session.backUrl || frontUrl}`)
       }
     }
   }

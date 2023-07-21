@@ -1,7 +1,13 @@
 import { Suspense } from 'react'
-import { getQueryWritingPage } from '@/lib/queries'
+import { getQueryWritingPage, queryWritings, queryUser } from '@/lib/queries'
 import { getData } from '@/lib/fetchData'
-import type { user, writingsInUser, writingInUser } from '@/types'
+import type {
+  user,
+  writingsInUser,
+  writingInUser,
+  writings,
+  users,
+} from '@/types'
 import Markdown from '@/components/Markdown'
 import Image from 'next/image'
 import { getEnglishDate } from '@/lib/utils'
@@ -155,6 +161,7 @@ export default async function Page({
           {/* Cover image */}
           <div className="relative w-full h-[450px]">
             <Image
+              priority
               src={user.writings[0].cover?.url as string}
               alt={user.writings[0].title as string}
               fill={true}
@@ -335,4 +342,17 @@ export default async function Page({
       </Suspense>
     </div>
   )
+}
+
+export const revalidate = 1800
+
+export async function generateStaticParams() {
+  const reqUrl = `${process.env.NEXT_PUBLIC_DB_URL}/api/users?${queryUser}`
+  console.log('confirm', reqUrl)
+  const users: users = await fetch(reqUrl).then((res) => res.json())
+  const writings = users.flatMap((user) => user.writings)
+  return writings.map((writing) => ({
+    userId: `${writing?.user.id}`,
+    writingId: `${writing?.id}`,
+  }))
 }

@@ -1,7 +1,13 @@
+import SwrProvider from '@/components/swrProvider'
+
 export default function PostLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <div>{children}</div>
+  return (
+    <SwrProvider>
+      <div>{children}</div>
+    </SwrProvider>
+  )
 }

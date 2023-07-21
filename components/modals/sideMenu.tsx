@@ -123,7 +123,7 @@ function UserProfile({ user }: { user: userSession }) {
         </div>
       </Link>
       {/* buttons */}
-      <Link href={'#'}>
+      <Link href={'/write'} prefetch={false}>
         <button
           className="bg-white border border-[#00c6be] rounded-[16px] text-[#00c6be] 
                       text-[13px] h-[32px] mt-[18px] w-[80px]"

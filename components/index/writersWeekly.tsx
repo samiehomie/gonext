@@ -114,7 +114,7 @@ function AuthorsGroup({
                       text-[12px] tracking-[-1px] py-[4px] px-[10px] 
                       inline-block leading-[18px] mx-[2px] overflow-hidden"
             >
-              {getRandomElementExcept(user.tags, tag)}
+              {getRandomElementExcept(user.tags!, tag)}
             </button>
             <button
               className="h-[28px] w-[35px] rounded-[20px] indent-[-9999px] 
