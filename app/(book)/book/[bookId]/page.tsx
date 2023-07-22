@@ -1,7 +1,6 @@
 import Overview from '@/components/bookpage/overview'
 import { book, users } from '@/types'
 import { queryBook, queryUser } from '@/lib/queries'
-import { getData } from '@/lib/fetchData'
 import ArticleList from '@/components/bookpage/articleList'
 
 export default async function BookPage({
@@ -9,9 +8,9 @@ export default async function BookPage({
 }: {
   params: { bookId: string }
 }) {
-  const bookData: book = await getData(
+  const bookData: book = await fetch(
     `${process.env.NEXT_PUBLIC_DB_URL}/api/books/${bookId}?${queryBook}`,
-  )
+  ).then((res) => res.json())
   const writings = bookData.data.attributes.writings?.data
   return (
     <div className="font-noto_sans_demlight">

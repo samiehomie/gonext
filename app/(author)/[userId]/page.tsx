@@ -1,6 +1,5 @@
 import Profile from '@/components/author/profile'
 import { queryUser } from '@/lib/queries'
-import { getData } from '@/lib/fetchData'
 import { user, users } from '@/types'
 import TopNavigation from '@/components/navigations/topNavigation'
 import Link from 'next/link'

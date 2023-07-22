@@ -2,7 +2,6 @@
 import { createContext, useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import type { userSession } from '@/types'
-import { frontUrl } from '@/lib/utils'
 import { garbageCookiesDelete } from '@/actions'
 // TODO: #8 Use next-auth instead of cookies-next
 
@@ -28,9 +27,12 @@ export function StartModalProvider({
 
   useEffect(() => {
     async function session() {
-      const response = await fetch(`${frontUrl}/api/auth/github/session`, {
-        headers: { Accept: 'application / json' },
-      })
+      const response = await fetch(
+        `${process.env.FRONT_URL}/api/auth/github/session`,
+        {
+          headers: { Accept: 'application / json' },
+        },
+      )
       const userData: userSession = await response.json()
       await garbageCookiesDelete()
       if (userData && userData.jwt) {

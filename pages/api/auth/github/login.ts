@@ -1,5 +1,4 @@
 import { withIronSessionApiRoute } from 'iron-session/next'
-// import { frontUrl } from '@/lib/utils'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default withIronSessionApiRoute(
@@ -14,7 +13,7 @@ export default withIronSessionApiRoute(
       username,
     }
     await req.session.save()
-    res.redirect(backUrl || 'http://localhost:3000')
+    res.redirect(backUrl || process.env.FRONT_URL!)
   },
   {
     cookieName: 'user',
@@ -24,5 +23,3 @@ export default withIronSessionApiRoute(
     },
   },
 )
-
-

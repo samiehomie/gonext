@@ -7,7 +7,6 @@ import useSWR from 'swr'
 import Link from 'next/link'
 import { queryUser } from '@/lib/queries'
 import defaultProfile from '@/public/default.jpg'
-import { domain } from '@/lib/utils'
 import LogOut from '../logOut'
 
 function InnerContainer({
@@ -118,7 +117,7 @@ function UserProfile({ user }: { user: userSession }) {
             className="text-[#959595] inline-block font-[Georgia] text-[12px] italic mt-[6.5px] 
                       overflow-hidden text-ellipsis align-top whitespace-nowrap w-[212px]"
           >
-            {`${domain}/${id}`}
+            {`${process.env.DOMAIN}/${id}`}
           </p>
         </div>
       </Link>

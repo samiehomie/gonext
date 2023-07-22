@@ -1,18 +1,14 @@
 'use server'
-// import { domain, frontUrl } from './lib/utils'
 import { cookies } from 'next/headers'
 import { userSession } from './types'
 import { revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-const frontUrl = 'http://localhost:3000'
-const domain = 'localhost'
-
 export async function garbageCookiesDelete() {
   cookies().set({
     name: 'backUrl',
     value: '',
-    domain: `${domain}`,
+    domain: `${process.env.DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
     path: '/',
@@ -20,7 +16,7 @@ export async function garbageCookiesDelete() {
   cookies().set({
     name: 'userjwt',
     value: '',
-    domain: `${domain}`,
+    domain: `${process.env.DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
     path: '/',
@@ -28,7 +24,7 @@ export async function garbageCookiesDelete() {
   cookies().set({
     name: 'username',
     value: '',
-    domain: `${domain}`,
+    domain: `${process.env.DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
     path: '/',
@@ -36,7 +32,7 @@ export async function garbageCookiesDelete() {
   cookies().set({
     name: 'userid',
     value: '',
-    domain: `${domain}`,
+    domain: `${process.env.DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
     path: '/',
@@ -45,9 +41,12 @@ export async function garbageCookiesDelete() {
 
 export async function getSession() {
   const userCookie = cookies().get('user')?.value
-  const response = await fetch(`${frontUrl}/api/auth/github/session`, {
-    headers: { Accept: 'application / json', Cookie: `user=${userCookie}` },
-  })
+  const response = await fetch(
+    `${process.env.FRONT_URL}/api/auth/github/session`,
+    {
+      headers: { Accept: 'application / json', Cookie: `user=${userCookie}` },
+    },
+  )
   const userData: userSession = await response.json()
   return userData
 }

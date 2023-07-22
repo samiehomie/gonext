@@ -1,13 +1,6 @@
 import { Suspense } from 'react'
-import { getQueryWritingPage, queryWritings, queryUser } from '@/lib/queries'
-import { getData } from '@/lib/fetchData'
-import type {
-  user,
-  writingsInUser,
-  writingInUser,
-  writings,
-  users,
-} from '@/types'
+import { getQueryWritingPage, queryUser } from '@/lib/queries'
+import type { user, writingsInUser, writingInUser, users } from '@/types'
 import Markdown from '@/components/Markdown'
 import Image from 'next/image'
 import { getEnglishDate } from '@/lib/utils'
@@ -27,7 +20,7 @@ async function Others({
   userName: string
 }) {
   const [_, others] = getQueryWritingPage(userId, writingId)
-  const otherWritings: user = await getData(others)
+  const otherWritings: user = await fetch(others).then((res) => res.json())
   const writings: writingsInUser = otherWritings.writings!
   const prev: undefined | writingInUser = writings
     .filter((w) => w.id < Number(writingId))
@@ -149,7 +142,7 @@ export default async function Page({
   params: { userId: string; writingId: string }
 }) {
   const [target, _] = getQueryWritingPage(userId, writingId)
-  const user: user = await getData(target)
+  const user: user = await fetch(target).then((res) => res.json())
 
   if (!user.writings) return null
 

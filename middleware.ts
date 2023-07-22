@@ -1,11 +1,8 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getIronSession } from 'iron-session/edge'
-// import { domain, frontUrl } from '@/lib/utils'
 import { jwtVerify, type JWTVerifyResult } from 'jose'
 
-const frontUrl = 'http://localhost:3000'
-const domain = 'localhost'
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
   const session = await getIronSession(req, res, {
@@ -18,7 +15,7 @@ export const middleware = async (req: NextRequest) => {
 
   if (req.nextUrl.pathname === '/write') {
     if (!session.user) {
-      const backUrl = session.backUrl || frontUrl
+      const backUrl = session.backUrl || process.env.FRONT_URL
       return NextResponse.redirect(`${backUrl}?signin`)
     }
     return res
@@ -38,7 +35,9 @@ export const middleware = async (req: NextRequest) => {
     })
 
     if (req.nextUrl.search.startsWith('?error')) {
-      return NextResponse.redirect(`${session.backUrl || frontUrl}`)
+      return NextResponse.redirect(
+        `${session.backUrl || process.env.FRONT_URL}`,
+      )
     }
 
     if (req.nextUrl.search.startsWith('?access_token')) {
@@ -66,29 +65,34 @@ export const middleware = async (req: NextRequest) => {
           (decoded.payload.exp as number) * 1000,
         ).toUTCString()
 
-        return NextResponse.redirect(`${frontUrl}/api/auth/github/login`, {
-          headers: [
-            [
-              'Set-Cookie',
-              `backUrl=${session.backUrl}; path=/; Domain=${domain}; HttpOnly;`,
+        return NextResponse.redirect(
+          `${process.env.FRONT_URL}/api/auth/github/login`,
+          {
+            headers: [
+              [
+                'Set-Cookie',
+                `backUrl=${session.backUrl}; path=/; Domain=${process.env.DOMAIN}; HttpOnly;`,
+              ],
+              [
+                'Set-Cookie',
+                `userid=${decoded.payload.id}; path=/; Domain=${process.env.DOMAIN}; HttpOnly; Expires=${expires}`,
+              ],
+              [
+                'Set-Cookie',
+                `userjwt=${data.jwt}; path=/; Domain=${process.env.DOMAIN}; HttpOnly; Expires=${expires}`,
+              ],
+              [
+                'Set-Cookie',
+                `username=${data.user.username}; path=/; Domain=${process.env.DOMAIN}; HttpOnly; Expires=${expires}`,
+              ],
             ],
-            [
-              'Set-Cookie',
-              `userid=${decoded.payload.id}; path=/; Domain=${domain}; HttpOnly; Expires=${expires}`,
-            ],
-            [
-              'Set-Cookie',
-              `userjwt=${data.jwt}; path=/; Domain=${domain}; HttpOnly; Expires=${expires}`,
-            ],
-            [
-              'Set-Cookie',
-              `username=${data.user.username}; path=/; Domain=${domain}; HttpOnly; Expires=${expires}`,
-            ],
-          ],
-        })
+          },
+        )
       } catch (error) {
         console.error(error)
-        return NextResponse.redirect(`${session.backUrl || frontUrl}`)
+        return NextResponse.redirect(
+          `${session.backUrl || process.env.FRONT_URL}`,
+        )
       }
     }
   }

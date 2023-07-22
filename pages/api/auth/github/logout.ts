@@ -1,13 +1,11 @@
 import { withIronSessionApiRoute } from 'iron-session/next'
-// import { frontUrl } from '@/lib/utils'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default withIronSessionApiRoute(
   function logoutRoute(req: NextApiRequest, res: NextApiResponse) {
-    const backUrl = 'http://localhost:3000' + req.query['back']
-    console.log('backUrl', backUrl)
+    const backUrl = process.env.FRONT_URL! + req.query['back']
     req.session.destroy()
-    res.redirect(req.query['back'] ? backUrl : 'http://localhost:3000')
+    res.redirect(req.query['back'] ? backUrl : process.env.FRONT_URL!)
   },
   {
     cookieName: 'user',

@@ -5,16 +5,6 @@ import type { userSession } from '@/types'
 import useSWR from 'swr'
 import { fetcher } from './fetchData'
 
-export const domain =
-  process.env.NEXT_PUBLIC_NODE_ENV! === 'development'
-    ? process.env.NEXT_PUBLIC_LOCAL_DOMAIN!
-    : process.env.NEXT_PUBLIC_REAL_DOMAIN!
-
-export const frontUrl =
-  process.env.NEXT_PUBLIC_NODE_ENV! === 'development'
-    ? process.env.NEXT_PUBLIC_FRONT_LOCAL_URL!
-    : process.env.NEXT_PUBLIC_FRONT_REAL_URL!
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -122,7 +112,7 @@ export function getEnglishDate(dateString: string) {
 
 export function useSession() {
   const { data: session }: { data: userSession | undefined } = useSWR(
-    `${frontUrl}/api/auth/github/session`,
+    `${process.env.FRONT_URL}/api/auth/github/session`,
     fetcher,
   )
   return session
