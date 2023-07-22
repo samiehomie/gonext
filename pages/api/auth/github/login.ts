@@ -13,7 +13,7 @@ export default withIronSessionApiRoute(
       username,
     }
     await req.session.save()
-    res.redirect(backUrl || process.env.FRONT_URL!)
+    res.redirect(backUrl || process.env.NEXT_PUBLIC_FRONT_URL!)
   },
   {
     cookieName: 'user',

@@ -2,10 +2,8 @@ import { withIronSessionApiRoute } from 'iron-session/next'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default withIronSessionApiRoute(
-  async function handler(req:NextApiRequest, res:NextApiResponse) {
-    const backUrl = `${process.env.FRONT_URL}${req.query['back']}`
-
-    console.log('backUrl', backUrl)
+  async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const backUrl = `${process.env.NEXT_PUBLIC_FRONT_URL}${req.query['back']}`
     req.session.backUrl = backUrl
     await req.session.save()
 

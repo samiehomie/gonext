@@ -42,7 +42,7 @@ export async function garbageCookiesDelete() {
 export async function getSession() {
   const userCookie = cookies().get('user')?.value
   const response = await fetch(
-    `${process.env.FRONT_URL}/api/auth/github/session`,
+    `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/session`,
     {
       headers: { Accept: 'application / json', Cookie: `user=${userCookie}` },
     },
@@ -60,7 +60,7 @@ export async function saveWriting(formData: FormData) {
   const user = await getSession()
 
   if (!user.jwt) {
-    console.log('unautherized!')
+    console.error('unautherized!')
     return redirect(`/?signin`)
   }
 

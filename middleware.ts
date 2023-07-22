@@ -15,13 +15,12 @@ export const middleware = async (req: NextRequest) => {
 
   if (req.nextUrl.pathname === '/write') {
     if (!session.user) {
-      const backUrl = session.backUrl || process.env.FRONT_URL
+      const backUrl = session.backUrl || process.env.NEXT_PUBLIC_FRONT_URL
       return NextResponse.redirect(`${backUrl}?signin`)
     }
     return res
   }
   if (req.nextUrl.pathname === '/api/auth/github/session') {
-    console.log(req.cookies)
     return NextResponse.json(session.user || {}, { status: 200 })
   }
   if (req.nextUrl.pathname === '/api/auth/github/callback') {
@@ -36,7 +35,7 @@ export const middleware = async (req: NextRequest) => {
 
     if (req.nextUrl.search.startsWith('?error')) {
       return NextResponse.redirect(
-        `${session.backUrl || process.env.FRONT_URL}`,
+        `${session.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
       )
     }
 
@@ -66,7 +65,7 @@ export const middleware = async (req: NextRequest) => {
         ).toUTCString()
 
         return NextResponse.redirect(
-          `${process.env.FRONT_URL}/api/auth/github/login`,
+          `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/login`,
           {
             headers: [
               [
@@ -91,7 +90,7 @@ export const middleware = async (req: NextRequest) => {
       } catch (error) {
         console.error(error)
         return NextResponse.redirect(
-          `${session.backUrl || process.env.FRONT_URL}`,
+          `${session.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
         )
       }
     }

@@ -28,7 +28,7 @@ export function StartModalProvider({
   useEffect(() => {
     async function session() {
       const response = await fetch(
-        `${process.env.FRONT_URL}/api/auth/github/session`,
+        `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/session`,
         {
           headers: { Accept: 'application / json' },
         },

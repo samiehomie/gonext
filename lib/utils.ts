@@ -112,7 +112,7 @@ export function getEnglishDate(dateString: string) {
 
 export function useSession() {
   const { data: session }: { data: userSession | undefined } = useSWR(
-    `${process.env.FRONT_URL}/api/auth/github/session`,
+    `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/session`,
     fetcher,
   )
   return session
