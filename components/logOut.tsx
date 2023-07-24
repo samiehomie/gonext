@@ -1,11 +1,16 @@
 'use client'
 import { ReactNode, useContext } from 'react'
 import { usePathname } from 'next/navigation'
-import { userDataContext, type usertStateType } from '@/components/userContext'
+import {
+  startModalContext,
+  type startStateType,
+} from '@/components/userContext'
 import { useRouter } from 'next/navigation'
 
 export default function LogOut({ children }: { children: ReactNode }) {
-  const [_, setUser] = useContext(userDataContext) as usertStateType
+  const {
+    user: [_, setUser],
+  } = useContext(startModalContext) as startStateType
   const pathname = usePathname()
   const router = useRouter()
   return (

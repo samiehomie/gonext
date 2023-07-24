@@ -3,7 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 export default withIronSessionApiRoute(
   async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const backUrl = req.cookies['backUrl']
+    const backUrl = req.cookies['backUrlp']
+    console.log('login api', req.cookies)
     const id = req.cookies['userid'] as string
     const jwt = req.cookies['userjwt'] as string
     const username = req.cookies['username'] as string

@@ -5,7 +5,7 @@ import { jwtVerify, type JWTVerifyResult } from 'jose'
 
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
-  const sessionUser = await getIronSession(req, res, {
+  const session = await getIronSession(req, res, {
     cookieName: 'user',
     password: process.env.SESSION_SECRET as string,
     cookieOptions: {
@@ -13,30 +13,26 @@ export const middleware = async (req: NextRequest) => {
     },
   })
 
+  console.log('user-write', session)
+
   if (req.nextUrl.pathname === '/write') {
-    if (!sessionUser.user) {
+    if (!session.user.jwt) {
       return NextResponse.redirect(
         `${process.env.NEXT_PUBLIC_FRONT_URL}?signin`,
       )
     }
+
     return res
   }
   if (req.nextUrl.pathname === '/api/auth/github/session') {
-    return NextResponse.json(sessionUser.user || {}, { status: 200 })
+    return NextResponse.json(session.user || {}, { status: 200 })
   }
 
   // (1) strapi ->
   if (req.nextUrl.pathname === '/api/auth/github/callback') {
-    const sessionBackUrl = await getIronSession(req, res, {
-      cookieName: 'backUrl',
-      password: process.env.SESSION_SECRET as string,
-      cookieOptions: {
-        secure: process.env.NODE_ENV === 'production',
-      },
-    })
     if (req.nextUrl.search.startsWith('?error')) {
       return NextResponse.redirect(
-        `${sessionBackUrl.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
+        `${session.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
       )
     }
 
@@ -71,19 +67,19 @@ export const middleware = async (req: NextRequest) => {
             headers: [
               [
                 'Set-Cookie',
-                `backUrl=${sessionBackUrl.backUrl}; path=/; Domain=${process.env.DOMAIN}; HttpOnly;`,
+                `backUrlp=${session.backUrl}; path=/; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
               ],
               [
                 'Set-Cookie',
-                `userid=${decoded.payload.id}; path=/; Domain=${process.env.DOMAIN}; HttpOnly; Expires=${expires}`,
+                `userid=${decoded.payload.id}; path=/; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly; Expires=${expires}`,
               ],
               [
                 'Set-Cookie',
-                `userjwt=${data.jwt}; path=/; Domain=${process.env.DOMAIN}; HttpOnly; Expires=${expires}`,
+                `userjwt=${data.jwt}; path=/; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly; Expires=${expires}`,
               ],
               [
                 'Set-Cookie',
-                `username=${data.user.username}; path=/; Domain=${process.env.DOMAIN}; HttpOnly; Expires=${expires}`,
+                `username=${data.user.username}; path=/; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly; Expires=${expires}`,
               ],
             ],
           },
@@ -91,7 +87,7 @@ export const middleware = async (req: NextRequest) => {
       } catch (error) {
         console.error(error)
         return NextResponse.redirect(
-          `${sessionBackUrl.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
+          `${session.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
         )
       }
     }

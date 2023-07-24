@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { useEffect, useContext, ReactNode } from 'react'
-import { userDataContext, type usertStateType } from '../userContext'
+import { startModalContext, type startStateType } from '../userContext'
 import type { user, userSession } from '@/types'
 import useSWR from 'swr'
 import Link from 'next/link'
@@ -211,7 +211,9 @@ export default function SideMenu({
   setOnStart: (arg: boolean) => void
   setOnSide: (arg: boolean) => void
 }) {
-  const [user, _] = useContext(userDataContext) as usertStateType
+  const {
+    user: [user, _],
+  } = useContext(startModalContext) as startStateType
 
   useEffect(() => {
     document.addEventListener('click', function handler(e) {

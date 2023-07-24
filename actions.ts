@@ -6,9 +6,9 @@ import { redirect } from 'next/navigation'
 
 export async function garbageCookiesDelete() {
   cookies().set({
-    name: 'backUrl',
+    name: 'backUrlp',
     value: '',
-    domain: `${process.env.DOMAIN}`,
+    domain: `${process.env.NEXT_PUBLIC_DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
     path: '/',
@@ -16,7 +16,7 @@ export async function garbageCookiesDelete() {
   cookies().set({
     name: 'userjwt',
     value: '',
-    domain: `${process.env.DOMAIN}`,
+    domain: `${process.env.NEXT_PUBLIC_DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
     path: '/',
@@ -24,7 +24,7 @@ export async function garbageCookiesDelete() {
   cookies().set({
     name: 'username',
     value: '',
-    domain: `${process.env.DOMAIN}`,
+    domain: `${process.env.NEXT_PUBLIC_DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
     path: '/',
@@ -32,7 +32,7 @@ export async function garbageCookiesDelete() {
   cookies().set({
     name: 'userid',
     value: '',
-    domain: `${process.env.DOMAIN}`,
+    domain: `${process.env.NEXT_PUBLIC_DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
     path: '/',

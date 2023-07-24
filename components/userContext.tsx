@@ -5,17 +5,15 @@ import type { userSession } from '@/types'
 import { garbageCookiesDelete } from '@/actions'
 // TODO: #8 Use next-auth instead of cookies-next
 
-export type startStateType = [
-  boolean,
-  React.Dispatch<React.SetStateAction<boolean>>,
-]
+export type startStateType = {
+  start: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
+  user: [
+    userSession | null,
+    React.Dispatch<React.SetStateAction<userSession | null>>,
+  ]
+}
 
-export type usertStateType = [
-  userSession | null,
-  React.Dispatch<React.SetStateAction<userSession | null>>,
-]
 export const startModalContext = createContext<startStateType | null>(null)
-export const userDataContext = createContext<usertStateType | null>(null)
 export function StartModalProvider({
   children,
 }: {
@@ -27,6 +25,7 @@ export function StartModalProvider({
 
   useEffect(() => {
     async function session() {
+      await garbageCookiesDelete()
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/session`,
         {
@@ -34,7 +33,7 @@ export function StartModalProvider({
         },
       )
       const userData: userSession = await response.json()
-      await garbageCookiesDelete()
+
       if (userData && userData.jwt) {
         setUser(userData)
       } else {
@@ -45,12 +44,10 @@ export function StartModalProvider({
   }, [pathname])
 
   return (
-    <startModalContext.Provider value={[onStart, setOnStart]}>
-      <userDataContext.Provider value={[user, setUser]}>
-      <div className={`relative overflow-hidden`}>
-        {children}
-        </div>
-      </userDataContext.Provider>
+    <startModalContext.Provider
+      value={{ start: [onStart, setOnStart], user: [user, setUser] }}
+    >
+      <div className={`relative overflow-hidden`}>{children}</div>
     </startModalContext.Provider>
   )
 }
