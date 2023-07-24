@@ -52,7 +52,6 @@ function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
       setOnStart(true)
     }
   }, [isSignin, setOnStart])
-
   return (
     <div
       className="w-[50%] h-full inline-block box-border 

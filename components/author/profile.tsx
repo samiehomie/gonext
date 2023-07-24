@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { author, user } from '@/types'
+import { user } from '@/types'
 import icoPlus from '@/public/ico-plus.png'
 
 function MoreControl() {

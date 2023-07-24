@@ -10,9 +10,9 @@ export default async function TopProfile({ userData }: { userData: user }) {
           className="text-[#666] font-noto_sans_light text-[16.5px] leading-none
                 font-normal whitespace-nowrap align-middle table-cell tracking-tight"
         >
-          <Link href={`/${userData.id}`}>
+          <Link href={`/user/${userData.id}`}>
             <Image
-              src={userData.profile?.formats.small.url as string}
+              src={userData.profile?.formats.thumbnail.url as string}
               alt={userData.username}
               width={30}
               height={30}

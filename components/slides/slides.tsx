@@ -71,9 +71,7 @@ export default function Slides() {
           {writingsWithBook.map((writing) => (
             <Link
               key={writing.id}
-              href={`/${writing.attributes.user?.data.id as number}/${
-                writing.id
-              }`}
+              href={`/writing/${writing.attributes.user?.data.id}/${writing.id}`}
               className="group block w-1/2 h-[260px]
                         relative float-left overflow-hidden"
             >

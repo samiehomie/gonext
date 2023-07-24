@@ -117,7 +117,7 @@ export default function RecommendArticle({
                         align-top float-left"
               >
                 <Link
-                  href={`/${writing.attributes.user?.data.id}/${writing.id}`}
+                  href={`/writing/${writing.attributes.user?.data.id}/${writing.id}`}
                   className="block"
                 >
                   <div className="mb-[22px] max-h-[320px] overflow-hidden">

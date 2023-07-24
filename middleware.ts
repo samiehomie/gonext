@@ -5,7 +5,7 @@ import { jwtVerify, type JWTVerifyResult } from 'jose'
 
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
-  const session = await getIronSession(req, res, {
+  const sessionUser = await getIronSession(req, res, {
     cookieName: 'user',
     password: process.env.SESSION_SECRET as string,
     cookieOptions: {
@@ -14,28 +14,29 @@ export const middleware = async (req: NextRequest) => {
   })
 
   if (req.nextUrl.pathname === '/write') {
-    if (!session.user) {
-      const backUrl = session.backUrl || process.env.NEXT_PUBLIC_FRONT_URL
-      return NextResponse.redirect(`${backUrl}?signin`)
+    if (!sessionUser.user) {
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_FRONT_URL}?signin`,
+      )
     }
     return res
   }
   if (req.nextUrl.pathname === '/api/auth/github/session') {
-    return NextResponse.json(session.user || {}, { status: 200 })
+    return NextResponse.json(sessionUser.user || {}, { status: 200 })
   }
+
+  // (1) strapi ->
   if (req.nextUrl.pathname === '/api/auth/github/callback') {
-    // const res = NextResponse.next()
-    const session = await getIronSession(req, res, {
+    const sessionBackUrl = await getIronSession(req, res, {
       cookieName: 'backUrl',
       password: process.env.SESSION_SECRET as string,
       cookieOptions: {
         secure: process.env.NODE_ENV === 'production',
       },
     })
-
     if (req.nextUrl.search.startsWith('?error')) {
       return NextResponse.redirect(
-        `${session.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
+        `${sessionBackUrl.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
       )
     }
 
@@ -70,7 +71,7 @@ export const middleware = async (req: NextRequest) => {
             headers: [
               [
                 'Set-Cookie',
-                `backUrl=${session.backUrl}; path=/; Domain=${process.env.DOMAIN}; HttpOnly;`,
+                `backUrl=${sessionBackUrl.backUrl}; path=/; Domain=${process.env.DOMAIN}; HttpOnly;`,
               ],
               [
                 'Set-Cookie',
@@ -90,7 +91,7 @@ export const middleware = async (req: NextRequest) => {
       } catch (error) {
         console.error(error)
         return NextResponse.redirect(
-          `${session.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
+          `${sessionBackUrl.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
         )
       }
     }

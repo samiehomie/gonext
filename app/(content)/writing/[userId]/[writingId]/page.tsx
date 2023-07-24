@@ -1,14 +1,22 @@
 import { Suspense } from 'react'
 import { getQueryWritingPage, queryUser } from '@/lib/queries'
-import type { user, writingsInUser, writingInUser, users } from '@/types'
+import type {
+  user,
+  users,
+  writingsInUser,
+  writingInUser,
+  commentsWithUser,
+} from '@/types'
 import Markdown from '@/components/Markdown'
 import Image from 'next/image'
-import { getEnglishDate } from '@/lib/utils'
+import { getEnglishDate, getCommentsQuery } from '@/lib/utils'
 import plusIco from '@/public/ico-plus.png'
 import bottomBanner from '@/public/bottom-banner.png'
 import Link from 'next/link'
 import TopNavigation from '@/components/navigations/topNavigation'
 import ScrollIndicator from '@/components/navigations/scrollIndicator'
+import Comments from '../../comments'
+import CommentForm from '../../commentForm'
 
 // TODO: #5 Add anchor using rehype library
 
@@ -48,7 +56,7 @@ async function Others({
               key={writing.id}
               className="float-left w-[300px] mx-[20px] mb-[35px]"
             >
-              <Link href={`/${userId}/${writing.id}`} className="block">
+              <Link href={`/writing/${userId}/${writing.id}`} className="block">
                 <div className="relative w-full h-[170px]">
                   <Image
                     src={writing.cover?.url as string}
@@ -97,7 +105,7 @@ async function Others({
       <div className="bg-white w-full z-[100] fixed bottom-0 h-[59px] border-t border-[#eee]">
         {prev && (
           <Link
-            href={`/${userId}/${prev.id}`}
+            href={`/writing/${userId}/${prev.id}`}
             className="float-left h-full px-[30px]"
           >
             <span
@@ -116,7 +124,7 @@ async function Others({
         )}
         {next && (
           <Link
-            href={`/${userId}/${next.id}`}
+            href={`/writing/${userId}/${next.id}`}
             className="float-right h-full px-[30px]"
           >
             <span
@@ -145,6 +153,21 @@ export default async function Page({
 }) {
   const [target, _] = getQueryWritingPage(userId, writingId)
   const user: user = await fetch(target).then((res) => res.json())
+
+  const comments: commentsWithUser = await fetch(
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/comments/api::writing.writing:${writingId}`,
+    { next: { tags: ['comments'] } },
+  ).then((res) => res.json())
+
+  const _commentUsers: users = await fetch(
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/users?${getCommentsQuery(comments)}`,
+  ).then((res) => res.json())
+
+  comments.forEach((comment) => {
+    comment['user'] = _commentUsers.find(
+      (user) => user.id === comment.author.id,
+    )!
+  })
 
   if (!user.writings) return null
 
@@ -197,7 +220,7 @@ export default async function Page({
                 </span>
                 <span className="opacity-80 float-left text-[#666]">
                   <Link
-                    href={`/${userId}`}
+                    href={`/user/${userId}`}
                     className="text-[#fff] tracking-[-.05em]"
                   >
                     {user.username}
@@ -256,7 +279,7 @@ export default async function Page({
                     ></span>
                     <span>댓글</span>
                     <span className="font-sf_light text-[#00c6be] ml-[3px]">
-                      2
+                      {comments.length}
                     </span>
                   </button>
                 </span>
@@ -265,7 +288,10 @@ export default async function Page({
           </div>
         </div>
         {/* comment */}
-        <div></div>
+        <div className="bg-white min-w-[1020px] pt-[44px] pb-[142px] relative font-noto_sans_light">
+          <Comments comments={comments} />
+          <CommentForm userId={userId} writingId={writingId} />
+        </div>
         {/* profile */}
         <div className="bg-[#fbfbfb] z-[10] relative pb-[80px] min-w-[1020px]">
           {/* pc profile */}
@@ -273,7 +299,7 @@ export default async function Page({
             <div>
               <strong className="block">
                 <Link
-                  href={`/${userId}`}
+                  href={`/user/${userId}`}
                   className="block text-[28px] font-normal overflow-hidden 
                         font-noto_sans_demlight text-ellipsis whitespace-nowrap w-[588px]"
                 >
@@ -285,7 +311,7 @@ export default async function Page({
                 {user.job}
               </span>
               <Link
-                href={`/${userId}`}
+                href={`/user/${userId}`}
                 className="absolute right-0 top-[-22px]"
               >
                 <Image
@@ -297,7 +323,7 @@ export default async function Page({
                 />
               </Link>
               <div className="text-[13px] text-[#666] mt-[21px]">
-                <Link href={`/${userId}`}>
+                <Link href={`/user/${userId}`}>
                   <p className="text-[#959595] leading-[22px]">
                     {user.introduction}
                   </p>

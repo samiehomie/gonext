@@ -1,3 +1,26 @@
+export type comment = {
+  id: number
+  content: string
+  blocked: boolean
+  blockedThread: boolean
+  blockReason?: boolean
+  isAdminComment?: boolean
+  removed?: boolean
+  approvalStatus?: boolean
+  createdAt: string
+  updatedAt: string
+  gotThread: boolean
+  author: {
+    id: number
+    name: string
+    email: string
+  }
+  children: []
+}
+
+export type commentsWithUser = (comment & {user: user})[] 
+
+export type comments = comment[]
 export type imageSizes = 'thumbnail' | 'small' | 'medium' | 'large'
 export type userSession = {
   jwt: string | undefined

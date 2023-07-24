@@ -36,10 +36,8 @@ export default function RootLayout({
         )}
       >
         <StartModalProvider>
-          <div className={`relative overflow-hidden`}>
-            <IndexStart />
-            {children}
-          </div>
+          <IndexStart />
+          {children}
         </StartModalProvider>
       </body>
     </html>

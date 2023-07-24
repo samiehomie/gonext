@@ -14,7 +14,7 @@ export default function Writing({
   return (
     <Link
       key={writing.id}
-      href={`/${writing.attributes.user?.data.id}/${writing.id}`}
+      href={`/writing/${writing.attributes.user?.data.id}/${writing.id}`}
       className={`${
         boxType === 'hor'
           ? 'w-1/2 h-[260px]'

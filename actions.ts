@@ -51,6 +51,43 @@ export async function getSession() {
   return userData
 }
 
+export async function saveComment(
+  formData: FormData,
+  path: string,
+  writingId: string,
+) {
+  const content = formData.get('content')?.toString() || ''
+  console.log('content', content)
+  const user = await getSession()
+  console.log('uer', user)
+  if (!user.jwt) {
+    console.error('unautherized!')
+    return redirect(`${path}?signin`)
+  }
+
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/comments/api::writing.writing:${writingId}`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${user.jwt}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        content: content,
+      }),
+    },
+  )
+
+  if (data.ok) {
+    revalidateTag('comments')
+    return redirect(`${path}`)
+  }
+
+  const response = await data.json()
+  console.error('unexpected error', response)
+}
+
 export async function saveWriting(formData: FormData) {
   const content = formData.get('content')?.toString() || ''
   const title = formData.get('title')?.toString() || ''

@@ -96,7 +96,7 @@ function UserProfile({ user }: { user: userSession }) {
   const imgUrl = userData?.profile?.url || defaultProfile
   return (
     <div className="bg-[#f6f6f6] h-[239px] overflow-hidden realtive font-noto_sans_light">
-      <Link href={`/${id}`}>
+      <Link href={`/user/${id}`}>
         <div className="w-[60px] m-[40px_auto_0px]">
           <Image
             src={imgUrl}
@@ -117,7 +117,7 @@ function UserProfile({ user }: { user: userSession }) {
             className="text-[#959595] inline-block font-[Georgia] text-[12px] italic mt-[6.5px] 
                       overflow-hidden text-ellipsis align-top whitespace-nowrap w-[212px]"
           >
-            {`${process.env.DOMAIN}/${id}`}
+            {`${process.env.NEXT_PUBLIC_DOMAIN}/${id}`}
           </p>
         </div>
       </Link>

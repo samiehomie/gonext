@@ -27,7 +27,7 @@ function SuggestList() {
             className="inline-block h-[198px] w-[140px] align-top mx-[30px]
                     suggest-list transition-all duration-1000 ease-in-out"
           >
-            <Link href={`/${user.id}`} className="block">
+            <Link href={`/user/${user.id}`} className="block">
               <Image
                 src={user.profile?.url as string}
                 alt={user.username}
@@ -150,7 +150,7 @@ function SearchSide({ searchWord }: { searchWord: string }) {
               <div className="pt-[11px] max-h-[298px] overflow-hidden suggest-list">
                 <div className="relative pl-[50px]">
                   <Link
-                    href={`/${user.id}`}
+                    href={`/user/${user.id}`}
                     className="rounded-full absolute h-[36px] w-[36px] left-0 top-0 overflow-hidden"
                   >
                     <Image
@@ -163,7 +163,7 @@ function SearchSide({ searchWord }: { searchWord: string }) {
                   <div className="table table-fixed	w-full min-h-[36px] overflow-hidden">
                     <div className="table-cell align-middle">
                       <Link
-                        href={`/${user.id}`}
+                        href={`/user/${user.id}`}
                         className="block overflow-hidden leading-[1.3] text-ellipsis 
                                 whitespace-nowrap text-[16px] w-[170px]"
                       >
@@ -216,7 +216,7 @@ function SearchList({ searchWord }: { searchWord: string }) {
             writingData.data.map((writing) => (
               <li key={writing.id} className="mt-[26px] box-border">
                 <Link
-                  href={`/${writing.attributes.user?.data.id}/${writing.id}`}
+                  href={`/writing/${writing.attributes.user?.data.id}/${writing.id}`}
                 >
                   <div className="max-w-[620px] overflow-hidden whitespace-nowrap text-ellipsis">
                     <strong

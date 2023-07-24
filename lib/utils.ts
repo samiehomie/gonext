@@ -1,12 +1,29 @@
 import qs from 'qs'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import type { userSession } from '@/types'
+import type { comments, userSession } from '@/types'
 import useSWR from 'swr'
 import { fetcher } from './fetchData'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export function getCommentsQuery(comments: comments) {
+  const filters = {
+    id: {
+      $in: comments.map((comment) => comment.author.id),
+    },
+  }
+  const populate = {
+    profile: true,
+  }
+  const fields = ['username']
+  return qs.stringify({
+    filters,
+    populate,
+    fields,
+  })
 }
 
 export function getWritingsQuery(pageSize: number, page: number = 1) {

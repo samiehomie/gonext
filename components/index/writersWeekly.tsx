@@ -72,7 +72,7 @@ function AuthorsGroup({
           className="float-left h-full mb-[15px] relative text-center w-[310px]"
         >
           <Link
-            href={`/${user.id}`}
+            href={`/user/${user.id}`}
             className="bg-[#fff] block min-h-[288px] py-[46px] px-[40px]"
           >
             <Image

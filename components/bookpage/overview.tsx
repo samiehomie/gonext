@@ -189,7 +189,7 @@ function OverviewSlide({
       {/* STEP 3 */}
       {step === 'step3' && (
         <Link
-          href={`/${bookData.data.attributes.user?.data.id}`}
+          href={`/user/${bookData.data.attributes.user?.data.id}`}
           className={`block z-[50] bg-white
                      box-border h-[450px] relative w-full border-l border-[#eee]`}
         >

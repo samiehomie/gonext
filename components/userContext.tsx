@@ -47,7 +47,9 @@ export function StartModalProvider({
   return (
     <startModalContext.Provider value={[onStart, setOnStart]}>
       <userDataContext.Provider value={[user, setUser]}>
+      <div className={`relative overflow-hidden`}>
         {children}
+        </div>
       </userDataContext.Provider>
     </startModalContext.Provider>
   )

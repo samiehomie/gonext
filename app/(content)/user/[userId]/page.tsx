@@ -10,19 +10,27 @@ export default async function AuthorPage({
 }: {
   params: { userId: string }
 }) {
-  const userData: user = await fetch(
-    `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${userId}?${queryUser}`,
-    { next: { tags: ['userPage'] } },
-  ).then((res) => res.json())
-  return (
-    <>
-      <TopNavigation inBookPage={true}>
-        <TopProfile userData={userData} />
-      </TopNavigation>
-      <Profile userData={userData} />
-      <Content userData={userData} />
-    </>
-  )
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${userId}?${queryUser}`,
+      { next: { tags: ['userPage'] } },
+    )
+    if (!response.ok) throw new Error('user/page response state issue')
+
+    const userData: user = await response.json()
+    return (
+      <>
+        <TopNavigation inBookPage={true}>
+          <TopProfile userData={userData} />
+        </TopNavigation>
+        <Profile userData={userData} />
+        <Content userData={userData} />
+      </>
+    )
+  } catch (e) {
+    console.error('user/page', e)
+    return null
+  }
 }
 
 export const revalidate = 3600
