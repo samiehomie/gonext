@@ -9,7 +9,7 @@ import type {
 } from '@/types'
 import Markdown from '@/components/Markdown'
 import Image from 'next/image'
-import { getEnglishDate, getCommentsQuery } from '@/lib/utils'
+import { getEnglishDate } from '@/lib/utils'
 import plusIco from '@/public/ico-plus.png'
 import bottomBanner from '@/public/bottom-banner.png'
 import Link from 'next/link'
@@ -19,6 +19,19 @@ import Comments from '../../comments'
 import CommentForm from '../../commentForm'
 
 // TODO: #5 Add anchor using rehype library
+
+async function getUser(target: string) {
+  const user: user = await fetch(target).then((res) => res.json())
+  return user
+}
+
+async function getComments(writingId: string) {
+  const comments: commentsWithUser = await fetch(
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/comments/api::writing.writing:${writingId}`,
+    { next: { tags: ['comments'] } },
+  ).then((res) => res.json())
+  return comments
+}
 
 async function Others({
   userId,
@@ -152,24 +165,29 @@ export default async function Page({
   params: { userId: string; writingId: string }
 }) {
   const [target, _] = getQueryWritingPage(userId, writingId)
-  const user: user = await fetch(target).then((res) => res.json())
 
-  const comments: commentsWithUser = await fetch(
-    `${process.env.NEXT_PUBLIC_DB_URL}/api/comments/api::writing.writing:${writingId}`,
-    { next: { tags: ['comments'] } },
-  ).then((res) => res.json())
+  let user: user | null = null
+  let comments: commentsWithUser | null = null
 
-  const _commentUsers: users = await fetch(
-    `${process.env.NEXT_PUBLIC_DB_URL}/api/users?${getCommentsQuery(comments)}`,
-  ).then((res) => res.json())
+  try {
+    const [userRes, commentsRes] = await Promise.allSettled([
+      getUser(target),
+      getComments(writingId),
+    ])
 
-  comments.forEach((comment) => {
-    comment['user'] = _commentUsers.find(
-      (user) => user.id === comment.author.id,
-    )!
-  })
+    if (userRes.status === 'fulfilled' && commentsRes.status === 'fulfilled') {
+      user = userRes.value
+      comments = commentsRes.value
+    } else {
+      throw new Error('fetch error')
+    }
+  } catch (error) {
+    console.error(error)
+  }
 
-  if (!user.writings) return null
+  if (!user || !comments || !user.writings) {
+    return null
+  }
 
   return (
     <>

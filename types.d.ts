@@ -18,7 +18,24 @@ export type comment = {
   children: []
 }
 
-export type commentsWithUser = (comment & {user: user})[] 
+export type strapiUserResponse = {
+  user: {
+    id: number
+    username: string
+    email: string
+    provider: string
+    confirmed: true
+    blocked: false
+    job: string
+    tags: string[]
+    introduction: string
+    createdAt: string
+    updatedAt: string
+  }
+  jwt: string
+}
+
+export type commentsWithUser = (comment & { user: user })[]
 
 export type comments = comment[]
 export type imageSizes = 'thumbnail' | 'small' | 'medium' | 'large'

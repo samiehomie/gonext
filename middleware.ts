@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getIronSession } from 'iron-session/edge'
-import { jwtVerify, type JWTVerifyResult } from 'jose'
+import { strapiUserResponse } from '@/types'
 
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
@@ -13,10 +13,20 @@ export const middleware = async (req: NextRequest) => {
     },
   })
 
-  console.log('user-write', session)
+  if (req.nextUrl.pathname === '/api/comment/create') {
+    const path = req.nextUrl.search.startsWith('path')
+    if (!session || !session.user) {
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_FRONT_URL}${path}?signin`,
+      )
+    }
+
+    res.cookies.set('jwt', session.user.jwt, { path: '/api/comment/create' })
+    return res
+  }
 
   if (req.nextUrl.pathname === '/write') {
-    if (!session.user.jwt) {
+    if (!session || !session.user) {
       return NextResponse.redirect(
         `${process.env.NEXT_PUBLIC_FRONT_URL}?signin`,
       )
@@ -25,7 +35,7 @@ export const middleware = async (req: NextRequest) => {
     return res
   }
   if (req.nextUrl.pathname === '/api/auth/github/session') {
-    return NextResponse.json(session.user || {}, { status: 200 })
+    return NextResponse.json(session.user || null, { status: 200 })
   }
 
   // (1) strapi ->
@@ -51,15 +61,8 @@ export const middleware = async (req: NextRequest) => {
         if (!res.ok) {
           throw new Error('Failed to fetch user data')
         }
-        const data = await res.json()
-        const decoded: JWTVerifyResult = await jwtVerify(
-          data.jwt as string,
-          new TextEncoder().encode(process.env.JWT_SECRET),
-        )
-
-        const expires = new Date(
-          (decoded.payload.exp as number) * 1000,
-        ).toUTCString()
+        const data: strapiUserResponse = await res.json()
+        console.log('data', data.user)
 
         return NextResponse.redirect(
           `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/login`,
@@ -67,19 +70,19 @@ export const middleware = async (req: NextRequest) => {
             headers: [
               [
                 'Set-Cookie',
-                `backUrlp=${session.backUrl}; path=/; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
+                `backUrlp=${session.backUrl}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
               ],
               [
                 'Set-Cookie',
-                `userid=${decoded.payload.id}; path=/; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly; Expires=${expires}`,
+                `userid=${data.user.id}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
               ],
               [
                 'Set-Cookie',
-                `userjwt=${data.jwt}; path=/; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly; Expires=${expires}`,
+                `userjwt=${data.jwt}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
               ],
               [
                 'Set-Cookie',
-                `username=${data.user.username}; path=/; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly; Expires=${expires}`,
+                `username=${data.user.username}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
               ],
             ],
           },

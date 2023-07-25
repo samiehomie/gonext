@@ -1,10 +1,22 @@
-'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-import type { commentsWithUser } from '@/types'
-import { getEnglishDate } from '@/lib/utils'
+import type { commentsWithUser, users } from '@/types'
+import { getEnglishDate, getCommentsQuery } from '@/lib/utils'
 
-export default function Comments({ comments }: { comments: commentsWithUser }) {
+export default async function Comments({
+  comments,
+}: {
+  comments: commentsWithUser
+}) {
+  const _commentUsers: users = await fetch(
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/users?${getCommentsQuery(comments)}`,
+  ).then((res) => res.json())
+
+  comments.forEach((comment) => {
+    comment['user'] = _commentUsers.find(
+      (user) => user.id === comment.author.id,
+    )!
+  })
   return (
     <>
       <h3 className="screen-out">댓글</h3>
