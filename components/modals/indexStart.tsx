@@ -120,9 +120,7 @@ function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
 
 export default function IndexStart() {
   const [page, setPage] = useState(0)
-  const {
-    start: [onStart, setOnStart],
-  } = useContext(startModalContext) as startStateType
+  const [onStart, setOnStart] = useContext(startModalContext) as startStateType
 
   const handlePage = useCallback(
     (page: number, plus: number, direct = false) => {

@@ -1,13 +1,11 @@
 'use client'
 import Image from 'next/image'
-import { useEffect, useContext, ReactNode } from 'react'
-import { startModalContext, type startStateType } from '../userContext'
-import type { user, userSession } from '@/types'
-import useSWR from 'swr'
+import { useEffect, ReactNode } from 'react'
+import type { userSession } from '@/types'
 import Link from 'next/link'
-import { queryUser } from '@/lib/queries'
 import defaultProfile from '@/public/default.jpg'
 import LogOut from '../logOut'
+import { useSession } from '@/lib/utils'
 
 function InnerContainer({
   children,
@@ -86,14 +84,8 @@ function CommonContent() {
 }
 
 function UserProfile({ user }: { user: userSession }) {
-  const { username, id } = user
-
-  const {
-    data: userData,
-  }: {
-    data: user | undefined
-  } = useSWR(`users/${id}?` + queryUser)
-  const imgUrl = userData?.profile?.url || defaultProfile
+  const { username, id, avatar } = user
+  const imgUrl = avatar || defaultProfile
   return (
     <div className="bg-[#f6f6f6] h-[239px] overflow-hidden realtive font-noto_sans_light">
       <Link href={`/user/${id}`}>
@@ -211,9 +203,7 @@ export default function SideMenu({
   setOnStart: (arg: boolean) => void
   setOnSide: (arg: boolean) => void
 }) {
-  const {
-    user: [user, _],
-  } = useContext(startModalContext) as startStateType
+  const user = useSession()
 
   useEffect(() => {
     document.addEventListener('click', function handler(e) {
@@ -230,7 +220,7 @@ export default function SideMenu({
 
   return (
     <InnerContainer onSide={onSide}>
-      {user && user.jwt && user.username ? (
+      {user ? (
         <UserProfile user={user} />
       ) : (
         <div

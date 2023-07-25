@@ -11,5 +11,8 @@
     "editor.defaultFormatter": "bradlc.vscode-tailwindcss"
   },
   "workbench.editor.enablePreview": false,
-  "workbench.editor.enablePreviewFromCodeNavigation": false
+  "workbench.editor.enablePreviewFromCodeNavigation": false,
+  "search.exclude": {
+    "**/node_modules": false
+  }
 }

@@ -35,8 +35,6 @@ export default function CommentForm({
 
   if (!user) return null
 
-  console.log(user)
-
   return (
     <div className="clear-both text-[14px]">
       <fieldset className="pt-[20px] m-auto relative w-[700px]">
@@ -46,10 +44,10 @@ export default function CommentForm({
                     relative w-[42px]"
         >
           <Image
-            src={defaultImg}
+            src={user.avatar}
             width={42}
             height={42}
-            alt={'test'}
+            alt={user.username}
             className="rounded-[42px] bg-white block"
           />
         </div>

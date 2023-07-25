@@ -62,12 +62,15 @@ export const middleware = async (req: NextRequest) => {
           throw new Error('Failed to fetch user data')
         }
         const data: strapiUserResponse = await res.json()
-        console.log('data', data.user)
 
         return NextResponse.redirect(
           `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/login`,
           {
             headers: [
+              [
+                'Set-Cookie',
+                `avatar=${data.user.profile.url}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
+              ],
               [
                 'Set-Cookie',
                 `backUrlp=${session.backUrl}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,

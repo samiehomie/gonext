@@ -131,6 +131,7 @@ export function useSession() {
   const { data: session }: { data: userSession | undefined } = useSWR(
     `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/session`,
     fetcher,
+    { revalidateOnMount: true },
   )
   return session
 }

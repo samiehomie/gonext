@@ -16,9 +16,7 @@ export default function IndexTopNavigation({
 }) {
   const [isFloat, setIsFloat] = useState(false)
   const [onSide, setOnSide] = useState(false)
-  const {
-    start: [_, setOnStart],
-  } = useContext(startModalContext) as startStateType
+  const [_, setOnStart] = useContext(startModalContext) as startStateType
   function handlerDown() {
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop

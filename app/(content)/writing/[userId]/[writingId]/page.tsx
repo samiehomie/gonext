@@ -307,7 +307,7 @@ export default async function Page({
         </div>
         {/* comment */}
         <div className="bg-white min-w-[1020px] pt-[44px] pb-[142px] relative font-noto_sans_light">
-          <Comments comments={comments} />
+          {comments.length > 0 && <Comments comments={comments} />}
           <CommentForm userId={userId} writingId={writingId} />
         </div>
         {/* profile */}

@@ -31,6 +31,44 @@ export type strapiUserResponse = {
     introduction: string
     createdAt: string
     updatedAt: string
+    profile: {
+      id: number
+      name: string
+      alternativeText?: string
+      caption?: number
+      width: number
+      height: number
+      formats: {
+        [key in imageSizes]: {
+          name: string
+          hash: string
+          ext: string
+          mime: string
+          path: null | string
+          width: number
+          height: number
+          size: number
+          url: string
+          provider_metadata: {
+            public_id: string
+            resource_type: string
+          }
+        }
+      }
+      hash: string
+      ext: string
+      mime: string
+      size: number
+      url: string
+      previewUrl?: string
+      provider: string
+      provider_metadata: {
+        public_id: string
+        resource_type: string
+      }
+      createdAt: string
+      updatedAt: string
+    }
   }
   jwt: string
 }
@@ -40,9 +78,10 @@ export type commentsWithUser = (comment & { user: user })[]
 export type comments = comment[]
 export type imageSizes = 'thumbnail' | 'small' | 'medium' | 'large'
 export type userSession = {
-  jwt: string | undefined
-  username: string | undefined
-  id: string | undefined
+  jwt: string
+  username: string
+  id: string
+  avatar: string
 }
 export type jwtSession = { id: number; iat: number; exp: number }
 export type userAsChild = {

@@ -17,10 +17,12 @@ export default withIronSessionApiRoute(
     const id = req.cookies['userid'] as string
     const jwt = req.cookies['userjwt'] as string
     const username = req.cookies['username'] as string
+    const avatar = req.cookies['avatar'] as string
     req.session.user = {
       id,
       jwt,
       username,
+      avatar,
     }
     await req.session.save()
     res.redirect(backUrl || process.env.NEXT_PUBLIC_FRONT_URL!)

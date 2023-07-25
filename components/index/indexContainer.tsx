@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, ReactElement, useContext } from 'react'
+import { useState, useEffect, ReactElement } from 'react'
 import TopBanner from '../banners/topBanner'
 import IndexTopNavigation from '../navigations/indexTopNavigation'
 import SlidesShow from '../slides/slidesShow'

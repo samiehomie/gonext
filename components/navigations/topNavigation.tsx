@@ -16,9 +16,7 @@ export default function TopNavigation({
 }) {
   const [onSide, setOnSide] = useState(false)
   const [isFloat, setIsFloat] = useState(false)
-  const {
-    start: [_, setOnStart],
-  } = useContext(startModalContext) as startStateType
+  const [_, setOnStart] = useContext(startModalContext) as startStateType
   const handlerDown = useCallback(() => {
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop
