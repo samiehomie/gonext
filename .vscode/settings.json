@@ -4,7 +4,7 @@
   "editor.formatOnSave": true,
   "prettier.printWidth": 80,
   "prettier.tabWidth": 2,
-  "prettier.trailingComma": "all",
+  "prettier.trailingComma": "none",
   "prettier.singleQuote": true,
   "prettier.semi": false,
   "[jsx-tags]": {

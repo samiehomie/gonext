@@ -69,7 +69,7 @@ export default function Content({ userData }: { userData: user }) {
                     </Link>
                   )}
                   <Link
-                    href={`/writing/${userId}/${writing.id}`}
+                    href={`/writing/${userId}/${writing.id}#title`}
                     className="min-h-[112px] overflow-visible clear-both block 
                               after:block after:clear-both after:content-['']"
                   >

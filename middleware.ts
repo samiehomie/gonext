@@ -1,49 +1,42 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { getIronSession } from 'iron-session/edge'
+import { getIronSession, sealData } from 'iron-session/edge'
 import { strapiUserResponse } from '@/types'
+import { sessionOptions } from '@/lib/session'
+import { debounce } from 'lodash'
+const debouncedFetch = debounce(fetch, 500)
 
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
-  const session = await getIronSession(req, res, {
-    cookieName: 'user',
-    password: process.env.SESSION_SECRET as string,
-    cookieOptions: {
-      secure: process.env.NODE_ENV === 'production',
-    },
-  })
+  const session = await getIronSession(req, res, sessionOptions)
+  const { user } = session
 
   if (req.nextUrl.pathname === '/api/comment/create') {
-    const path = req.nextUrl.search.startsWith('path')
-    if (!session || !session.user) {
+    const path = req.nextUrl.searchParams.get('path')
+    if (!user?.isLoggedIn) {
       return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_FRONT_URL}${path}?signin`,
+        `${process.env.NEXT_PUBLIC_FRONT_URL}${path}?signin`
       )
     }
 
-    res.cookies.set('jwt', session.user.jwt, { path: '/api/comment/create' })
+    res.cookies.set('jwt', user.jwt, { path: '/api/comment/create' })
     return res
   }
 
   if (req.nextUrl.pathname === '/write') {
-    if (!session || !session.user) {
+    if (!user?.isLoggedIn) {
       return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_FRONT_URL}?signin`,
+        `${process.env.NEXT_PUBLIC_FRONT_URL}?signin`
       )
     }
 
     return res
   }
-  if (req.nextUrl.pathname === '/api/auth/github/session') {
-    return NextResponse.json(session.user || null, { status: 200 })
-  }
 
-  // (1) strapi ->
-  if (req.nextUrl.pathname === '/api/auth/github/callback') {
+  // (1)
+  if (req.nextUrl.pathname === '/api/auth/github/login/callback') {
     if (req.nextUrl.search.startsWith('?error')) {
-      return NextResponse.redirect(
-        `${session.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
-      )
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_FRONT_URL}`)
     }
 
     if (req.nextUrl.search.startsWith('?access_token')) {
@@ -53,48 +46,32 @@ export const middleware = async (req: NextRequest) => {
         if (!accessToken) {
           throw new Error(`There isn't a given access_token`)
         }
-
-        const res: Response = await fetch(
+        console.log('how many? ------>', req.nextUrl.href)
+        const res: Response = await debouncedFetch(
           `${process.env.NEXT_PUBLIC_DB_URL}/api/auth/github/callback?access_token=` +
-            accessToken,
-        )
+            accessToken
+        )!
         if (!res.ok) {
           throw new Error('Failed to fetch user data')
         }
         const data: strapiUserResponse = await res.json()
-        console.log(data)
-        return NextResponse.redirect(
-          `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/login`,
+        const dataSealed = await sealData(
           {
-            headers: [
-              [
-                'Set-Cookie',
-                `avatar=${data.user.profile.url}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
-              ],
-              [
-                'Set-Cookie',
-                `backUrlp=${session.backUrl}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
-              ],
-              [
-                'Set-Cookie',
-                `userid=${data.user.id}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
-              ],
-              [
-                'Set-Cookie',
-                `userjwt=${data.jwt}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
-              ],
-              [
-                'Set-Cookie',
-                `username=${data.user.username}; path=/api/auth/github/login; Domain=${process.env.NEXT_PUBLIC_DOMAIN}; HttpOnly;`,
-              ],
-            ],
+            id: data?.user?.id,
+            username: data?.user?.username,
+            avatar: data?.user?.profile?.url,
+            isLoggedIn: true,
+            jwt: data?.jwt
           },
+          { password: process.env.SESSION_SECRET! }
+        )
+
+        return NextResponse.redirect(
+          `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/login?seal=${dataSealed}`
         )
       } catch (error) {
         console.error(error)
-        return NextResponse.redirect(
-          `${session.backUrl || process.env.NEXT_PUBLIC_FRONT_URL}`,
-        )
+        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_FRONT_URL}`)
       }
     }
   }

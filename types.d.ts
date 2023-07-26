@@ -82,6 +82,7 @@ export type userSession = {
   username: string
   id: string
   avatar: string
+  isLoggedIn: boolean
 }
 export type jwtSession = { id: number; iat: number; exp: number }
 export type userAsChild = {

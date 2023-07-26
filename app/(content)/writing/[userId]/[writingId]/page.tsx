@@ -17,6 +17,7 @@ import TopNavigation from '@/components/navigations/topNavigation'
 import ScrollIndicator from '@/components/navigations/scrollIndicator'
 import Comments from '../../comments'
 import CommentForm from '../../commentForm'
+import CommentContainer from '../../commentContainer'
 
 // TODO: #5 Add anchor using rehype library
 
@@ -69,7 +70,10 @@ async function Others({
               key={writing.id}
               className="float-left w-[300px] mx-[20px] mb-[35px]"
             >
-              <Link href={`/writing/${userId}/${writing.id}`} className="block">
+              <Link
+                href={`/writing/${userId}/${writing.id}#title`}
+                className="block"
+              >
                 <div className="relative w-full h-[170px]">
                   <Image
                     src={writing.cover?.url as string}
@@ -118,7 +122,7 @@ async function Others({
       <div className="bg-white w-full z-[100] fixed bottom-0 h-[59px] border-t border-[#eee]">
         {prev && (
           <Link
-            href={`/writing/${userId}/${prev.id}`}
+            href={`/writing/${userId}/${prev.id}#title`}
             className="float-left h-full px-[30px]"
           >
             <span
@@ -137,7 +141,7 @@ async function Others({
         )}
         {next && (
           <Link
-            href={`/writing/${userId}/${next.id}`}
+            href={`/writing/${userId}/${next.id}#title`}
             className="float-right h-full px-[30px]"
           >
             <span
@@ -214,6 +218,7 @@ export default async function Page({
                         text-left translate-x-[50%] translate-y-[-96px] text-[#fff]"
               >
                 <h1
+                  id="title"
                   className=" text-[34pt] font-serif_mj 
                             leading-[40pt] tracking-[-.01em] break-words"
                 >
@@ -258,57 +263,24 @@ export default async function Page({
             </div>
           </div>
         </div>
-        <div>
-          <div className="mt-[450px] pb-[54px] bg-white relative">
-            <div
-              className="mb-[-5px] bg-white relative z-[10] pt-[40px] 
-                    break-words overflow-hidden"
-            >
-              <Markdown content={user.writings[0].content as string} />
-            </div>
-            {/* tags */}
-            <div>
-              <div
-                className="mt-[80px] mx-auto text-right w-[700px] 
-                      after:content-[''] after:block after:clear-both"
-              >
-                <div className="float-left pt-[6px] bg-white overflow-hidden relative">
-                  <strong className="leading-none overflow-hidden indent-[-9999px] h-0 w-0 absolute">
-                    keyword
-                  </strong>
-                  <ul className="float-left">
-                    {user.writings[0].tags.map((tag, i) => (
-                      <li
-                        key={tag + i}
-                        className="float-left mb-[8px] mr-[8px]"
-                      >
-                        <a href="#" className="writing-tag tracking-[-.5px]">
-                          {tag}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <span className="inline-block ">
-                  <button className="comment-button">
-                    <span
-                      className="bg-ico-article-buttons bg-[0px_0px] bg-[length:80px_80px] 
-                            h-[20px] w-[20px] mr-[3px] inline-block align-top"
-                    ></span>
-                    <span>댓글</span>
-                    <span className="font-sf_light text-[#00c6be] ml-[3px]">
-                      {comments.length}
-                    </span>
-                  </button>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
         {/* comment */}
-        <div className="bg-white min-w-[1020px] pt-[44px] pb-[142px] relative font-noto_sans_light">
-          {comments.length > 0 && <Comments comments={comments} />}
-          <CommentForm userId={userId} writingId={writingId} />
+        <div className="mt-[450px] bg-white relative">
+          <div
+            className="mb-[-5px] bg-white relative z-[10] pt-[40px] 
+                    break-words overflow-hidden"
+          >
+            <Markdown content={user.writings[0].content as string} />
+          </div>
+          {/* tags */}
+
+          <CommentContainer
+            writingId={writingId}
+            userId={userId}
+            user={user}
+            comments={comments}
+          >
+            <Comments comments={comments} />
+          </CommentContainer>
         </div>
         {/* profile */}
         <div className="bg-[#fbfbfb] z-[10] relative pb-[80px] min-w-[1020px]">

@@ -1,23 +1,14 @@
 'use client'
-import type { userSession } from '@/types'
 import { ReactNode } from 'react'
-import Link from 'next/link'
-export default function LogOut({
-  children,
-  setUser,
-}: {
-  children: ReactNode
-  setUser: (arg: userSession | null) => void
-}) {
-  return (
-    <Link
-      prefetch={false}
-      href="/api/auth/github/logout"
-      onClick={() => {
-        setUser(null)
-      }}
-    >
-      {children}
-    </Link>
-  )
+import fetchJson from '@/lib/fetchJson'
+import useUser from '@/lib/useUser'
+
+export default function LogOut({ children }: { children: ReactNode }) {
+  const { mutateUser } = useUser({
+    redirectTo: '/'
+  })
+  const handleClick = async () => {
+    mutateUser(await fetchJson('/api/auth/github/logout'), false)
+  }
+  return <button onClick={handleClick}>{children}</button>
 }

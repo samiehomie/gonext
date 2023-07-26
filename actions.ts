@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { userSession } from './types'
 import { revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { debounce } from 'lodash'
 
 export async function garbageCookiesDelete() {
   cookies().set({
@@ -39,7 +40,7 @@ export async function garbageCookiesDelete() {
   })
 }
 
-export async function getSession() {
+export const getSession = async function () {
   const userCookie = cookies().get('user')?.value
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/session`,
@@ -48,7 +49,6 @@ export async function getSession() {
     },
   )
   const userData: userSession = await response.json()
-  console.log('getsession', userData)
   return userData
 }
 
@@ -60,7 +60,7 @@ export async function saveWriting(formData: FormData) {
   const tags = formData.get('tags')?.toString() || ''
   const user = await getSession()
 
-  if (!user.jwt) {
+  if (!user) {
     console.error('unautherized!')
     return redirect(`/?signin`)
   }
@@ -82,8 +82,6 @@ export async function saveWriting(formData: FormData) {
       },
     }),
   })
-
-  console.log('acton writing', data)
 
   if (data.ok) {
     revalidateTag('userPage')

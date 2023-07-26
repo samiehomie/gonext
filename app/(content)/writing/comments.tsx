@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { commentsWithUser, users } from '@/types'
 import { getEnglishDate, getCommentsQuery } from '@/lib/utils'
+import CommentButton from './commentButton'
 
 export default async function Comments({
   comments,
@@ -17,24 +18,17 @@ export default async function Comments({
       (user) => user.id === comment.author.id,
     )!
   })
+
+  if (!comments || comments.length === 0) return null
   return (
     <>
-      <h3 className="screen-out">댓글</h3>
-      <div className="m-[0px_auto_13px] h-[30px] w-[700px]">
-        <strong className="ml-[-1px] pt-[4px] float-left font-normal text-[16px]">
-          댓글{' '}
-          <span className="text-[#00c6be] pl-[5px] font-sf_light text-[16px] font-normal">
-            {comments.length}
-          </span>
-        </strong>
-      </div>
       <div className="m-auto w-[700px]">
         <ul className="block w-full border-t border-[#eee]">
           {comments.map((comment) => (
             <li
               key={comment.id}
               className="w-full p-[30px_0px_25px] float-left border-b 
-                    border-[#eee] animation-up hover:bg-[#f8f8f8]"
+                    border-[#eee] animation-up hover:bg-[#f8f8f8] group"
             >
               <div>
                 <Link
@@ -74,6 +68,7 @@ export default async function Comments({
                   >
                     {comment.content}
                   </p>
+                  <CommentButton />
                 </div>
               </div>
             </li>

@@ -1,38 +1,34 @@
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { jwtVerify, type JWTVerifyResult } from 'jose'
+import { sessionOptions } from '@/lib/session'
+import { unsealData } from 'iron-session'
+import { userSession } from '@/types'
 
-async function getExpires(jwt: string) {
-  const decoded: JWTVerifyResult = await jwtVerify(
-    jwt as string,
-    new TextEncoder().encode(process.env.JWT_SECRET),
-  )
-  console.log('date', decoded.payload.exp! * 1000)
-  return new Date(decoded.payload.exp! * 1000)
-}
+export default withIronSessionApiRoute(loginRoute, sessionOptions)
 
-export default withIronSessionApiRoute(
-  async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const backUrl = req.cookies['backUrlp']
-    const id = req.cookies['userid'] as string
-    const jwt = req.cookies['userjwt'] as string
-    const username = req.cookies['username'] as string
-    const avatar = req.cookies['avatar'] as string
-    req.session.user = {
-      id,
-      jwt,
-      username,
-      avatar,
-    }
+async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const seal = req.query.seal as string
+    const user = await unsealData<userSession>(seal, {
+      password: process.env.SESSION_SECRET!
+    })
+    console.log('----------------confirm', user)
+    // const id = req.cookies['id'] as string
+    // const jwt = req.cookies['jwt'] as string
+    // const username = req.cookies['username'] as string
+    // const avatar = req.cookies['avatar'] as string
+    // const user = {
+    //   isLoggedIn: true,
+    //   id,
+    //   jwt,
+    //   username,
+    //   avatar
+    // }
+
+    req.session.user = user
     await req.session.save()
-    res.redirect(backUrl || process.env.NEXT_PUBLIC_FRONT_URL!)
-  },
-  async (req: NextApiRequest, res: NextApiResponse) => ({
-    cookieName: 'user',
-    password: process.env.SESSION_SECRET as string,
-    cookieOptions: {
-      secure: process.env.NODE_ENV === 'production',
-      expires: await getExpires(req.cookies['userjwt']!),
-    },
-  }),
-)
+    res.redirect('/')
+  } catch (error) {
+    res.status(500).json({ message: (error as Error).message })
+  }
+}

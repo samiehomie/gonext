@@ -1,23 +1,19 @@
 'use client'
 import type { userSession } from '@/types'
-import { useTransition, useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
+import useSWR from 'swr'
+import { fetcher } from './lib/fetchData'
 
-export function useSession() {
-  const [user, setUser] = useState<userSession | null>(null)
-  const [isPending, startTransition] = useTransition()
-  const pathName = usePathname()
-  useEffect(() => {
-    const getuser = async () => {
-      const data = await fetch(
-        `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/session`,
-      ).then((res) => res.json())
-      startTransition(() => {
-        setUser(data as userSession)
-      })
-    }
-    getuser()
-  }, [pathName])
+export function useSession(where?: string) {
+  console.log('useSession--->', where)
+  const {
+    data: user,
+    error,
+    isLoading,
+  }: { data: userSession | undefined; error: any; isLoading: boolean } = useSWR(
+    `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/session`,
+    fetcher,
+    { revalidateOnMount: true, dedupingInterval: 1000 },
+  )
 
-  return { loading: isPending, user: user, setUser: setUser }
+  return user
 }

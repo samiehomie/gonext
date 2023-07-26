@@ -3,8 +3,6 @@ import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { comments } from '@/types'
 
-
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -126,17 +124,6 @@ export function getEnglishDate(dateString: string) {
   })
   return formattedDate
 }
-
-// export function useSession() {
-//   const { data: session }: { data: userSession | undefined } = useSWR(
-//     `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/session`,
-//     fetcher,
-//     { revalidateOnMount: true },
-//   )
-//   return session
-// }
-
-
 
 export function getDateString() {
   const today = new Date()

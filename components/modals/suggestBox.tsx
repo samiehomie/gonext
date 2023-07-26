@@ -216,7 +216,7 @@ function SearchList({ searchWord }: { searchWord: string }) {
             writingData.data.map((writing) => (
               <li key={writing.id} className="mt-[26px] box-border">
                 <Link
-                  href={`/writing/${writing.attributes.user?.data.id}/${writing.id}`}
+                  href={`/writing/${writing.attributes.user?.data.id}/${writing.id}#title`}
                 >
                   <div className="max-w-[620px] overflow-hidden whitespace-nowrap text-ellipsis">
                     <strong

@@ -5,7 +5,7 @@ import type { userSession } from '@/types'
 import Link from 'next/link'
 import defaultProfile from '@/public/default.jpg'
 import LogOut from '../logOut'
-import { useSession } from '@/useSession'
+import useUser from '@/lib/useUser'
 
 function InnerContainer({
   children,
@@ -126,11 +126,7 @@ function UserProfile({ user }: { user: userSession }) {
   )
 }
 
-function UserOnlyButton({
-  setUser,
-}: {
-  setUser: (arg: userSession | null) => void
-}) {
+function UserOnlyButton() {
   return (
     <>
       <Link href={'#'}>
@@ -141,7 +137,7 @@ function UserOnlyButton({
           설정
         </button>
       </Link>
-      <LogOut setUser={setUser}>
+      <LogOut>
         <button
           className="border border-[#bbb] rounded-[16px] text-[#959595] text-[13px] 
                     h-[32px] mx-[2px] w-[80px]"
@@ -207,7 +203,7 @@ export default function SideMenu({
   setOnStart: (arg: boolean) => void
   setOnSide: (arg: boolean) => void
 }) {
-  const { loading, user, setUser } = useSession()
+  const { user } = useUser()
 
   useEffect(() => {
     document.addEventListener('click', function handler(e) {
@@ -222,11 +218,9 @@ export default function SideMenu({
     })
   }, [onSide, setOnSide])
 
-  if (loading) return null
-
   return (
     <InnerContainer onSide={onSide}>
-      {user ? (
+      {user?.isLoggedIn ? (
         <UserProfile user={user} />
       ) : (
         <div
@@ -261,7 +255,7 @@ export default function SideMenu({
       )}
       <div className="border-t border-[#ddd] overflow-y-auto pt-[28px] h-[427px]">
         <ul>
-          {user && user.jwt && user.username && <UserOnlyMenu />}
+          {user?.isLoggedIn && <UserOnlyMenu />}
           <CommonContent />
         </ul>
 
@@ -277,8 +271,8 @@ export default function SideMenu({
               />
             </a>
           </div>
-          {user && user.jwt && user.username ? (
-            <UserOnlyButton setUser={setUser} />
+          {user?.isLoggedIn ? (
+            <UserOnlyButton />
           ) : (
             <a
               href="#"
