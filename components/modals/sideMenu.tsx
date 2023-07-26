@@ -5,7 +5,7 @@ import type { userSession } from '@/types'
 import Link from 'next/link'
 import defaultProfile from '@/public/default.jpg'
 import LogOut from '../logOut'
-import { useSession } from '@/lib/utils'
+import { useSession } from '@/useSession'
 
 function InnerContainer({
   children,
@@ -126,7 +126,11 @@ function UserProfile({ user }: { user: userSession }) {
   )
 }
 
-function UserOnlyButton() {
+function UserOnlyButton({
+  setUser,
+}: {
+  setUser: (arg: userSession | null) => void
+}) {
   return (
     <>
       <Link href={'#'}>
@@ -137,7 +141,7 @@ function UserOnlyButton() {
           설정
         </button>
       </Link>
-      <LogOut>
+      <LogOut setUser={setUser}>
         <button
           className="border border-[#bbb] rounded-[16px] text-[#959595] text-[13px] 
                     h-[32px] mx-[2px] w-[80px]"
@@ -203,7 +207,7 @@ export default function SideMenu({
   setOnStart: (arg: boolean) => void
   setOnSide: (arg: boolean) => void
 }) {
-  const user = useSession()
+  const { loading, user, setUser } = useSession()
 
   useEffect(() => {
     document.addEventListener('click', function handler(e) {
@@ -217,6 +221,8 @@ export default function SideMenu({
       }
     })
   }, [onSide, setOnSide])
+
+  if (loading) return null
 
   return (
     <InnerContainer onSide={onSide}>
@@ -272,7 +278,7 @@ export default function SideMenu({
             </a>
           </div>
           {user && user.jwt && user.username ? (
-            <UserOnlyButton />
+            <UserOnlyButton setUser={setUser} />
           ) : (
             <a
               href="#"

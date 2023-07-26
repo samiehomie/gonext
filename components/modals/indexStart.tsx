@@ -42,7 +42,13 @@ function PageButton({
   )
 }
 
-function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
+function StartItem({
+  setOnStart,
+  setDisabled,
+}: {
+  setOnStart: (arg: boolean) => void
+  setDisabled: (arg: boolean) => void
+}) {
   const pathName = usePathname()
   const searchParams = useSearchParams()
   const isSignin = searchParams?.has('signin')
@@ -61,10 +67,12 @@ function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
         <strong className="block text-[22px] leading-[22px] mb-[18px] font-normal">
           브런치스토리 시작하기
         </strong>
-        <a
+        <Link
+          prefetch={false}
           href={`/api/auth/github?back=${pathName}`}
           className="bg-[#231F20] box-border rounded-[5px] text-[#333] block text-[16px] 
                       h-[60px] leading-[61px] mt-[14px] text-center w-full"
+          onClick={() => setDisabled(true)}
         >
           <GitHubIco
             width={18}
@@ -77,7 +85,7 @@ function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
           >
             GitHub 계정으로 로그인
           </span>
-        </a>
+        </Link>
       </div>
       <div className="py-[40px]">
         <strong className="block font-normal text-[15px]">
@@ -121,6 +129,7 @@ function StartItem({ setOnStart }: { setOnStart: (arg: boolean) => void }) {
 export default function IndexStart() {
   const [page, setPage] = useState(0)
   const [onStart, setOnStart] = useContext(startModalContext) as startStateType
+  const [disabled, setDisabled] = useState(false)
 
   const handlePage = useCallback(
     (page: number, plus: number, direct = false) => {
@@ -141,6 +150,9 @@ export default function IndexStart() {
         onStart ? 'block' : 'hidden'
       } bg-[rgba(0,0,0,.3)] h-full w-full fixed left-0 top-0 z-[1002]`}
     >
+      {disabled && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-20 z-[1003] select-none cursor-wait"></div>
+      )}
       <h2 className="screen-out">브런치 로그인</h2>
       <div
         className="bg-white rounded-[15px] inline-block h-[610px] w-[1000px] 
@@ -280,7 +292,7 @@ export default function IndexStart() {
         </div>
         {/* item start */}
         <Suspense fallback={<></>}>
-          <StartItem setOnStart={setOnStart} />
+          <StartItem setOnStart={setOnStart} setDisabled={setDisabled} />
         </Suspense>
       </div>
     </div>

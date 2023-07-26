@@ -20,7 +20,6 @@ export async function GET(req: NextRequest) {
         content: content,
       }),
     },
-  )
-
-  return NextResponse.json({})
+  ).then((res) => res.json())
+  return NextResponse.json({ ...data })
 }

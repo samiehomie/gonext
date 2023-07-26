@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 export default withIronSessionApiRoute(
   function logoutRoute(req: NextApiRequest, res: NextApiResponse) {
     req.session.destroy()
-    return res.end()
+    return res.redirect(process.env.NEXT_PUBLIC_FRONT_URL!)
   },
   {
     cookieName: 'user',
