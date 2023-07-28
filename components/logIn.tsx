@@ -1,14 +1,8 @@
 'use client'
-import fetchJson, { FetchError } from '@/lib/fetchJson'
-import useUser from '@/lib/useUser'
 import GitHubIco from '@/components/gitHubico'
 import Link from 'next/link'
 
 export default function Login() {
-  // 이미 로그인된 상태인지 확인하고
-  // 로그인 유무 상관없이 리다이렉트 하지 않는다.
-  const { mutateUser } = useUser()
-
   return (
     <Link
       prefetch={false}

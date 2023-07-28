@@ -1,18 +1,19 @@
 'use client'
 import { useEffect } from 'react'
 import type { userSession } from '@/types'
-import Router from 'next/router'
+import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
 import fetchJson from '@/lib/fetchJson'
 
 export default function useUser({
   redirectTo = '',
-  redirectIfFound = false,
+  redirectIfFound = false
 } = {}) {
   const { data: user, mutate: mutateUser } = useSWR<userSession>(
     '/api/auth/github/user',
-    fetchJson,
+    fetchJson
   )
+  const router = useRouter()
   useEffect(() => {
     // 리다이렉트가 필요없거나 아직 유저 데이터가 없으면 곧바로 리턴
     if (!redirectTo || !user) return
@@ -22,7 +23,7 @@ export default function useUser({
       (redirectTo && !redirectIfFound && !user?.isLoggedIn) ||
       (redirectIfFound && user?.isLoggedIn)
     ) {
-      Router.push(redirectTo)
+      router.push(redirectTo)
     }
   }, [user, redirectIfFound, redirectTo])
 

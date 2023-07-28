@@ -6,10 +6,11 @@ import Link from 'next/link'
 import defaultProfile from '@/public/default.jpg'
 import LogOut from '../logOut'
 import useUser from '@/lib/useUser'
+import { usePathname } from 'next/navigation'
 
 function InnerContainer({
   children,
-  onSide,
+  onSide
 }: {
   children: ReactNode
   onSide: boolean
@@ -197,13 +198,17 @@ function UserOnlyMenu() {
 export default function SideMenu({
   onSide,
   setOnStart,
-  setOnSide,
+  setOnSide
 }: {
   onSide: boolean
   setOnStart: (arg: boolean) => void
   setOnSide: (arg: boolean) => void
 }) {
-  const { user } = useUser()
+  const pathname = usePathname()
+  const { user } = useUser({
+    redirectTo: pathname!,
+    redirectIfFound: true
+  })
 
   useEffect(() => {
     document.addEventListener('click', function handler(e) {

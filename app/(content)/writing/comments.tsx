@@ -5,17 +5,17 @@ import { getEnglishDate, getCommentsQuery } from '@/lib/utils'
 import CommentButton from './commentButton'
 
 export default async function Comments({
-  comments,
+  comments
 }: {
   comments: commentsWithUser
 }) {
   const _commentUsers: users = await fetch(
-    `${process.env.NEXT_PUBLIC_DB_URL}/api/users?${getCommentsQuery(comments)}`,
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/users?${getCommentsQuery(comments)}`
   ).then((res) => res.json())
 
   comments.forEach((comment) => {
     comment['user'] = _commentUsers.find(
-      (user) => user.id === comment.author.id,
+      (user) => user.id === comment.author.id
     )!
   })
 

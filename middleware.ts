@@ -46,7 +46,7 @@ export const middleware = async (req: NextRequest) => {
         if (!accessToken) {
           throw new Error(`There isn't a given access_token`)
         }
-        console.log('how many? ------>', req.nextUrl.href)
+        console.log('access_github -------->', req.nextUrl.href)
         const res: Response = await debouncedFetch(
           `${process.env.NEXT_PUBLIC_DB_URL}/api/auth/github/callback?access_token=` +
             accessToken
