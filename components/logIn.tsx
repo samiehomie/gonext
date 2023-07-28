@@ -1,16 +1,24 @@
 'use client'
 import GitHubIco from '@/components/gitHubico'
 import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import useUser from '@/lib/useUser'
 import fetchJson from '@/lib/fetchJson'
+import { debounce } from 'lodash'
 
 export default function Login() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const seal = searchParams!.get('seal')
-  const { mutateUser } = useUser()
+  const { mutateUser } = useUser({
+    redirectTo: pathname!,
+    redirectIfFound: true
+  })
+  const router = useRouter()
+  const handlerClick = debounce(() => {
+    router.push(`/api/auth/github/ask?back=${pathname}`)
+  }, 500)
 
   useEffect(() => {
     const handler = async () => {
@@ -25,9 +33,8 @@ export default function Login() {
   }, [seal, mutateUser])
 
   return (
-    <Link
-      prefetch={false}
-      href={`/api/auth/github/ask?back=${pathname}`}
+    <button
+      onClick={handlerClick}
       className="bg-[#231F20] box-border rounded-[5px] text-[#333] block text-[16px] 
                 h-[60px] leading-[61px] mt-[14px] text-center w-full"
     >
@@ -42,6 +49,6 @@ export default function Login() {
       >
         GitHub 계정으로 로그인
       </span>
-    </Link>
+    </button>
   )
 }

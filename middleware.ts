@@ -3,8 +3,8 @@ import type { NextRequest } from 'next/server'
 import { getIronSession, sealData } from 'iron-session/edge'
 import { strapiUserResponse } from '@/types'
 import { sessionOptions } from '@/lib/session'
-import { debounce } from 'lodash'
-const debouncedFetch = debounce(fetch, 500)
+// import { debounce } from 'lodash'
+// const debouncedFetch = debounce(fetch, 1000)
 
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
@@ -47,13 +47,21 @@ export const middleware = async (req: NextRequest) => {
           throw new Error(`There isn't a given access_token`)
         }
         console.log('access_github -------->', req.nextUrl.href)
-        const res: Response = await debouncedFetch(
+        // const res: Response = await debouncedFetch(
+        //   `${process.env.NEXT_PUBLIC_DB_URL}/api/auth/github/callback?access_token=` +
+        //     accessToken
+        // )!
+        const res: Response = await fetch(
           `${process.env.NEXT_PUBLIC_DB_URL}/api/auth/github/callback?access_token=` +
             accessToken
         )!
+
+        console.log('res-------///---->', res)
+
         if (!res.ok) {
           throw new Error('Failed to fetch user data')
         }
+
         const data: strapiUserResponse = await res.json()
         const dataSealed = await sealData(
           {

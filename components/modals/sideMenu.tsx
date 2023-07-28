@@ -205,10 +205,7 @@ export default function SideMenu({
   setOnSide: (arg: boolean) => void
 }) {
   const pathname = usePathname()
-  const { user } = useUser({
-    redirectTo: pathname!,
-    redirectIfFound: true
-  })
+  const { user } = useUser()
 
   useEffect(() => {
     document.addEventListener('click', function handler(e) {
