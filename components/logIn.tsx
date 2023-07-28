@@ -1,12 +1,33 @@
 'use client'
 import GitHubIco from '@/components/gitHubico'
 import Link from 'next/link'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
+import useUser from '@/lib/useUser'
+import fetchJson from '@/lib/fetchJson'
 
 export default function Login() {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const seal = searchParams!.get('seal')
+  const { mutateUser } = useUser()
+
+  useEffect(() => {
+    const handler = async () => {
+      if (seal) {
+        mutateUser(
+          await fetchJson(`/api/auth/github/login?seal=${seal}`),
+          false
+        )
+      }
+    }
+    handler()
+  }, [seal, mutateUser])
+
   return (
     <Link
       prefetch={false}
-      href={process.env.NEXT_PUBLIC_AUTH_GITHUB!}
+      href={`/api/auth/github/ask?back=${pathname}`}
       className="bg-[#231F20] box-border rounded-[5px] text-[#333] block text-[16px] 
                 h-[60px] leading-[61px] mt-[14px] text-center w-full"
     >

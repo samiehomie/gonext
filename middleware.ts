@@ -9,7 +9,7 @@ const debouncedFetch = debounce(fetch, 500)
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
   const session = await getIronSession(req, res, sessionOptions)
-  const { user } = session
+  const { user, back } = session
 
   if (req.nextUrl.pathname === '/api/comment/create') {
     const path = req.nextUrl.searchParams.get('path')
@@ -65,9 +65,10 @@ export const middleware = async (req: NextRequest) => {
           },
           { password: process.env.SESSION_SECRET! }
         )
+        console.log('back----------->', back)
 
         return NextResponse.redirect(
-          `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/login?seal=${dataSealed}`
+          `${process.env.NEXT_PUBLIC_FRONT_URL}${back || ''}?seal=${dataSealed}`
         )
       } catch (error) {
         console.error(error)

@@ -13,7 +13,8 @@ export default function useUser({
     '/api/auth/github/user',
     fetchJson
   )
-  const router = useRouter()
+  const router =  useRouter()
+  
   useEffect(() => {
     // 리다이렉트가 필요없거나 아직 유저 데이터가 없으면 곧바로 리턴
     if (!redirectTo || !user) return
@@ -25,7 +26,7 @@ export default function useUser({
     ) {
       router.push(redirectTo)
     }
-  }, [user, redirectIfFound, redirectTo])
+  }, [user, redirectIfFound, redirectTo, router])
 
   return { user, mutateUser }
 }
