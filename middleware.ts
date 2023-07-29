@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server'
 import { getIronSession, sealData } from 'iron-session/edge'
 import { strapiUserResponse } from '@/types'
 import { sessionOptions } from '@/lib/session'
+import defaultImg from '@/public/default.png'
 // import { debounce } from 'lodash'
 // const debouncedFetch = debounce(fetch, 1000)
 
@@ -67,7 +68,7 @@ export const middleware = async (req: NextRequest) => {
           {
             id: data?.user?.id,
             username: data?.user?.username,
-            avatar: data?.user?.profile?.url,
+            avatar: data?.user?.profile?.url || defaultImg,
             isLoggedIn: true,
             jwt: data?.jwt
           },
