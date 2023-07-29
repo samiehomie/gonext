@@ -5,7 +5,7 @@ import type {
   users,
   writingsInUser,
   writingInUser,
-  commentsWithUser,
+  commentsWithUser
 } from '@/types'
 import Markdown from '@/components/Markdown'
 import Image from 'next/image'
@@ -15,9 +15,8 @@ import bottomBanner from '@/public/bottom-banner.png'
 import Link from 'next/link'
 import TopNavigation from '@/components/navigations/topNavigation'
 import ScrollIndicator from '@/components/navigations/scrollIndicator'
-import Comments from '../../comments'
-import CommentForm from '../../commentForm'
 import CommentContainer from '../../commentContainer'
+import fetchJson from '@/lib/fetchJson'
 
 // TODO: #5 Add anchor using rehype library
 
@@ -29,7 +28,7 @@ async function getUser(target: string) {
 async function getComments(writingId: string) {
   const comments: commentsWithUser = await fetch(
     `${process.env.NEXT_PUBLIC_DB_URL}/api/comments/api::writing.writing:${writingId}`,
-    { next: { tags: ['comments'] } },
+    { next: { tags: ['comments'] } }
   ).then((res) => res.json())
   return comments
 }
@@ -37,7 +36,7 @@ async function getComments(writingId: string) {
 async function Others({
   userId,
   writingId,
-  userName,
+  userName
 }: {
   userId: string
   writingId: string
@@ -50,7 +49,7 @@ async function Others({
     .filter((w) => w.id < Number(writingId))
     .at(-1)
   const next: undefined | writingInUser = writings.filter(
-    (w) => w.id > Number(writingId),
+    (w) => w.id > Number(writingId)
   )[0]
   return (
     <>
@@ -164,34 +163,14 @@ async function Others({
 }
 
 export default async function Page({
-  params: { userId, writingId },
+  params: { userId, writingId }
 }: {
   params: { userId: string; writingId: string }
 }) {
   const [target, _] = getQueryWritingPage(userId, writingId)
+  const user: user = await fetchJson(target)
 
-  let user: user | null = null
-  let comments: commentsWithUser | null = null
-
-  try {
-    const [userRes, commentsRes] = await Promise.allSettled([
-      getUser(target),
-      getComments(writingId),
-    ])
-
-    if (userRes.status === 'fulfilled' && commentsRes.status === 'fulfilled') {
-      user = userRes.value
-      comments = commentsRes.value
-    } else {
-      throw new Error('fetch error')
-    }
-  } catch (error) {
-    console.error(error)
-  }
-
-  if (!user || !comments || !user.writings) {
-    return null
-  }
+  if (!user || !user.writings) return null
 
   return (
     <>
@@ -273,14 +252,7 @@ export default async function Page({
           </div>
           {/* tags */}
 
-          <CommentContainer
-            writingId={writingId}
-            userId={userId}
-            user={user}
-            comments={comments}
-          >
-            <Comments comments={comments} />
-          </CommentContainer>
+          <CommentContainer writingId={writingId} userId={userId} user={user} />
         </div>
         {/* profile */}
         <div className="bg-[#fbfbfb] z-[10] relative pb-[80px] min-w-[1020px]">
@@ -376,6 +348,6 @@ export async function generateStaticParams() {
   const writings = users.flatMap((user) => user.writings)
   return writings.map((writing) => ({
     userId: `${writing?.user.id}`,
-    writingId: `${writing?.id}`,
+    writingId: `${writing?.id}`
   }))
 }

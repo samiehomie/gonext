@@ -73,14 +73,15 @@ export type strapiUserResponse = {
   jwt: string
 }
 
-export type commentsWithUser = (comment & { user: user })[]
+export type commentWithUser = (comment & { user: user })
+export type commentsWithUser = commentWithUser[]
 
 export type comments = comment[]
 export type imageSizes = 'thumbnail' | 'small' | 'medium' | 'large'
 export type userSession = {
   jwt: string
   username: string
-  id: string
+  id: number
   avatar: string
   isLoggedIn: boolean
 }

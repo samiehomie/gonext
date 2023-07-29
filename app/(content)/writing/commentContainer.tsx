@@ -1,22 +1,24 @@
 'use client'
-import { ReactNode, useState } from 'react'
-import type { user, commentsWithUser } from '@/types'
+import { useState } from 'react'
+import type { user } from '@/types'
 import CommentForm from './commentForm'
+import Comments from './comments'
+import useComment from '@/lib/useComment'
 
 export default function CommentContainer({
-  children,
   user,
-  comments,
   userId,
-  writingId,
+  writingId
 }: {
-  children: ReactNode
   user: user
-  comments: commentsWithUser
   userId: string
   writingId: string
 }) {
   const [open, setOpen] = useState(false)
+  const { comments } = useComment({ writingId })
+
+  if (!comments) return null
+
   return (
     <>
       <div className={`bg-white relative pb-[54px]`}>
@@ -74,8 +76,8 @@ export default function CommentContainer({
             </span>
           </strong>
         </div>
-        {children}
-        <CommentForm userId={userId} writingId={writingId} />
+        <Comments writingId={writingId} />
+        <CommentForm writingId={writingId} />
       </div>
     </>
   )
