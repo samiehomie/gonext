@@ -7,11 +7,13 @@ import { startModalContext, startStateType } from '../userContext'
 
 export default function TopNavigation({
   children,
-  inBookPage = false,
-  breakpoint = 400,
+  isBlack = false,
+  inWrite = false,
+  breakpoint = 400
 }: {
   children: React.ReactNode
-  inBookPage?: boolean
+  isBlack?: boolean
+  inWrite?: boolean
   breakpoint?: number
 }) {
   const [onSide, setOnSide] = useState(false)
@@ -67,20 +69,18 @@ export default function TopNavigation({
               className={`bg-ico-brunch-sub overflow-hidden 
                         indent-[-999px] leading-none h-[20px] w-[27px] 
                         mr-[14px] float-left ${
-                          isFloat || inBookPage
-                            ? 'bg-[0px_0px]'
-                            : 'bg-[0px_-30px]'
+                          isFloat || isBlack ? 'bg-[0px_0px]' : 'bg-[0px_-30px]'
                         }`}
             >
               메뉴
             </button>
-            <h1 className={`inline-block float-left`}>
+            <h1 className={`inline-block float-left ${inWrite && 'hidden'}`}>
               <a
                 href="/"
                 className={`block leading-none indent-[-999px] 
                           overflow-hidden w-[120px] h-[22px] mt-[-1px] 
                           bg-ico-brunch-titles ${
-                            isFloat || inBookPage
+                            isFloat || isBlack
                               ? 'bg-[0px_-80px]'
                               : 'bg-[-120px_-80px]'
                           }`}

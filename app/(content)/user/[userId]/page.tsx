@@ -6,21 +6,21 @@ import TopNavigation from '@/components/navigations/topNavigation'
 import TopProfile from '../topProfile'
 
 export default async function AuthorPage({
-  params: { userId },
+  params: { userId }
 }: {
   params: { userId: string }
 }) {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${userId}?${queryUser}`,
-      { next: { tags: ['userPage'] } },
+      { next: { tags: ['userPage'] } }
     )
     if (!response.ok) throw new Error('user/page response state issue')
 
     const userData: user = await response.json()
     return (
       <>
-        <TopNavigation inBookPage={true}>
+        <TopNavigation isBlack={true}>
           <TopProfile userData={userData} />
         </TopNavigation>
         <Profile userData={userData} />
@@ -39,6 +39,6 @@ export async function generateStaticParams() {
   const reqUrl = `${process.env.NEXT_PUBLIC_DB_URL}/api/users?${queryUser}`
   const users: users = await fetch(reqUrl).then((res) => res.json())
   return users.map((user) => ({
-    userId: `${user.id}`,
+    userId: `${user.id}`
   }))
 }

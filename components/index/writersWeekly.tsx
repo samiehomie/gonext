@@ -20,18 +20,18 @@ const getFilterdUrl = (tag: string) => {
       fields: ['username', 'introduction', 'job', 'tags'],
       populate: {
         profile: {
-          fields: ['url'],
-        },
+          fields: ['url']
+        }
       },
       filters: {
-        tags: { $contains: tag },
+        tags: { $contains: tag }
       },
       start: 0,
-      limit: 6,
+      limit: 6
     },
     {
-      encodeValuesOnly: true,
-    },
+      encodeValuesOnly: true
+    }
   )
   return queryTags
 }
@@ -42,18 +42,20 @@ const initialState = tags.reduce(
     pre[cur] = false
     return pre
   },
-  {},
+  {}
 )
 function AuthorsGroup({
   tag,
-  tagsState,
+  tagsState
 }: {
   tag: string
   tagsState: typeof initialState
 }) {
   const query = getFilterdUrl(tag)
   const { data: users }: { data: users | undefined } = useSWR(
-    regexInvalidQuery.test(query) ? null : 'users?' + query,
+    regexInvalidQuery.test(query)
+      ? null
+      : `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + query
   )
 
   if (!users) return null
@@ -132,7 +134,7 @@ function AuthorsGroup({
 export default function WritersWeekly() {
   const [tagsState, setTagsState] = useState({
     ...initialState,
-    [tags[0]]: true,
+    [tags[0]]: true
   })
   return (
     <>

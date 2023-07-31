@@ -17,7 +17,8 @@ import TopNavigation from '@/components/navigations/topNavigation'
 import ScrollIndicator from '@/components/navigations/scrollIndicator'
 import CommentContainer from '../../commentContainer'
 import fetchJson from '@/lib/fetchJson'
-
+import defaultCover from '@/public/default-cover.png'
+import { removeMarkdownImages } from '@/lib/utils'
 // TODO: #5 Add anchor using rehype library
 
 async function getUser(target: string) {
@@ -75,7 +76,7 @@ async function Others({
               >
                 <div className="relative w-full h-[170px]">
                   <Image
-                    src={writing.cover?.url as string}
+                    src={writing.cover ? writing.cover.url : defaultCover}
                     fill={true}
                     alt={writing.title}
                     className="object-cover top-0 left-0"
@@ -92,7 +93,7 @@ async function Others({
                         overflow-hidden text-ellipsis max-h-[66px]"
                 >
                   <span className="relative leading-[24px] inline text-[#959595] text-[13px]">
-                    {writing.content}
+                    {removeMarkdownImages(writing.content)}
                   </span>
                 </span>
                 <span className="block mt-[15px]">
@@ -183,13 +184,18 @@ export default async function Page({
           <div className="fixed top-0 w-full z-0">
             {/* Cover image */}
             <div className="relative w-full h-[450px]">
-              <Image
-                priority
-                src={user.writings[0].cover?.url as string}
-                alt={user.writings[0].title as string}
-                fill={true}
-                className=" object-cover"
-              />
+              {user.writings[0].cover ? (
+                <Image
+                  priority
+                  src={user.writings[0].cover?.url as string}
+                  alt={user.writings[0].title as string}
+                  fill={true}
+                  className=" object-cover"
+                />
+              ) : (
+                <div className="bg-white absolute left-0 top-0 w-full h-[450px]" />
+              )}
+
               <div className="h-[450px] absolute w-full left-0 top-0 bg-black opacity-30"></div>
               {/* Title */}
               <div

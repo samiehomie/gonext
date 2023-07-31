@@ -3,14 +3,20 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { slidesInfo } from '../../public/localdata/imgSources'
 import { throttle } from 'lodash'
+import Link from 'next/link'
+import { queryTopBanners } from '@/lib/queries'
+import useSWR from 'swr'
+import type { users } from '@/types'
+
 // TODO: Consider another way to manage the states
+
 function InnerPaging({
   slides,
   currentSlide,
   isWhite,
   isBig,
   onChnageSlide,
-  onChangePastSlide,
+  onChangePastSlide
 }: {
   slides: typeof slidesInfo
   currentSlide: string
@@ -84,6 +90,9 @@ export default function TopBanner() {
   const [currentSlide, setCurrentSlide] = useState(slidesInfo[0].key)
   const [slideIsBig, setSlideIsBig] = useState(false)
   const [pastSlide, setPastSlide] = useState('')
+  const { data: banners } = useSWR<users>(
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + queryTopBanners
+  )
 
   const handlerWheel =
     (cbForBig: () => void, cbForSmall: () => void, elem: HTMLUListElement) =>
@@ -133,9 +142,9 @@ export default function TopBanner() {
             setSlideIsBig(true)
           },
           () => setSlideIsBig(false),
-          slidesNode,
+          slidesNode
         ),
-        100,
+        100
       )
       document.addEventListener('wheel', handler)
 
@@ -146,8 +155,16 @@ export default function TopBanner() {
   }, [])
 
   const slideIsWhite = slidesInfo.find(
-    (slide) => slide.key === currentSlide,
+    (slide) => slide.key === currentSlide
   )?.white
+
+  if (!banners) return null
+
+  const bannersEndpoint = banners[0].writings?.reduce((acc, w) => {
+    acc[w.title] = `/writing/${banners[0].id}/${w.id}`
+    return acc
+  }, {} as { [key: string]: string })
+
   return (
     <div className="overflow-y-auto overflow-x-auto">
       <div
@@ -177,7 +194,10 @@ export default function TopBanner() {
               : 'translate-y-[60px] z-[1] invisible'
           }`}
             >
-              <a href="#" className="h-[480px] w-[100%]">
+              <Link
+                href={`${bannersEndpoint![slide.alt]}`}
+                className="h-[480px] w-[100%]"
+              >
                 <Image src={slide.big.back} alt={slide.big.alt} fill={true} />
                 <Image
                   src={slide.big.src}
@@ -186,9 +206,9 @@ export default function TopBanner() {
                   height={480}
                   className="absolute top-0 left-[50%] transform translate-x-[-50%]"
                 />
-              </a>
-              <a
-                href="#"
+              </Link>
+              <Link
+                href="/writing/21/34"
                 className={`h-[60px] absolute bottom-0 w-[100%]
               transition-opacity duration-400 linear ${
                 slideIsBig ? 'opacity-0' : 'opacity-100'
@@ -206,7 +226,7 @@ export default function TopBanner() {
                   height={60}
                   className="absolute top-0 left-[50%] transform translate-x-[-50%]"
                 />
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

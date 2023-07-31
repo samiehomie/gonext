@@ -11,7 +11,7 @@ import Link from 'next/link'
 
 function SuggestList() {
   const { data: users }: { data: users | undefined } = useSWR(
-    'users?' + queryUsersFive,
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + queryUsersFive
   )
 
   if (!users) return null
@@ -59,16 +59,24 @@ function SuggestList() {
 function SearchSide({ searchWord }: { searchWord: string }) {
   const { queryBooks, queryUsers } = getSearchQuery(searchWord)
   const {
-    data: booksData,
+    data: booksData
   }: {
     data: books | undefined
-  } = useSWR(regexInvalidQuery.test(queryBooks) ? null : 'books?' + queryBooks)
+  } = useSWR(
+    regexInvalidQuery.test(queryBooks)
+      ? null
+      : `${process.env.NEXT_PUBLIC_DB_URL}/api/books?` + queryBooks
+  )
 
   const {
-    data: usersData,
+    data: usersData
   }: {
     data: users | undefined
-  } = useSWR(regexInvalidQuery.test(queryUsers) ? null : 'users?' + queryUsers)
+  } = useSWR(
+    regexInvalidQuery.test(queryUsers)
+      ? null
+      : `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + queryUsers
+  )
 
   if (!booksData || !usersData) return null
 
@@ -184,11 +192,13 @@ function SearchSide({ searchWord }: { searchWord: string }) {
 function SearchList({ searchWord }: { searchWord: string }) {
   const { queryWritings } = getSearchQuery(searchWord)
   const {
-    data: writingData,
+    data: writingData
   }: {
     data: writings | undefined
   } = useSWR(
-    regexInvalidQuery.test(queryWritings) ? null : 'writings?' + queryWritings,
+    regexInvalidQuery.test(queryWritings)
+      ? null
+      : `${process.env.NEXT_PUBLIC_DB_URL}/api/writings?` + queryWritings
   )
 
   if (!writingData) return null
@@ -225,8 +235,8 @@ function SearchList({ searchWord }: { searchWord: string }) {
                       dangerouslySetInnerHTML={{
                         __html: writing.attributes.title.replaceAll(
                           searchWord,
-                          `<b style="color: #00c6be; font-weight: normal">${searchWord}</b>`,
-                        ),
+                          `<b style="color: #00c6be; font-weight: normal">${searchWord}</b>`
+                        )
                       }}
                     />
                   </div>
@@ -241,7 +251,7 @@ function SearchList({ searchWord }: { searchWord: string }) {
 }
 
 export default function SuggestBox({
-  setOnSearch,
+  setOnSearch
 }: {
   setOnSearch: (onSearch: boolean) => void
 }) {

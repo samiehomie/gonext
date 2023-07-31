@@ -6,9 +6,18 @@ import SlidesShow from '../slides/slidesShow'
 import WritersWeekly from './writersWeekly'
 import Keywords from './keywords'
 import RecommendArticle from './recommendArticle'
-
+import Link from 'next/link'
+import type { users } from '@/types'
+import useSWR from 'swr'
+import { queryTopNotice } from '@/lib/queries'
 
 function MainContent({ children }: { children: ReactElement }) {
+  const { data: notice } = useSWR<users>(
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + queryTopNotice
+  )
+
+  if (!notice) return null
+
   return (
     <article className="text-[12px]">
       <div className="w-[960px] m-auto font-serif_mj">
@@ -35,11 +44,13 @@ function MainContent({ children }: { children: ReactElement }) {
         </p>
         <ul className="h-[18px] overflow-hidden relative font-noto_sans_demlight">
           <li className="h-full">
-            <a href="#">
+            <Link
+              href={`/writing/${notice[0].id}/${notice[0].writings![0].id}`}
+            >
               <span className="float-right pl-[7px] text-[#959595] text-[11.5px]">
                 작가별 알림 기능 신설 및 매거진 개편
               </span>
-            </a>
+            </Link>
             <span
               className="text-[#00c6be] font-[Georgia] text-[10.5px]
                     italic float-right pt-[2px] font-semibold tracking-tighter"
@@ -59,7 +70,6 @@ export default function IndexContainer() {
   const [onTop, setOnTop] = useState(false)
   const [cursor, setCursor] = useState(0)
   const [page, setPage] = useState(0)
-
 
   useEffect(() => {
     const winScroll =

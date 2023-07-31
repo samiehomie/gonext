@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { userSession } from './types'
 import { revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { debounce } from 'lodash'
+import type { UploadWidgetResult } from 'uploader/dist/components/modal/UploadWidgetResult'
 
 export async function garbageCookiesDelete() {
   cookies().set({
@@ -12,7 +12,7 @@ export async function garbageCookiesDelete() {
     domain: `${process.env.NEXT_PUBLIC_DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
-    path: '/',
+    path: '/'
   })
   cookies().set({
     name: 'userjwt',
@@ -20,7 +20,7 @@ export async function garbageCookiesDelete() {
     domain: `${process.env.NEXT_PUBLIC_DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
-    path: '/',
+    path: '/'
   })
   cookies().set({
     name: 'username',
@@ -28,7 +28,7 @@ export async function garbageCookiesDelete() {
     domain: `${process.env.NEXT_PUBLIC_DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
-    path: '/',
+    path: '/'
   })
   cookies().set({
     name: 'userid',
@@ -36,7 +36,7 @@ export async function garbageCookiesDelete() {
     domain: `${process.env.NEXT_PUBLIC_DOMAIN}`,
     httpOnly: true,
     expires: new Date('2016-10-05'),
-    path: '/',
+    path: '/'
   })
 }
 
@@ -45,11 +45,27 @@ export const getSession = async function () {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/session`,
     {
-      headers: { Accept: 'application / json', Cookie: `user=${userCookie}` },
-    },
+      headers: { Accept: 'application / json', Cookie: `user=${userCookie}` }
+    }
   )
   const userData: userSession = await response.json()
   return userData
+}
+
+export async function deleteUploadImage(params: UploadWidgetResult) {
+  const baseUrl = 'https://api.upload.io'
+  const path = `/v2/accounts/${params.originalFile.accountId}/files`
+  const query = `?filePath=${params.filePath}`
+  const response = await fetch(`${baseUrl}${path}${query}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${process.env.UPLOAD_API_KEY}`
+    }
+  })
+  if (Math.floor(response.status / 100) !== 2) {
+    const result = await response.json()
+    throw new Error(`Upload API Error: ${JSON.stringify(result)}`)
+  }
 }
 
 export async function saveWriting(formData: FormData) {
@@ -69,7 +85,7 @@ export async function saveWriting(formData: FormData) {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${user.jwt}`,
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       data: {
@@ -78,9 +94,9 @@ export async function saveWriting(formData: FormData) {
         user: `${user.id}`,
         content: content,
         tags: tags,
-        created: created,
-      },
-    }),
+        created: created
+      }
+    })
   })
 
   if (data.ok) {

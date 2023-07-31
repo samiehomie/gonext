@@ -18,15 +18,15 @@ const slideStyles: Array<slideStyles>[] = [
   ['long', 'short', 'short', 'short'],
   ['big', 'hor', 'hor'],
   ['ver', 'ver', 'ver'],
-  ['long', 'short', 'short', 'short'],
+  ['long', 'short', 'short', 'short']
 ]
 
 export default function Slides() {
   const {
-    data: writings,
+    data: writings
   }: {
     data: writings | undefined
-  } = useSWR('writings?' + queryWritings)
+  } = useSWR(`${process.env.NEXT_PUBLIC_DB_URL}/api/writings?` + queryWritings)
 
   if (!writings) return null
 
@@ -55,7 +55,7 @@ export default function Slides() {
             return null
           })}
         </div>
-      </li>,
+      </li>
     )
     slideKey += 1
     styleIndex += 1

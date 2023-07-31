@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverActions: true,
+    serverActions: true
   },
   images: {
     remotePatterns: [
@@ -9,16 +9,22 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'i.ibb.co',
         port: '',
-        pathname: '**/*',
+        pathname: '**/*'
       },
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
-        pathname: '**/*',
+        pathname: '**/*'
       },
-    ],
-  },
+      {
+        protocol: 'https',
+        hostname: 'upcdn.io',
+        port: '',
+        pathname: '**/*'
+      }
+    ]
+  }
 }
 
 module.exports = nextConfig

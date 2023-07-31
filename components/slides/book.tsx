@@ -8,7 +8,7 @@ import Link from 'next/link'
 
 export default function Book({ bookId }: { bookId: number }) {
   const { data: bookData }: { data: book | undefined } = useSWR(
-    `books/${bookId}?` + queryBook,
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/books/${bookId}?` + queryBook
   )
 
   if (!bookData) return null

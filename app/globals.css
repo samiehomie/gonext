@@ -23,7 +23,12 @@
 body {
   color: #8d8d8d;
 }
-
+.uploader__backdrop.show {
+  pointer-events: none !important;
+}
+.uploader .btn--file__input {
+  cursor: pointer !important;
+}
 @keyframes animation_up {
   0% {
     opacity: 0;

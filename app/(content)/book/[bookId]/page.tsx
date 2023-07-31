@@ -5,17 +5,17 @@ import ArticleList from '@/components/bookpage/articleList'
 import TopNavigation from '@/components/navigations/topNavigation'
 
 export default async function BookPage({
-  params: { bookId },
+  params: { bookId }
 }: {
   params: { bookId: string }
 }) {
   const bookData: book = await fetch(
-    `${process.env.NEXT_PUBLIC_DB_URL}/api/books/${bookId}?${queryBook}`,
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/books/${bookId}?${queryBook}`
   ).then((res) => res.json())
   const writings = bookData.data.attributes.writings?.data
   return (
     <>
-      <TopNavigation inBookPage={true} breakpoint={5}>
+      <TopNavigation isBlack={true} breakpoint={5}>
         <div className="absolute text-center left-[250px] right-[250px] h-full">
           <div className="table h-full mx-auto">
             <h2
@@ -43,6 +43,6 @@ export async function generateStaticParams() {
   const users: users = await fetch(reqUrl).then((res) => res.json())
   const books = users.flatMap((user) => user.books)
   return books.map((book) => ({
-    bookId: `${book?.id}`,
+    bookId: `${book?.id}`
   }))
 }

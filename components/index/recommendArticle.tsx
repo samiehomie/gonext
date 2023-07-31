@@ -18,7 +18,10 @@ function calcHeight(data: writing['data'], height: number) {
 
 const getKey = (pageIndex: number, previousPageData: writings) => {
   if (previousPageData && !previousPageData.data.length) return null
-  return `writings?${getWritingsQuery(30, pageIndex + 1)}`
+  return `${process.env.NEXT_PUBLIC_DB_URL}/api/writings?${getWritingsQuery(
+    30,
+    pageIndex + 1
+  )}`
 }
 
 const slideGroupActions = 7
@@ -27,7 +30,7 @@ let section = 1
 
 export default function RecommendArticle({
   cursor,
-  setCursor,
+  setCursor
 }: {
   cursor: number
   setCursor: (arg: number) => void
@@ -37,7 +40,7 @@ export default function RecommendArticle({
   const {
     data: writings,
     size,
-    setSize,
+    setSize
   }: {
     data: writings[] | undefined
     size: number

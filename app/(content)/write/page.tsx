@@ -1,11 +1,9 @@
 import Form from './form'
 
-export default function MyComponent() {
+export default function Page() {
   return (
-    <div className="w-[1000px] m-auto">
-      <div>write</div>
-
+    <>
       <Form />
-    </div>
+    </>
   )
 }

@@ -1,23 +1,67 @@
 import qs from 'qs'
 
+export const queryTopBanners = qs.stringify(
+  {
+    filters: {
+      username: {
+        $eq: 'brunchstory'
+      }
+    },
+    populate: {
+      writings: {
+        filters: {
+          tags: {
+            $contains: '프로모션'
+          }
+        }
+      }
+    }
+  },
+  {
+    encodeValuesOnly: true
+  }
+)
+
+export const queryTopNotice = qs.stringify(
+  {
+    filters: {
+      username: {
+        $eq: 'brunchstory'
+      }
+    },
+    populate: {
+      writings: {
+        filters: {
+          tags: {
+            $contains: '공지사항'
+          }
+        }
+      }
+    }
+  },
+  {
+    encodeValuesOnly: true
+  }
+)
+
 export const queryWritings = qs.stringify(
   {
     fields: ['title', 'subtitle', 'content'],
     populate: {
       user: {
-        fields: ['username'],
+        fields: ['username']
       },
       cover: {
-        fields: ['formats'],
-      },
+        fields: ['formats']
+      }
     },
     pagination: {
-      pageSize: 29,
-    },
+      pageSize: 29
+    }
   },
   {
-    encodeValuesOnly: true,
-  },
+    encodeValuesOnly: true
+  }
 )
 
 export const queryBook = qs.stringify(
@@ -28,29 +72,29 @@ export const queryBook = qs.stringify(
         fields: ['username', 'introduction', 'job'],
         populate: {
           profile: {
-            fields: ['formats', 'url'],
-          },
-        },
+            fields: ['formats', 'url']
+          }
+        }
       },
       writings: {
         fields: ['title', 'content', 'subtitle'],
         populate: {
           cover: {
-            fields: ['formats', 'url'],
+            fields: ['formats', 'url']
           },
           user: {
-            fields: ['username'],
-          },
-        },
+            fields: ['username']
+          }
+        }
       },
       cover: {
-        fields: ['formats', 'url'],
-      },
-    },
+        fields: ['formats', 'url']
+      }
+    }
   },
   {
-    encodeValuesOnly: true,
-  },
+    encodeValuesOnly: true
+  }
 )
 
 export const queryUser = qs.stringify(
@@ -58,38 +102,38 @@ export const queryUser = qs.stringify(
     fields: ['username', 'introduction', 'job', 'tags'],
     populate: {
       profile: {
-        fields: ['formats', 'url'],
+        fields: ['formats', 'url']
       },
       writings: {
         fields: ['title', 'content', 'subtitle', 'publishedAt'],
         populate: {
           cover: {
-            fields: ['formats', 'url'],
+            fields: ['formats', 'url']
           },
           book: {
-            fields: ['title'],
+            fields: ['title']
           },
           user: {
-            fields: ['username'],
-          },
-        },
+            fields: ['username']
+          }
+        }
       },
       books: {
         fields: ['title', 'publishedAt', 'introduction', 'summary', 'tags'],
         populate: {
           cover: {
-            fields: ['formats', 'url'],
+            fields: ['formats', 'url']
           },
           writings: {
-            fields: ['title'],
-          },
-        },
-      },
-    },
+            fields: ['title']
+          }
+        }
+      }
+    }
   },
   {
-    encodeValuesOnly: true,
-  },
+    encodeValuesOnly: true
+  }
 )
 
 export function getQueryWritingPage(userId: string, writingId: string) {
@@ -99,55 +143,55 @@ export function getQueryWritingPage(userId: string, writingId: string) {
       fields: ['username', 'introduction', 'job'],
       populate: {
         profile: {
-          fields: 'url',
+          fields: 'url'
         },
         writings: {
           filters: {
             id: {
-              $eq: writingId,
-            },
+              $eq: writingId
+            }
           },
           fields: ['title', 'content', 'created', 'subtitle', 'tags'],
           populate: {
             cover: {
-              fields: 'url',
-            },
-          },
-        },
-      },
+              fields: 'url'
+            }
+          }
+        }
+      }
     },
     {
-      encodeValuesOnly: true,
-    },
+      encodeValuesOnly: true
+    }
   )
   const others = qs.stringify(
     {
       fields: ['username', 'introduction', 'job'],
       populate: {
         profile: {
-          fields: 'url',
+          fields: 'url'
         },
         writings: {
           filters: {
             id: {
-              $ne: writingId,
-            },
+              $ne: writingId
+            }
           },
           fields: ['title', 'content', 'created', 'subtitle', 'tags'],
           populate: {
             cover: {
-              fields: 'url',
-            },
-          },
-        },
+              fields: 'url'
+            }
+          }
+        }
       },
       pagination: {
-        pageSize: 6,
-      },
+        pageSize: 6
+      }
     },
     {
-      encodeValuesOnly: true,
-    },
+      encodeValuesOnly: true
+    }
   )
   return [url + target, url + others]
 }
@@ -156,14 +200,14 @@ export const queryUsersFive = qs.stringify(
   {
     fields: ['username', 'introduction'],
     populate: {
-      profile: { fields: ['url'] },
+      profile: { fields: ['url'] }
     },
     start: 0,
-    limit: 5,
+    limit: 5
   },
   {
-    encodeValuesOnly: true,
-  },
+    encodeValuesOnly: true
+  }
 )
 
 export const urlBook = `${process.env.NEXT_PUBLIC_DB_URL}/api/books/1?`

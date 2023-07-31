@@ -6,8 +6,8 @@ export default function SwrProvider({ children }: { children: ReactNode }) {
   return (
     <SWRConfig
       value={{
-        fetcher: (query: string) =>
-          fetch(`${process.env.NEXT_PUBLIC_DB_URL}/api/${query}`).then((res) =>
+        fetcher: (url: string) =>
+          fetch(url).then((res) =>
             res.json(),
           ),
       }}
