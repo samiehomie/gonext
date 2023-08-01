@@ -12,37 +12,19 @@ import type { UploadWidgetResult } from 'uploader/dist/components/modal/UploadWi
 import { Uploader } from 'uploader'
 import { deleteUploadImage } from '@/actions'
 
-const uploader = Uploader({
-  apiKey: process.env.NEXT_PUBLIC_UPLOAD_API_KEY!
-})
-
 export default function Form() {
   const [menuColor, setMenuColor] = useState('white')
-  const [cover, setCover] = useState<UploadWidgetResult | null>(null)
+  const [cover, setCover] = useState<Blob | null>(null)
   const [title, setTitle] = useState('')
   const [subTitle, setSubTitle] = useState('')
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { user: userMe, mutateUser } = useUser()
 
-  const options = {
-    maxFileCount: 1,
-    mimeTypes: ['image/jpeg', 'image/png', 'image/jpg'],
-    editor: { images: { crop: false } },
-    styles: { colors: { primary: '#000' } },
-    showFinishButton: true,
-    locale: {
-      uploadImage: '이미지 업로드',
-      orDragDropImage: '이미지를 드래그 & 드랍 하셔도 됩니다'
-    }
-
-    // onValidate: async (file: File): Promise<undefined | string> => {
-    //   if (data.remainingGenerations === 0) {
-    //     return 'No more generations left for the day.'
-    //   }
-    //   return undefined
-    // }
-  }
+  const imgInputRef = useRef<HTMLInputElement>(null)
+  const titleRef = useRef('')
+  const subTitleRef = useRef('')
+  const contentRef = useRef('')
 
   const handleColor = async (url: string) => {
     const color = await getColor(url, 'rgbArray', 'anonymous')
@@ -55,9 +37,7 @@ export default function Form() {
       setMenuColor('black')
     }
   }
-  const titleRef = useRef('')
-  const subTitleRef = useRef('')
-  const contentRef = useRef('')
+
   const handleTitle = (e: any) => {
     titleRef.current = e.target.value
     setTitle(e.target.value)
@@ -71,26 +51,31 @@ export default function Form() {
     setContent(e.target.value)
   }
 
-  async function handleCreate() {
+  async function handleSubmit() {
     setIsLoading(true)
-    await fetchJson(`${process.env.NEXT_PUBLIC_DB_URL}/api/writings`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${userMe!.jwt}`,
-        'Content-Type': 'application/json'
-      },
-
-      body: JSON.stringify({
-        data: {
-          title: title,
-          subtitle: subTitle,
-          user: `${userMe!.id}`,
-          content: content,
-          cover: cover ? cover.fileUrl : '',
-          created: getDateString()
-        }
+    const formData = new FormData()
+    const data = {
+      title: title,
+      subtitle: subTitle,
+      user: `${userMe!.id}`,
+      content: content,
+      created: getDateString()
+    }
+    console.log('data', typeof cover)
+    formData.append(`files.cover`, cover!, cover!.name)
+    formData.append('data', JSON.stringify(data))
+    try {
+      await fetchJson(`${process.env.NEXT_PUBLIC_DB_URL}/api/writings`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${userMe!.jwt}`
+        },
+        body: formData
       })
-    })
+    } catch (e) {
+      console.error(e)
+      setIsLoading(false)
+    }
     setIsLoading(false)
   }
 
@@ -111,7 +96,7 @@ export default function Form() {
             <span className="text-[#666] text-[12px] ">
               <button
                 disabled={isLoading || !title || !content}
-                onClick={handleCreate}
+                onClick={handleSubmit}
                 className="mt-[-1px] border-b border-[#bbb] mr-[5px] bg-white rounded-[15px] 
                           h-[30px] w-[66px] leading-[25px] disabled:opacity-70"
               >
@@ -121,6 +106,7 @@ export default function Form() {
           </div>
         </div>
       </TopNavigation>
+
       <div className="min-w-[940px] font-noto_sans_demlight text-[13px]">
         {/* title section */}
         <div
@@ -131,7 +117,7 @@ export default function Form() {
           {/* cover image */}
           {cover && (
             <Image
-              src={cover.fileUrl}
+              src={URL.createObjectURL(cover)}
               fill={true}
               alt={'cover'}
               className="object-cover"
@@ -154,6 +140,7 @@ export default function Form() {
                     menuColor === 'black' ? 'text-[#ccc]' : 'text-white'
                   }`}
             />
+
             {!title && (
               <span
                 onClick={() => {
@@ -179,6 +166,7 @@ export default function Form() {
                     menuColor === 'black' ? 'text-[#b9b9b9]' : 'text-white'
                   }`}
             />
+
             {!subTitle && (
               <span
                 onClick={() => {
@@ -214,32 +202,26 @@ export default function Form() {
         <div className="left-0 absolute top-0 w-[41px] z-[3]">
           <div className="relative z-[1]">
             {/* cover insert button */}
-            <div
+            <label
               className="z-0 relative mt-[1px] bg-clip-padding inline-block 
                           rounded-none h-[35px] py-[2px] text-center w-[42px]"
             >
-              <UploadButton
-                uploader={uploader}
-                // @ts-ignore
-                options={options}
-                onComplete={async (file) => {
-                  if (file[0] && file[0].fileUrl) {
-                    await handleColor(file[0].fileUrl)
-                    setCover(file[0])
-                  }
-                  return
+              <i
+                className={`bg-ico-btn-cover cursor-pointer inline-block h-[25px] w-[25px] ${
+                  menuColor === 'black' ? 'bg-[0px_0px]' : 'bg-[-29px_0px]'
+                }`}
+              />
+              <input
+                ref={imgInputRef}
+                type="file"
+                accept="image/*"
+                className={`hidden`}
+                onChange={(e) => {
+                  setCover(e.target.files![0])
+                  handleColor(URL.createObjectURL(e.target.files![0]))
                 }}
-              >
-                {({ onClick }) => (
-                  <button
-                    className={`bg-ico-btn-cover cursor-pointer inline-block h-[25px] w-[25px] ${
-                      menuColor === 'black' ? 'bg-[0px_0px]' : 'bg-[-29px_0px]'
-                    }`}
-                    onClick={onClick}
-                  />
-                )}
-              </UploadButton>
-            </div>
+              />
+            </label>
             {/* cover remove button */}
             {cover && (
               <div
@@ -248,11 +230,9 @@ export default function Form() {
               >
                 <button
                   onClick={async () => {
-                    setIsLoading(true)
-                    await deleteUploadImage(cover)
                     setCover(null)
+                    imgInputRef.current!.value = ''
                     setMenuColor('white')
-                    setIsLoading(false)
                   }}
                   className={`bg-ico-btn-cover cursor-pointer inline-block h-[25px] w-[25px] ${
                     menuColor === 'black'
@@ -265,6 +245,7 @@ export default function Form() {
           </div>
         </div>
       </div>
+
       <div className="fixed top-[487px] left-1/2 inline-block z-[9999] translate-x-[479px]">
         <div className="bg-white rounded-[2px] h-[340px] left-[3px] opacity-95 absolute top-[-4px] w-[38px]"></div>
         <div className="absolute left-0 top-0 w-[41px]">

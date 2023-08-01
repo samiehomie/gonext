@@ -21,19 +21,6 @@ import defaultCover from '@/public/default-cover.png'
 import { removeMarkdownImages } from '@/lib/utils'
 // TODO: #5 Add anchor using rehype library
 
-async function getUser(target: string) {
-  const user: user = await fetch(target).then((res) => res.json())
-  return user
-}
-
-async function getComments(writingId: string) {
-  const comments: commentsWithUser = await fetch(
-    `${process.env.NEXT_PUBLIC_DB_URL}/api/comments/api::writing.writing:${writingId}`,
-    { next: { tags: ['comments'] } }
-  ).then((res) => res.json())
-  return comments
-}
-
 async function Others({
   userId,
   writingId,

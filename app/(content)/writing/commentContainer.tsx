@@ -34,13 +34,17 @@ export default function CommentContainer({
                   keyword
                 </strong>
                 <ul className="float-left">
-                  {user.writings![0].tags.map((tag, i) => (
-                    <li key={tag + i} className="float-left mb-[8px] mr-[8px]">
-                      <a href="#" className="writing-tag tracking-[-.5px]">
-                        {tag}
-                      </a>
-                    </li>
-                  ))}
+                  {user.writings![0].tags &&
+                    user.writings![0].tags.map((tag, i) => (
+                      <li
+                        key={tag + i}
+                        className="float-left mb-[8px] mr-[8px]"
+                      >
+                        <a href="#" className="writing-tag tracking-[-.5px]">
+                          {tag}
+                        </a>
+                      </li>
+                    ))}
                 </ul>
               </div>
               <span className="inline-block ">
