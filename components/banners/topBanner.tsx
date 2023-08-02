@@ -208,7 +208,7 @@ export default function TopBanner() {
                 />
               </Link>
               <Link
-                href="/writing/21/34"
+                href={`${bannersEndpoint![slide.alt]}`}
                 className={`h-[60px] absolute bottom-0 w-[100%]
               transition-opacity duration-400 linear ${
                 slideIsBig ? 'opacity-0' : 'opacity-100'

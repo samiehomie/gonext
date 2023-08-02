@@ -7,24 +7,32 @@ import ContentEditable from 'react-contenteditable'
 import fetchJson from '@/lib/fetchJson'
 import useUser from '@/lib/useUser'
 import { getDateString } from '@/lib/utils'
-import { UploadButton } from 'react-uploader'
-import type { UploadWidgetResult } from 'uploader/dist/components/modal/UploadWidgetResult'
+import { useRouter } from 'next/navigation'
 import { Uploader } from 'uploader'
-import { deleteUploadImage } from '@/actions'
+import { deleteUploadImage, revalidateTagAction } from '@/actions'
+import TuiEditor from './editor'
+import type { Editor } from '@toast-ui/react-editor'
+import { HookCallback } from '@toast-ui/editor/types/editor'
+import Toast from '@/components/toast'
+
+const uploader = Uploader({
+  apiKey: process.env.NEXT_PUBLIC_UPLOAD_API_KEY!
+})
 
 export default function Form() {
+  const router = useRouter()
   const [menuColor, setMenuColor] = useState('white')
   const [cover, setCover] = useState<Blob | null>(null)
   const [title, setTitle] = useState('')
   const [subTitle, setSubTitle] = useState('')
-  const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { user: userMe, mutateUser } = useUser()
+  const [block, setBlock] = useState(false)
+  const { user: userMe } = useUser()
 
   const imgInputRef = useRef<HTMLInputElement>(null)
   const titleRef = useRef('')
   const subTitleRef = useRef('')
-  const contentRef = useRef('')
+  const editorRef = useRef<Editor>(null)
 
   const handleColor = async (url: string) => {
     const color = await getColor(url, 'rgbArray', 'anonymous')
@@ -37,6 +45,12 @@ export default function Form() {
       setMenuColor('black')
     }
   }
+  const handleImage = async (blob: Blob | File, callback: HookCallback) => {
+    setIsLoading(true)
+    const response = await uploader.uploadFile(blob)
+    callback(response.fileUrl)
+    setIsLoading(false)
+  }
 
   const handleTitle = (e: any) => {
     titleRef.current = e.target.value
@@ -46,19 +60,23 @@ export default function Form() {
     subTitleRef.current = e.target.value
     setSubTitle(e.target.value)
   }
-  const handleContent = (e: any) => {
-    contentRef.current = e.target.value
-    setContent(e.target.value)
-  }
 
   async function handleSubmit() {
     setIsLoading(true)
+    const markdownContent = editorRef.current?.getInstance().getMarkdown()
+    if (!title || !markdownContent) {
+      setIsLoading(false)
+      setBlock(true)
+      return setTimeout(() => {
+        setBlock(false)
+      }, 1200)
+    }
     const formData = new FormData()
     const data = {
       title: title,
       subtitle: subTitle,
       user: `${userMe!.id}`,
-      content: content,
+      content: markdownContent,
       created: getDateString()
     }
     console.log('data', typeof cover)
@@ -72,38 +90,36 @@ export default function Form() {
         },
         body: formData
       })
+      await revalidateTagAction('userPage')
     } catch (e) {
       console.error(e)
       setIsLoading(false)
     }
     setIsLoading(false)
+
+    router.push(`/user/${userMe!.id}`)
   }
 
   return (
-    <div
-      className={`${
-        isLoading &&
-        'opacity-60 pointer-events-none cursor-wait z-[15000] w-full h-full'
-      }`}
-    >
-      <TopNavigation
-        isBlack={menuColor === 'black'}
-        inWrite={true}
-        breakpoint={0}
-      >
-        <div className="float-right mt-[30px] mr-[111px]">
-          <div className="mt-[-4px] pt-[2.5px] inline-block relative top-[-4px]">
-            <span className="text-[#666] text-[12px] ">
-              <button
-                disabled={isLoading || !title || !content}
-                onClick={handleSubmit}
-                className="mt-[-1px] border-b border-[#bbb] mr-[5px] bg-white rounded-[15px] 
-                          h-[30px] w-[66px] leading-[25px] disabled:opacity-70"
-              >
-                저장
-              </button>
-            </span>
-          </div>
+    <>
+      {isLoading && (
+        <div
+          className="absolute top-0 left-0 w-full h-full bg-white 
+                    opacity-50 cursor-wait z-[100000] pointer-events-none"
+        />
+      )}
+      <Toast isShow={block} message="내용을 입력하세요" />
+      <TopNavigation isBlack={menuColor === 'black'} inWrite={true}>
+        <div className="float-right mr-[111px] table h-full">
+          <span className="text-[#00c6be] text-[12px] table-cell align-middle">
+            <button
+              onClick={handleSubmit}
+              className={`mt-[-1px] border border-[#00c6be] mr-[5px] bg-white rounded-[15px] 
+                          h-[30px] w-[66px] leading-[25px]`}
+            >
+              {isLoading ? '저장중' : '저장'}
+            </button>
+          </span>
         </div>
       </TopNavigation>
 
@@ -185,16 +201,18 @@ export default function Form() {
         </div>
 
         {/* content section */}
+
         <div
-          className="min-h-[300px] m-auto relative w-[700px] pt-[40px] pb-[120px] 
+          className="min-h-[300px] m-auto relative w-[700px] pt-[40px]  
               word-wrap-break text-[#333] text-[11pt] leading-[22pt] 
               tracking-[.8px] text-left"
         >
-          <ContentEditable
-            html={contentRef.current}
-            onChange={handleContent}
+          <div
+            id="editor-wrapper"
             className="outline-none mt-[-7px] m-auto w-auto min-w-fit min-h-[300px]"
-          />
+          >
+            <TuiEditor editorRef={editorRef} imageHandler={handleImage} />
+          </div>
         </div>
       </div>
       {/* top buttons */}
@@ -245,22 +263,6 @@ export default function Form() {
           </div>
         </div>
       </div>
-
-      <div className="fixed top-[487px] left-1/2 inline-block z-[9999] translate-x-[479px]">
-        <div className="bg-white rounded-[2px] h-[340px] left-[3px] opacity-95 absolute top-[-4px] w-[38px]"></div>
-        <div className="absolute left-0 top-0 w-[41px]">
-          <div className="relative z-[1]">
-            {/* image insert button */}
-            <button className="mt-[1px] bg-clip-padding cursor-pointer inline-block h-[35px] py-[2px] text-center w-[42px]">
-              <i className=" inline-block w-[25px] h-[25px] bg-ico-btn-cover2 bg-[0px_0px]"></i>
-            </button>
-            {/* line insert button */}
-            <button className="mt-[1px] bg-clip-padding cursor-pointer inline-block h-[35px] py-[2px] text-center w-[42px]">
-              <i className=" inline-block w-[25px] h-[25px] bg-ico-btn-cover2 bg-[0px_-249px]"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   )
 }

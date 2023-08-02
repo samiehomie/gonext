@@ -73,7 +73,7 @@ export type strapiUserResponse = {
   jwt: string
 }
 
-export type commentWithUser = (comment & { user: user })
+export type commentWithUser = comment & { user: user }
 export type commentsWithUser = commentWithUser[]
 
 export type comments = comment[]
@@ -532,7 +532,7 @@ export type slideStyles = 'hor' | 'ver' | 'big' | 'long' | 'short'
 
 export type dimensions = { width: number; height: number; type: string }
 
-export type imgAttrsMDX = { src: string; alt: string }
+export type imgAttrsMDX = { src: string; alt?: string }
 
 export type paraTextAttrsMDX = { children: string }
 
@@ -544,7 +544,7 @@ export type paraImgAttrsMDX = {
     ref: null
     props: {
       src: string
-      alt: string
+      alt?: string
     }
     _owner: null
     _store: {}

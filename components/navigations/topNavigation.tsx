@@ -59,7 +59,7 @@ export default function TopNavigation({
                       : `fixed border-b border-[#ddd] h-[59px] overflow-visible bg-[hsla(0,0%,100%,.9)] box-border`
                   }`}
       >
-        {breakpoint === 400 ? isFloat && children : children}
+        {!inWrite && breakpoint === 400 ? isFloat && children : children}
 
         <div className={`${!isFloat ? 'mt-[30px]' : 'mt-[20px]'} mx-[30px]`}>
           <div className={`float-left`}>

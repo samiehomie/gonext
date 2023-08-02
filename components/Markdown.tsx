@@ -7,7 +7,7 @@ import type {
   dimensions,
   imgAttrsMDX,
   paraImgAttrsMDX,
-  paraTextAttrsMDX,
+  paraTextAttrsMDX
 } from '@/types'
 
 async function getImgSize(imgUrl: string) {
@@ -27,75 +27,94 @@ async function getImgSize(imgUrl: string) {
   return dimensions as dimensions
 }
 
-const components = {
-  hr: () => {
-    return (
-      <div className="mt-[13px] w-full min-w-[940px]">
-        <div className="m-auto w-[700px]">
-          <hr
-            className=" border-none leading-none h-[18px] 
-                      bg-line-type-03 bg-[50%_50%] bg-no-repeat"
-          />
-        </div>
+const HorizonTalRule = () => {
+  return (
+    <div className="mt-[13px] w-full min-w-[940px]">
+      <div className="m-auto w-[700px]">
+        <hr
+          className=" border-none leading-none h-[18px] 
+                bg-line-type-03 bg-[50%_50%] bg-no-repeat"
+        />
       </div>
-    )
-  },
-  img: async (props: imgAttrsMDX) => {
-    const { width, height } = await getImgSize(props.src)
-    return (
-      <Image
-        src={props.src}
-        alt={props.alt}
-        width={width <= 700 ? width : 700}
-        height={width <= 700 ? height : height * (700 / width)}
-        className="block m-auto"
-      />
-    )
-  },
-  p: async (props: paraTextAttrsMDX | paraImgAttrsMDX) => {
-    if (
-      props.children instanceof Object &&
-      Object.hasOwn(props.children, 'type') &&
-      typeof props.children.type === 'function'
-    ) {
-      const { width, height } = await getImgSize(props.children.props.src)
-      const { src, alt } = props.children.props
-      return (
-        <div className="mt-[20px] w-full min-w-[940px] peer only-image">
-          <div className="w-[700px] m-auto">
-            <Image
-              src={src}
-              alt={alt}
-              width={width <= 700 ? width : 700}
-              height={width <= 700 ? height : height * (700 / width)}
-              className="m-auto"
-            />
-          </div>
-        </div>
-      )
-    } else {
+    </div>
+  )
+}
+
+const ResponsiveImage = async (props: imgAttrsMDX) => {
+  const { width, height } = await getImgSize(props.src)
+  return (
+    <Image
+      src={props.src}
+      alt={props.alt || '본문 이미지'}
+      width={width <= 700 ? width : 700}
+      height={width <= 700 ? height : height * (700 / width)}
+      className="block m-auto"
+    />
+  )
+}
+
+const ItemInParagraph = async (
+  content: paraImgAttrsMDX['children'] | string
+) => {
+  switch (typeof content) {
+    case 'string':
       return (
         <>
           <h4
             className="first:mt-[-7px] font-noto_sans_demlight text-[11pt] m-auto text-[#8d8d8d]
-                    w-[700px] min-w-[700px] text-justify leading-[22pt] tracking-[.8px] peer-[.only-image]:mt-[13px]"
+                  w-[700px] min-w-[700px] text-justify leading-[22pt] tracking-[.8px] peer-[.only-image]:mt-[13px]"
           >
             <span
               dangerouslySetInnerHTML={{
-                __html: (props.children as string).replaceAll('\n', '<br />'),
+                __html: content.replaceAll('\n', '<br />')
               }}
             />
           </h4>
           <h4
             className="first:mt-[-7px] font-noto_sans_demlight text-[11pt] m-auto 
-                    w-[700px] min-w-[700px] text-justify leading-[22pt] tracking-[.8px]"
+                  w-[700px] min-w-[700px] text-justify leading-[22pt] tracking-[.8px]"
           >
             <br />
           </h4>
         </>
       )
-    }
-  },
+    case 'object':
+      const { width, height } = await getImgSize(content.props.src)
+      const { src, alt } = content.props
+      return (
+        <div className="mt-[20px] w-full min-w-[940px] peer only-image">
+          <div className="w-[700px] m-auto">
+            <Image
+              src={src}
+              alt={alt || '본문 이미지'}
+              width={width <= 700 ? width : 700}
+              height={width <= 700 ? height : height * (700 / width)}
+              className="m-auto my-[15px]"
+            />
+          </div>
+        </div>
+      )
+  }
+}
+
+const Paragraph = async (
+  props:
+    | paraTextAttrsMDX
+    | paraImgAttrsMDX
+    | { children: (string | paraImgAttrsMDX['children'])[] }
+) => {
+  console.log(props)
+  const { children: content } = props
+  if (Array.isArray(content)) {
+    return content.map((item, i) => <div key={i}>{ItemInParagraph(item)}</div>)
+  }
+  return await ItemInParagraph(content)
+}
+
+const components = {
+  hr: HorizonTalRule,
+  img: ResponsiveImage,
+  p: Paragraph
 }
 
 export function CustomMDX(props: any) {

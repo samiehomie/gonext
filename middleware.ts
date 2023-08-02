@@ -7,6 +7,19 @@ import defaultImg from '@/public/default.png'
 // import { debounce } from 'lodash'
 // const debouncedFetch = debounce(fetch, 1000)
 
+declare module 'iron-session' {
+  interface IronSessionData {
+    user?: {
+      jwt: string
+      username: string
+      id: number
+      avatar: string
+      isLoggedIn: boolean
+    }
+    back?: string
+  }
+}
+
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
   const session = await getIronSession(req, res, sessionOptions)

@@ -23,12 +23,54 @@
 body {
   color: #8d8d8d;
 }
+
 .uploader__backdrop.show {
   pointer-events: none !important;
 }
 .uploader .btn--file__input {
   cursor: pointer !important;
 }
+#editor-wrapper .toastui-editor-contents {
+  @apply font-noto_sans_demlight text-[11pt] text-[#333] text-left leading-[22pt] tracking-[.8px];
+}
+
+#editor-wrapper .toastui-editor-contents *:not(table) {
+  line-height: 22pt;
+}
+#editor-wrapper .toastui-editor-defaultUI-toolbar,
+#editor-wrapper .toastui-editor-md-tab-container,
+#editor-wrapper .toastui-editor-toolbar {
+  height: 0px;
+}
+#editor-wrapper .toastui-editor-ww-container .toastui-editor-content,
+#editor-wrapper .toastui-editor-defaultUI .ProseMirror {
+  padding: 0px;
+}
+#editor-wrapper .toastui-editor-defaultUI {
+  border: none;
+}
+#editor-wrapper .toastui-editor-popup {
+  top: 0px !important;
+  left: 58% !important;
+}
+#editor-wrapper .toastui-editor-main-container {
+  position: static !important;
+}
+#editor-wrapper .ProseMirror.toastui-editor-contents {
+  min-height: 300px;
+  height: 100%;
+  padding-bottom: 120px;
+  box-sizing: content-box;
+}
+
+#editor-wrapper .toastui-editor-contents img {
+  margin: 0 auto;
+  position: relative;
+}
+#editor-wrapper .toastui-editor-contents p {
+  position: relative;
+}
+
 @keyframes animation_up {
   0% {
     opacity: 0;
