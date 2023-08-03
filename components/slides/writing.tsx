@@ -1,12 +1,12 @@
 'use client'
 import Image from 'next/image'
 import { writing, slideStyles } from '@/types'
-import { removeMarkdownImages } from '../../lib/utils'
+import { dressUpMarkdown } from '../../lib/utils'
 import Link from 'next/link'
 
 export default function Writing({
   writing,
-  boxType,
+  boxType
 }: {
   writing: writing['data']
   boxType: slideStyles
@@ -51,10 +51,9 @@ export default function Writing({
             } font-noto_sans_demlight 
                             leading-[20px] pt-[9px]`}
           >
-            {removeMarkdownImages(writing.attributes.content).slice(0, 20)}
+            {dressUpMarkdown(writing.attributes.content).slice(0, 20)}
             <br />
-            {removeMarkdownImages(writing.attributes.content).slice(20, 34) +
-              '...'}
+            {dressUpMarkdown(writing.attributes.content).slice(20, 34) + '...'}
           </span>
           <span
             className="w-[200px] block m-auto pt-[30px] overflow-hidden 

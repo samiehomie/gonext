@@ -7,7 +7,7 @@ import type {
   writingInUser,
   commentsWithUser
 } from '@/types'
-import Markdown from '@/components/Markdown'
+import Markdown from '@/components/markdown'
 import Image from 'next/image'
 import { getEnglishDate } from '@/lib/utils'
 import plusIco from '@/public/ico-plus.png'
@@ -18,7 +18,7 @@ import ScrollIndicator from '@/components/navigations/scrollIndicator'
 import CommentContainer from '../../commentContainer'
 import fetchJson from '@/lib/fetchJson'
 import defaultCover from '@/public/default-cover.png'
-import { removeMarkdownImages } from '@/lib/utils'
+import { dressUpMarkdown } from '@/lib/utils'
 // TODO: #5 Add anchor using rehype library
 
 async function Others({
@@ -80,7 +80,7 @@ async function Others({
                         overflow-hidden text-ellipsis max-h-[66px]"
                 >
                   <span className="relative leading-[24px] inline text-[#959595] text-[13px]">
-                    {removeMarkdownImages(writing.content)}
+                    {dressUpMarkdown(writing.content)}
                   </span>
                 </span>
                 <span className="block mt-[15px]">

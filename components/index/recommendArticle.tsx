@@ -2,7 +2,7 @@
 import { useRef, useEffect } from 'react'
 import useSWRInfinite from 'swr/infinite'
 import { writing, writings } from '../../types'
-import { removeMarkdownImages, getWritingsQuery } from '../../lib/utils'
+import { dressUpMarkdown, getWritingsQuery } from '../../lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -141,7 +141,7 @@ export default function RecommendArticle({
                     className="text-[#959595] text-[12px] tracking-[-.025em] 
                             leading-[20px] pt-[10px] text-justify break-all"
                   >
-                    {removeMarkdownImages(writing.attributes.content)
+                    {dressUpMarkdown(writing.attributes.content)
                       .slice(0, 200)
                       .replace(/\S+$/, '')}
                   </p>

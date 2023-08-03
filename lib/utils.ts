@@ -2,6 +2,7 @@ import qs from 'qs'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { comments } from '@/types'
+import sanitizeHtml from 'sanitize-html'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -10,17 +11,17 @@ export function cn(...inputs: ClassValue[]) {
 export function getCommentsQuery(comments: comments) {
   const filters = {
     id: {
-      $in: comments.map((comment) => comment.author.id),
-    },
+      $in: comments.map((comment) => comment.author.id)
+    }
   }
   const populate = {
-    profile: true,
+    profile: true
   }
   const fields = ['username']
   return qs.stringify({
     filters,
     populate,
-    fields,
+    fields
   })
 }
 
@@ -30,20 +31,20 @@ export function getWritingsQuery(pageSize: number, page: number = 1) {
       fields: ['title', 'subtitle', 'content'],
       populate: {
         user: {
-          fields: ['username'],
+          fields: ['username']
         },
         cover: {
-          fields: ['formats'],
-        },
+          fields: ['formats']
+        }
       },
       pagination: {
         page,
-        pageSize,
-      },
+        pageSize
+      }
     },
     {
-      encodeValuesOnly: true,
-    },
+      encodeValuesOnly: true
+    }
   )
 }
 
@@ -54,65 +55,69 @@ export function getSearchQuery(searchWord: string) {
       filters: { title: { $contains: searchWord } },
       populate: {
         user: {
-          fields: ['username'],
-        },
+          fields: ['username']
+        }
       },
       pagination: {
         page: 1,
-        pageSize: 7,
-      },
+        pageSize: 7
+      }
     },
     {
-      encodeValuesOnly: true,
-    },
+      encodeValuesOnly: true
+    }
   )
   const queryBooks = qs.stringify(
     {
       fields: ['title'],
       populate: {
         cover: {
-          fields: ['formats'],
-        },
+          fields: ['formats']
+        }
       },
       filters: { title: { $contains: searchWord } },
       pagination: {
         page: 1,
-        pageSize: 3,
-      },
+        pageSize: 3
+      }
     },
 
     {
-      encodeValuesOnly: true,
-    },
+      encodeValuesOnly: true
+    }
   )
   const queryUsers = qs.stringify(
     {
       fields: ['username'],
       populate: {
         profile: {
-          fields: ['formats'],
-        },
+          fields: ['formats']
+        }
       },
       filters: { username: { $contains: searchWord } },
       start: 0,
-      limit: 3,
+      limit: 3
     },
     {
-      encodeValuesOnly: true,
-    },
+      encodeValuesOnly: true
+    }
   )
   return {
     queryWritings,
     queryBooks,
-    queryUsers,
+    queryUsers
   }
 }
 
 export const regexInvalidQuery = /\[\$contains\]=$/
 
-export function removeMarkdownImages(str: string) {
-  const regex = /!\[(.*?)\]\((.*?)\)/g
-  return str.replace(regex, '')
+export function dressUpMarkdown(str: string) {
+  const regexImg = /!\[(.*?)\]\((.*?)\)/g
+  const content = str
+    .replace(regexImg, '')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+  return content
 }
 
 export function getEnglishDate(dateString: string) {
@@ -120,7 +125,7 @@ export function getEnglishDate(dateString: string) {
   const formattedDate = date.toLocaleDateString('en-US', {
     month: 'short',
     day: '2-digit',
-    year: 'numeric',
+    year: 'numeric'
   })
   return formattedDate
 }

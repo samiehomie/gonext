@@ -14,6 +14,7 @@ import TuiEditor from './editor'
 import type { Editor } from '@toast-ui/react-editor'
 import { HookCallback } from '@toast-ui/editor/types/editor'
 import Toast from '@/components/toast'
+import sanitizeHtml from 'sanitize-html'
 
 const uploader = Uploader({
   apiKey: process.env.NEXT_PUBLIC_UPLOAD_API_KEY!
@@ -63,7 +64,8 @@ export default function Form() {
 
   async function handleSubmit() {
     setIsLoading(true)
-    const markdownContent = editorRef.current?.getInstance().getMarkdown()
+    const markdownContent = editorRef.current?.getInstance().getMarkdown()!
+
     if (!title || !markdownContent) {
       setIsLoading(false)
       setBlock(true)
@@ -72,15 +74,25 @@ export default function Form() {
       }, 1200)
     }
     const formData = new FormData()
+    // toast-editor에서 사용자 입력한 html 태그 이스케이프를 위한 역슬래쉬 제거하여
+    // 모든 사용자 입력 html 태그 제거 위함
+    const contentData = markdownContent.replace(/\\(<[a-zA-Z]+.*?>)/g, '$1')
     const data = {
       title: title,
       subtitle: subTitle,
       user: `${userMe!.id}`,
-      content: markdownContent,
-      created: getDateString()
+      content: sanitizeHtml(contentData, {
+        transformTags: {
+          br: '\n'
+        }
+      }),
+      created: getDateString(),
+      publishedAt: null
     }
-    console.log('data', typeof cover)
-    formData.append(`files.cover`, cover!, cover!.name)
+    if (cover) {
+      formData.append(`files.cover`, cover, cover.name || '커버 이미지')
+    }
+
     formData.append('data', JSON.stringify(data))
     try {
       await fetchJson(`${process.env.NEXT_PUBLIC_DB_URL}/api/writings`, {

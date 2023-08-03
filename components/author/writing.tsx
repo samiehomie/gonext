@@ -1,5 +1,5 @@
 'use client'
-import { removeMarkdownImages } from '@/lib/utils'
+import { dressUpMarkdown } from '@/lib/utils'
 import useComment from '@/lib/useComment'
 import Image from 'next/image'
 import type { writingInUser } from '@/types'
@@ -66,7 +66,7 @@ export default function Writing({
             </em>
             <span className="w-[1px] align-top h-[12px] inline-block bg-[#eee] m-[4px_3px_0px]"></span>
             <span className="word-wrap-break break-words text-[#959595]">
-              {removeMarkdownImages(writing.content).slice(0, 200)}
+              {dressUpMarkdown(writing.content).slice(0, 200)}
             </span>
           </div>
         </div>

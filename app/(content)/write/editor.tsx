@@ -3,6 +3,7 @@ import '@toast-ui/editor/dist/toastui-editor.css'
 import { Editor } from '@toast-ui/react-editor'
 import { deleteUploadImage } from '@/actions'
 import { HookCallback } from '@toast-ui/editor/types/editor'
+import sanitizeHtml from 'sanitize-html'
 
 const toolbar = [
   [
@@ -42,6 +43,13 @@ function TuiEditor({
         hideModeSwitch
         height="100%"
         hooks={{ addImageBlobHook: imageHandler }}
+        // customHTMLSanitizer={(str) =>
+        //   sanitizeHtml(str, {
+        //     transformTags: {
+        //       br: '\n'
+        //     }
+        //   })
+        // }
       />
     </>
   )

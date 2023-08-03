@@ -56,6 +56,7 @@ const ResponsiveImage = async (props: imgAttrsMDX) => {
 const ItemInParagraph = async (
   content: paraImgAttrsMDX['children'] | string
 ) => {
+  console.dir('pi---->', content)
   switch (typeof content) {
     case 'string':
       return (
@@ -64,11 +65,7 @@ const ItemInParagraph = async (
             className="first:mt-[-7px] font-noto_sans_demlight text-[11pt] m-auto text-[#8d8d8d]
                   w-[700px] min-w-[700px] text-justify leading-[22pt] tracking-[.8px] peer-[.only-image]:mt-[13px]"
           >
-            <span
-              dangerouslySetInnerHTML={{
-                __html: content.replaceAll('\n', '<br />')
-              }}
-            />
+            <div className="whitespace-pre-wrap">{content}</div>
           </h4>
           <h4
             className="first:mt-[-7px] font-noto_sans_demlight text-[11pt] m-auto 
@@ -103,7 +100,6 @@ const Paragraph = async (
     | paraImgAttrsMDX
     | { children: (string | paraImgAttrsMDX['children'])[] }
 ) => {
-  console.log(props)
   const { children: content } = props
   if (Array.isArray(content)) {
     return content.map((item, i) => <div key={i}>{ItemInParagraph(item)}</div>)
@@ -127,5 +123,8 @@ export function CustomMDX(props: any) {
 }
 
 export default function Markdown({ content }: { content: string }) {
+  console.log('----시작----')
+  console.dir(content)
+  console.log('----종료----')
   return <CustomMDX source={content} />
 }
