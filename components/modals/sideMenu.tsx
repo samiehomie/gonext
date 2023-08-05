@@ -171,8 +171,8 @@ function UserOnlyMenu() {
         </a>
       </li>
       <li className="h-[13px] leading-[13px] py-[12.5px] m-auto w-[240px] ">
-        <a
-          href="#"
+        <Link
+          href="/ready"
           className="hover:text-[#00c6be] block h-[13px] leading-[14px] 
                   text-[14px] group relative"
         >
@@ -185,7 +185,7 @@ function UserOnlyMenu() {
             className="absolute top-[6px] block border-b opacity-0
                   border-[#00c6be] w-[8px] right-[50px] group-hover:opacity-100"
           ></span>
-        </a>
+        </Link>
       </li>
       <li
         className="block bg-ico-ico-sidebar bg-[-52px_-5px] h-[15px] w-[140px] 

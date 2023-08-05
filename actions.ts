@@ -5,7 +5,6 @@ import { revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import type { UploadWidgetResult } from 'uploader/dist/components/modal/UploadWidgetResult'
 
-
 export async function revalidateTagAction(tag: string) {
   revalidateTag(tag)
 }

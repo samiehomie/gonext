@@ -13,5 +13,6 @@ function logoutRoute(req: NextApiRequest, res: NextApiResponse<userSession>) {
     username: '',
     id: '',
     jwt: '',
+    subscription: null
   })
 }

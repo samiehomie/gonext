@@ -8,12 +8,14 @@ import { startModalContext, startStateType } from '../userContext'
 export default function TopNavigation({
   children,
   isBlack = false,
-  inWrite = false,
+  showButtons = false,
+  showBrunch = true,
   breakpoint = 400
 }: {
   children: React.ReactNode
   isBlack?: boolean
-  inWrite?: boolean
+  showButtons?: boolean
+  showBrunch?: boolean
   breakpoint?: number
 }) {
   const [onSide, setOnSide] = useState(false)
@@ -59,7 +61,7 @@ export default function TopNavigation({
                       : `fixed border-b border-[#ddd] h-[59px] overflow-visible bg-[hsla(0,0%,100%,.9)] box-border`
                   }`}
       >
-        {!inWrite && breakpoint === 400 ? isFloat && children : children}
+        {!showButtons && breakpoint === 400 ? isFloat && children : children}
 
         <div className={`${!isFloat ? 'mt-[30px]' : 'mt-[20px]'} mx-[30px]`}>
           <div className={`float-left`}>
@@ -74,7 +76,7 @@ export default function TopNavigation({
             >
               메뉴
             </button>
-            <h1 className={`inline-block float-left ${inWrite && 'hidden'}`}>
+            <h1 className={`inline-block float-left ${!showBrunch && 'hidden'}`}>
               <a
                 href="/"
                 className={`block leading-none indent-[-999px] 

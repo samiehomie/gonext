@@ -9,12 +9,13 @@ import defaultImg from '@/public/default.png'
 
 declare module 'iron-session' {
   interface IronSessionData {
-    user?: {
+    user: {
       jwt: string
       username: string
-      id: number
+      id: number | string
       avatar: string
       isLoggedIn: boolean
+      subscription: null | number
     }
     back?: string
   }
@@ -37,7 +38,7 @@ export const middleware = async (req: NextRequest) => {
     return res
   }
 
-  if (req.nextUrl.pathname === '/write') {
+  if (req.nextUrl.pathname === '/write' || req.nextUrl.pathname === '/ready') {
     if (!user?.isLoggedIn) {
       return NextResponse.redirect(
         `${process.env.NEXT_PUBLIC_FRONT_URL}?signin`
@@ -79,11 +80,12 @@ export const middleware = async (req: NextRequest) => {
         const data: strapiUserResponse = await res.json()
         const dataSealed = await sealData(
           {
-            id: data?.user?.id,
-            username: data?.user?.username,
-            avatar: data?.user?.profile?.url || defaultImg,
+            id: data.user.id,
+            username: data.user.username,
+            avatar: data.user.profile?.url || defaultImg,
             isLoggedIn: true,
-            jwt: data?.jwt
+            jwt: data.jwt,
+            subscription: data.user.subscription?.id
           },
           { password: process.env.SESSION_SECRET! }
         )

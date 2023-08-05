@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { user } from '@/types'
+import { user, subscribers } from '@/types'
 import icoPlus from '@/public/ico-plus.png'
 
 function MoreControl() {
@@ -31,7 +31,13 @@ function getContent() {
   return Object.keys(initialState).map((key) => document.getElementById(key))
 }
 
-export default function Profile({ userData }: { userData: user }) {
+export default function Profile({
+  userData,
+  subscribersData
+}: {
+  userData: user
+  subscribersData: subscribers
+}) {
   const [zoom, setZoom] = useState(false)
   const [more, setMore] = useState(false)
   const [tabs, setTabs] = useState({ ...initialState, author: true })
@@ -115,7 +121,7 @@ export default function Profile({ userData }: { userData: user }) {
               <a href="#">
                 <em className="block not-italic font-normal">구독자</em>
                 <span className="block font-noto_sans_light font-medium text-[20px] mt-[-2px]">
-                  100
+                  {subscribersData.meta.pagination.total}
                 </span>
               </a>
             </dd>
@@ -123,7 +129,7 @@ export default function Profile({ userData }: { userData: user }) {
               <a href="#">
                 <em className="block not-italic font-normal">관심작가</em>
                 <span className="block font-noto_sans_light font-medium text-[20px] mt-[-2px]">
-                  50
+                  {userData.subscription?.targets.length}
                 </span>
               </a>
             </dd>

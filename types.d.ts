@@ -1,3 +1,20 @@
+export type resCreateWriting = {
+  data: {
+    id: number
+    attributes: {
+      title: string
+      content: string
+      created: string
+      subtitle?: string
+      tags?: string[]
+      createdAt: string
+      updatedAt: string
+      publishedAt: string
+    }
+  }
+  meta: {}
+}
+
 export type comment = {
   id: number
   content: string
@@ -27,7 +44,7 @@ export type strapiUserResponse = {
     confirmed: true
     blocked: false
     job: string
-    tags: string[]
+    tags: null | string[]
     introduction: string
     createdAt: string
     updatedAt: string
@@ -69,8 +86,47 @@ export type strapiUserResponse = {
       createdAt: string
       updatedAt: string
     }
+    subscription: subscription
   }
   jwt: string
+}
+
+export type subscription = null | {
+  id: number
+  createdAt: string
+  updatedAt: string
+  targets: {
+    id: number
+    username: string
+    email: string
+    provider: string
+    confirmed: true
+    blocked: boolean
+    createdAt: string
+    updatedAt: string
+    job: string
+    tags: null | string[]
+    introduction: null | string
+  }[]
+}
+
+export type subscribers = {
+  data: {
+    id: number
+    attributes: {
+      createdAt: string
+      updatedAt: string
+      subscriber: userAsChild
+    }
+  }[]
+  meta: {
+    pagination: {
+      page: number
+      pageSize: number
+      pageCount: number
+      total: number
+    }
+  }
 }
 
 export type commentWithUser = comment & { user: user }
@@ -78,13 +134,9 @@ export type commentsWithUser = commentWithUser[]
 
 export type comments = comment[]
 export type imageSizes = 'thumbnail' | 'small' | 'medium' | 'large'
-export type userSession = {
-  jwt: string
-  username: string
-  id: number
-  avatar: string
-  isLoggedIn: boolean
-}
+
+import type { IronSessionData } from 'iron-session'
+export type userSession = IronSessionData['user']
 export type jwtSession = { id: number; iat: number; exp: number }
 export type userAsChild = {
   data: {
@@ -154,7 +206,7 @@ export type writingInUser = {
   content: string
   created: string
   subtitle: string
-  tags: string[]
+  tags: null | string[]
   createdAt: string
   updatedAt: string
   publishedAt: string
@@ -306,6 +358,7 @@ export type user = {
   }
   writings?: writingsInUser
   books?: booksInUser
+  subscription: subscription
 }
 
 export type users = user[]
