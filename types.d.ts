@@ -86,12 +86,12 @@ export type strapiUserResponse = {
       createdAt: string
       updatedAt: string
     }
-    subscription: subscription
+    subscription: subscriptionInUser
   }
   jwt: string
 }
 
-export type subscription = null | {
+export type subscriptionInUser = null | {
   id: number
   createdAt: string
   updatedAt: string
@@ -110,6 +110,76 @@ export type subscription = null | {
   }[]
 }
 
+export type subscription = {
+  data: {
+    id: number
+    attributes: {
+      createdAt: string
+      updatedAt: string
+      targets: {
+        data: {
+          id: number
+          attributes: {
+            username: string
+            email: string
+            provider: string
+            confirmed: boolean
+            blocked: boolean
+            job: string
+            tags: null | string[]
+            introduction: string
+            createdAt: string
+            updatedAt: string
+            profile?: {
+              data: {
+                id: number
+                attributes: {
+                  name: string
+                  alternativeText: null | string
+                  caption: null | string
+                  width: number
+                  height: number
+                  formats: {
+                    [key in imageSizes]: {
+                      name: string
+                      hash: string
+                      ext: string
+                      mime: string
+                      path: null | string
+                      width: number
+                      height: number
+                      size: number
+                      url: string
+                      provider_metadata: {
+                        public_id: string
+                        resource_type: string
+                      }
+                    }
+                  }
+                  hash: string
+                  ext: string
+                  mime: string
+                  size: number
+                  url: string
+                  previewUrl: null | string
+                  provider: string
+                  provider_metadata: {
+                    public_id: string
+                    resource_type: string
+                  }
+                  createdAt: string
+                  updatedAt: string
+                }
+              }
+            }
+          }
+        }[]
+      }
+    }
+  }
+  meta: {}
+}
+
 export type subscribers = {
   data: {
     id: number
@@ -119,7 +189,7 @@ export type subscribers = {
       subscriber: userAsChild
     }
   }[]
-  meta: {
+  meta?: {
     pagination: {
       page: number
       pageSize: number
@@ -358,7 +428,7 @@ export type user = {
   }
   writings?: writingsInUser
   books?: booksInUser
-  subscription: subscription
+  subscription: subscriptionInUser
 }
 
 export type users = user[]

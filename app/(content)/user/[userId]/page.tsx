@@ -5,6 +5,8 @@ import Content from '@/components/author/content'
 import TopNavigation from '@/components/navigations/topNavigation'
 import TopProfile from '../topProfile'
 import fetchJson from '@/lib/fetchJson'
+
+
 export default async function AuthorPage({
   params: { userId }
 }: {

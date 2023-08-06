@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { user, subscribers } from '@/types'
 import icoPlus from '@/public/ico-plus.png'
+import Link from 'next/link'
 
 function MoreControl() {
   return (
@@ -118,20 +119,20 @@ export default function Profile({
           <dl className="text-[#959595] text-[12px] overflow-hidden pt-[22px] pr-[200px]">
             <dt className="screen-out">브런치 정보</dt>
             <dd className="float-left mr-[40px]">
-              <a href="#">
+              <Link href={`/user/${userData.id}/follower`}>
                 <em className="block not-italic font-normal">구독자</em>
                 <span className="block font-noto_sans_light font-medium text-[20px] mt-[-2px]">
-                  {subscribersData.meta.pagination.total}
+                  {subscribersData.data.length}
                 </span>
-              </a>
+              </Link>
             </dd>
             <dd className="float-left">
-              <a href="#">
+              <Link href={`/user/${userData.id}/following`}>
                 <em className="block not-italic font-normal">관심작가</em>
                 <span className="block font-noto_sans_light font-medium text-[20px] mt-[-2px]">
                   {userData.subscription?.targets.length}
                 </span>
-              </a>
+              </Link>
             </dd>
           </dl>
         </div>

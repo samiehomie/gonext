@@ -8,6 +8,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
+        'ico-bg-underbar': "url('../public/bg-underbar.gif')",
         'ico-btn-cover': "url('../public/ico-btn-cover.png')",
         'ico-btn-cover2': "url('../public/ico-btn-cover2.png')",
         'wrap-overview-bg': 'linear-gradient(#f8f8f8,#fff)',
