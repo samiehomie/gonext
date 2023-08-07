@@ -2,7 +2,8 @@ import qs from 'qs'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { comments } from '@/types'
-import sanitizeHtml from 'sanitize-html'
+import { subscription, subscribers } from '@/types'
+import exp from 'constants'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -136,4 +137,21 @@ export function getDateString() {
   const month = String(today.getMonth() + 1).padStart(2, '0')
   const day = String(today.getDate()).padStart(2, '0')
   return `${year}-${month}-${day}`
+}
+
+export function checkType(
+  data: subscribers | subscription
+): data is subscribers {
+  return Array.isArray(data.data)
+}
+
+export function confirmSubscription(
+  subscription: subscription | subscribers,
+  followerId: number
+) {
+  const followings = checkType(subscription)
+    ? subscription.data
+    : subscription?.data.attributes.targets.data
+  if (!followings) return false
+  return followings.findIndex((el) => el.id === followerId) !== -1
 }

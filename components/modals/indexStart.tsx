@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useContext, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import Login from '@/components/logIn'
+import Login from '@/components/buttons/logIn'
 import { startModalContext, startStateType } from '../userContext'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'

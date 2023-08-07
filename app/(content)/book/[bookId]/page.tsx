@@ -1,7 +1,7 @@
-import Overview from '@/components/bookpage/overview'
+import Overview from '../(components)/overview'
 import { book, users } from '@/types'
 import { queryBook, queryUser } from '@/lib/queries'
-import ArticleList from '@/components/bookpage/articleList'
+import ArticleList from '../(components)/articleList'
 import TopNavigation from '@/components/navigations/topNavigation'
 
 export default async function BookPage({

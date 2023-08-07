@@ -4,7 +4,7 @@ import { useEffect, ReactNode } from 'react'
 import type { userSession } from '@/types'
 import Link from 'next/link'
 import defaultProfile from '@/public/default.jpg'
-import LogOut from '../logOut'
+import LogOut from '../buttons/logOut'
 import useUser from '@/lib/useUser'
 import { usePathname } from 'next/navigation'
 

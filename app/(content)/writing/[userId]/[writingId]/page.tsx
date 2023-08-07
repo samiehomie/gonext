@@ -1,24 +1,19 @@
 import { Suspense } from 'react'
 import { getQueryWritingPage, queryUser } from '@/lib/queries'
-import type {
-  user,
-  users,
-  writingsInUser,
-  writingInUser,
-  commentsWithUser
-} from '@/types'
+import type { user, users, writingsInUser, writingInUser } from '@/types'
 import Markdown from '@/components/markdown'
 import Image from 'next/image'
 import { getEnglishDate } from '@/lib/utils'
-import plusIco from '@/public/ico-plus.png'
 import bottomBanner from '@/public/bottom-banner.png'
 import Link from 'next/link'
 import TopNavigation from '@/components/navigations/topNavigation'
 import ScrollIndicator from '@/components/navigations/scrollIndicator'
-import CommentContainer from '../../commentContainer'
+import CommentContainer from '../../{components)/commentContainer'
 import fetchJson from '@/lib/fetchJson'
 import defaultCover from '@/public/default-cover.png'
 import { dressUpMarkdown } from '@/lib/utils'
+import Profile from '../../{components)/profile'
+
 // TODO: #5 Add anchor using rehype library
 
 async function Others({
@@ -248,78 +243,7 @@ export default async function Page({
           <CommentContainer writingId={writingId} userId={userId} user={user} />
         </div>
         {/* profile */}
-        <div className="bg-[#fbfbfb] z-[10] relative pb-[80px] min-w-[1020px]">
-          {/* pc profile */}
-          <div className="w-[700px] relative m-auto pt-[31px]">
-            <div>
-              <strong className="block">
-                <Link
-                  href={`/user/${userId}`}
-                  className="block text-[28px] font-normal overflow-hidden 
-                        font-noto_sans_demlight text-ellipsis whitespace-nowrap w-[588px]"
-                >
-                  {user.username}
-                </Link>
-              </strong>
-              <span className="text-[#666] block text-[13px] my-[1px] mx-[2px] font-noto_sans_demlight">
-                <em className="screen-out absolute h-0 w-0">직업</em>
-                {user.job}
-              </span>
-              <Link
-                href={`/user/${userId}`}
-                className="absolute right-0 top-[-22px]"
-              >
-                <Image
-                  src={user.profile?.url as string}
-                  alt={user.username}
-                  width={100}
-                  height={100}
-                  className="rounded-full align-top"
-                />
-              </Link>
-              <div className="text-[13px] text-[#666] mt-[21px]">
-                <Link href={`/user/${userId}`}>
-                  <p className="text-[#959595] leading-[22px]">
-                    {user.introduction}
-                  </p>
-                </Link>
-              </div>
-              <div className="mt-[34px] after:content-[''] after:clear-both after:block">
-                <a href="#" className="text-[14px]">
-                  <span className="text-[#666] float-left mt-[6px]">
-                    <span>구독자</span>
-                    <span className="text-[#666] ml-[4px] font-sf_light">
-                      12
-                    </span>
-                  </span>
-                </a>
-                <span className="float-right text-center">
-                  <button
-                    className="bg-[#00c6be] border border-[#00c6be] rounded-[21px] 
-                            text-white text-[14px] h-[42px] w-[86px] pt-[1px]"
-                  >
-                    제안하기
-                  </button>
-                  <button
-                    className="bg-white border border-[#00c6be] rounded-[21px] 
-                            text-[#00c6be] text-[14px] h-[42px] w-[86px] pt-[1px] ml-[5px] opacity-90"
-                  >
-                    <span>
-                      <Image
-                        src={plusIco}
-                        alt="plus icon"
-                        width={17}
-                        height={17}
-                        className="align-sub inline-block mr-[3px]"
-                      />
-                      구독
-                    </span>
-                  </button>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Profile user={user} />
         {/* others */}
         <Suspense fallback={<div>Loading...</div>}>
           <Others

@@ -21,7 +21,6 @@ export const queryTopBanners = qs.stringify(
     encodeValuesOnly: true
   }
 )
-
 export const queryTopNotice = qs.stringify(
   {
     filters: {
@@ -43,7 +42,6 @@ export const queryTopNotice = qs.stringify(
     encodeValuesOnly: true
   }
 )
-
 export const queryWritings = qs.stringify(
   {
     fields: ['title', 'subtitle', 'content'],
@@ -96,52 +94,6 @@ export const queryBook = qs.stringify(
     encodeValuesOnly: true
   }
 )
-
-// export const queryUser = qs.stringify(
-//   {
-//     fields: ['username', 'introduction', 'job', 'tags'],
-//     populate: {
-//       profile: {
-//         fields: ['formats', 'url']
-//       },
-//       writings: {
-//         fields: ['title', 'content', 'subtitle', 'publishedAt'],
-//         populate: {
-//           cover: {
-//             fields: ['formats', 'url']
-//           },
-//           book: {
-//             fields: ['title']
-//           },
-//           user: {
-//             fields: ['username']
-//           }
-//         }
-//       },
-//       books: {
-//         fields: ['title', 'publishedAt', 'introduction', 'summary', 'tags'],
-//         populate: {
-//           cover: {
-//             fields: ['formats', 'url']
-//           },
-//           writings: {
-//             fields: ['title']
-//           }
-//         }
-//       }
-//     }
-//   },
-//   {
-//     encodeValuesOnly: true
-//   }
-// )
-
-export const queryUser = `?populate[profile]=true&populate[writings][populate][0]=book&populate[writings][populate][1]
-=cover&populate[writings][populate][2]=user&populate[books][populate][0]=cover&populate[books][populate][1]
-=writings&populate[subscription][populate][targets][populate][profile]=true`
-
-export const getQuerySubscribers = (userId: string | number) =>
-  `?filters[targets][id][$eq]=${userId}&populate[subscriber][populate][profile]=true`
 
 export function getQueryWritingPage(userId: string, writingId: string) {
   const url = `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${userId}?`
@@ -226,3 +178,9 @@ export const queryUnpublished =
 export const queryPendingDelete =
   '?populate[writings][populate][cover]=true&populate[writings][filters][publishedAt][$null]=true&populate[writings][filters][tags][$contains]=_delete'
 
+export const queryUser = `?populate[profile]=true&populate[writings][populate][0]=book&populate[writings][populate][1]
+  =cover&populate[writings][populate][2]=user&populate[books][populate][0]=cover&populate[books][populate][1]
+  =writings&populate[subscription][populate][targets][populate][profile]=true`
+
+export const getQuerySubscribers = (userId: string | number) =>
+  `?filters[targets][id][$eq]=${userId}&populate[subscriber][populate][profile]=true`
