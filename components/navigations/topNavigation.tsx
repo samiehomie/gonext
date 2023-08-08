@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState, useCallback, useContext } from 'react'
 import SideMenu from '../modals/sideMenu'
-import { startModalContext, startStateType } from '../userContext'
+import { startModalContext, stateType } from '../userContext'
 
 // TODO: #1 Implement search modal and right hidden menu
 
@@ -20,7 +20,9 @@ export default function TopNavigation({
 }) {
   const [onSide, setOnSide] = useState(false)
   const [isFloat, setIsFloat] = useState(false)
-  const [_, setOnStart] = useContext(startModalContext) as startStateType
+  const {
+    start: [_, setOnStart]
+  } = useContext(startModalContext) as stateType
   const handlerDown = useCallback(() => {
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop
@@ -76,7 +78,9 @@ export default function TopNavigation({
             >
               메뉴
             </button>
-            <h1 className={`inline-block float-left ${!showBrunch && 'hidden'}`}>
+            <h1
+              className={`inline-block float-left ${!showBrunch && 'hidden'}`}
+            >
               <a
                 href="/"
                 className={`block leading-none indent-[-999px] 

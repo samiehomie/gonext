@@ -11,5 +11,5 @@ export default function LogOut({ children }: { children: ReactNode }) {
     mutateUser(await fetchJson('/api/auth/github/logout'), false)
     router.push('/')
   }
-  return <button onClick={handleClick}>{children}</button>
+  return <span onClick={handleClick}>{children}</span>
 }

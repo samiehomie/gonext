@@ -1,11 +1,10 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useContext } from 'react'
+import { startModalContext, stateType } from '@/components/userContext'
 import Image from 'next/image'
-import { slidesInfo } from '../public/localdata/imgSources'
+import { slidesInfo } from '../../../../public/localdata/imgSources'
 import { throttle } from 'lodash'
 import Link from 'next/link'
-import { queryTopBanners } from '@/lib/queries'
-import useSWR from 'swr'
 import type { users } from '@/types'
 
 // TODO: Consider another way to manage the states
@@ -85,14 +84,14 @@ function InnerPaging({
   )
 }
 
-export default function TopBanner() {
+export default function TopBanner({ banners }: { banners: users }) {
   const slidesRef = useRef<HTMLUListElement>(null)
   const [currentSlide, setCurrentSlide] = useState(slidesInfo[0].key)
   const [slideIsBig, setSlideIsBig] = useState(false)
   const [pastSlide, setPastSlide] = useState('')
-  const { data: banners } = useSWR<users>(
-    `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + queryTopBanners
-  )
+  const {
+    search: [onSearch, _]
+  } = useContext(startModalContext) as stateType
 
   const handlerWheel =
     (cbForBig: () => void, cbForSmall: () => void, elem: HTMLUListElement) =>
@@ -166,23 +165,24 @@ export default function TopBanner() {
   }, {} as { [key: string]: string })
 
   return (
-    <div className="overflow-y-auto overflow-x-auto">
-      <div
-        className={`relative overflow-hidden transition-margin duration-700 linear ${
-          slideIsBig ? 'mt-0' : 'mt-[-420px]'
-        }`}
-      >
-        <ul
-          ref={slidesRef}
-          className={`relative h-[480px] overflow-hidden
+    <div
+      className={`${
+        onSearch && 'hidden'
+      } relative overflow-hidden transition-margin duration-700 linear ${
+        slideIsBig ? 'mt-0' : 'mt-[-420px]'
+      }`}
+    >
+      <ul
+        ref={slidesRef}
+        className={`relative h-[480px] overflow-hidden
           
         `}
-        >
-          {slidesInfo.map((slide) => (
-            <li
-              key={slide.key}
-              data-key={slide.key}
-              className={`absolute h-[100%] w-[100%] 
+      >
+        {slidesInfo.map((slide) => (
+          <li
+            key={slide.key}
+            data-key={slide.key}
+            className={`absolute h-[100%] w-[100%] 
           ${
             !slideIsBig && 'transition-transform duration-700 linear'
           } overflow-hidden
@@ -193,70 +193,65 @@ export default function TopBanner() {
               ? 'z-[2]'
               : 'translate-y-[60px] z-[1] invisible'
           }`}
+          >
+            <Link
+              href={`${bannersEndpoint![slide.alt]}`}
+              className="h-[480px] w-[100%]"
             >
-              <Link
-                href={`${bannersEndpoint![slide.alt]}`}
-                className="h-[480px] w-[100%]"
-              >
-                <Image src={slide.big.back} alt={slide.big.alt} fill={true} />
-                <Image
-                  src={slide.big.src}
-                  alt={slide.big.alt}
-                  width={960}
-                  height={480}
-                  className="absolute top-0 left-[50%] transform translate-x-[-50%]"
-                />
-              </Link>
-              <Link
-                href={`${bannersEndpoint![slide.alt]}`}
-                className={`h-[60px] absolute bottom-0 w-[100%]
+              <Image src={slide.big.back} alt={slide.big.alt} fill={true} />
+              <Image
+                src={slide.big.src}
+                alt={slide.big.alt}
+                width={960}
+                height={480}
+                className="absolute top-0 left-[50%] transform translate-x-[-50%]"
+              />
+            </Link>
+            <Link
+              href={`${bannersEndpoint![slide.alt]}`}
+              className={`h-[60px] absolute bottom-0 w-[100%]
               transition-opacity duration-400 linear ${
                 slideIsBig ? 'opacity-0' : 'opacity-100'
               }`}
-              >
-                <Image
-                  src={slide.back}
-                  alt="topbanner-background"
-                  fill={true}
-                />
-                <Image
-                  src={slide.src}
-                  alt={slide.alt}
-                  width={960}
-                  height={60}
-                  className="absolute top-0 left-[50%] transform translate-x-[-50%]"
-                />
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <InnerPaging
-          slides={slidesInfo}
-          currentSlide={currentSlide}
-          isWhite={slideIsWhite}
-          isBig={slideIsBig}
-          onChnageSlide={(slideKey) => setCurrentSlide(slideKey)}
-          onChangePastSlide={(slideKey) => setPastSlide(slideKey)}
-        />
-        <button
-          onClick={() => setSlideIsBig(false)}
-          className="absolute left-[50%] bottom-[50%] 
+            >
+              <Image src={slide.back} alt="topbanner-background" fill={true} />
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                width={960}
+                height={60}
+                className="absolute top-0 left-[50%] transform translate-x-[-50%]"
+              />
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <InnerPaging
+        slides={slidesInfo}
+        currentSlide={currentSlide}
+        isWhite={slideIsWhite}
+        isBig={slideIsBig}
+        onChnageSlide={(slideKey) => setCurrentSlide(slideKey)}
+        onChangePastSlide={(slideKey) => setPastSlide(slideKey)}
+      />
+      <button
+        onClick={() => setSlideIsBig(false)}
+        className="absolute left-[50%] bottom-[50%] 
           z-[4] ml-[570px] mb-[-30px]"
+      >
+        <svg
+          id="_closebutton_1"
+          data-name="closebutton 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 100.71 100.71"
+          className={`${
+            slideIsWhite ? 'stroke-zinc-500' : 'stroke-zinc-200'
+          } fill-none w-[60px] h-[60px]`}
         >
-          <svg
-            id="_closebutton_1"
-            data-name="closebutton 1"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 100.71 100.71"
-            className={`${
-              slideIsWhite ? 'stroke-zinc-500' : 'stroke-zinc-200'
-            } fill-none w-[60px] h-[60px]`}
-          >
-            <line x1=".35" y1=".35" x2="100.35" y2="100.35" />
-            <line x1="100.35" y1=".35" x2=".35" y2="100.35" />
-          </svg>
-        </button>
-      </div>
+          <line x1=".35" y1=".35" x2="100.35" y2="100.35" />
+          <line x1="100.35" y1=".35" x2=".35" y2="100.35" />
+        </svg>
+      </button>
     </div>
   )
 }

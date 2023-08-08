@@ -31,6 +31,7 @@ export default function Article({
                 src={writing.attributes.cover?.data.attributes.url as string}
                 alt={writing.attributes.title}
                 fill={true}
+                sizes="(max-width: 768px) 120px, (max-width: 1200px) 120px, 120px"
                 className="object-cover"
               />
             )}

@@ -6,7 +6,6 @@ import Link from 'next/link'
 import defaultProfile from '@/public/default.jpg'
 import LogOut from '../buttons/logOut'
 import useUser from '@/lib/useUser'
-import { usePathname } from 'next/navigation'
 
 function InnerContainer({
   children,
@@ -141,7 +140,7 @@ function UserOnlyButton() {
       <LogOut>
         <button
           className="border border-[#bbb] rounded-[16px] text-[#959595] text-[13px] 
-                    h-[32px] mx-[2px] w-[80px]"
+                    h-[32px] mx-[2px] w-[80px] inline-block"
         >
           로그아웃
         </button>
@@ -204,7 +203,6 @@ export default function SideMenu({
   setOnStart: (arg: boolean) => void
   setOnSide: (arg: boolean) => void
 }) {
-  const pathname = usePathname()
   const { user } = useUser()
 
   useEffect(() => {

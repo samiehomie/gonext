@@ -1,12 +1,9 @@
 'use client'
-
-import useSWR from 'swr'
-import type { writings, slideStyles } from '../../../../types'
+import type { writings, slideStyles, book } from '../../../../types'
 import Image from 'next/image'
 import { ReactElement } from 'react'
 import Book from '../../../(content)/book/(components)/slides/book'
 import Writing from './writing'
-import { queryWritings } from '../../../../lib/queries'
 import Link from 'next/link'
 
 // TODO: Check out whether lazy loading is working
@@ -21,13 +18,7 @@ const slideStyles: Array<slideStyles>[] = [
   ['long', 'short', 'short', 'short']
 ]
 
-export default function Slides() {
-  const {
-    data: writings
-  }: {
-    data: writings | undefined
-  } = useSWR(`${process.env.NEXT_PUBLIC_DB_URL}/api/writings?` + queryWritings)
-
+export default function Slides({ writings, book }: { writings: writings; book: book }) {
   if (!writings) return null
 
   const writingsWithBook = writings.data.slice(0, 2)
@@ -66,7 +57,7 @@ export default function Slides() {
       <li className="float-left">
         <div className="overflow-hidden w-[960px]">
           {/* brunch book */}
-          <Book bookId={1} />
+          <Book book={book} />
           {/* 2 stack writings alongside book*/}
           {writingsWithBook.map((writing) => (
             <Link

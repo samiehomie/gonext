@@ -1,11 +1,12 @@
 'use client'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Slides from './slides'
+import { book, writings } from '@/types'
 
 function Pagination({
   pageNumber,
   i,
-  onSlide,
+  onSlide
 }: {
   pageNumber: number
   i: number
@@ -42,13 +43,8 @@ function Pagination({
 
 const endNumber = 8
 
-export default function SlidesShow({
-  page,
-  setPage,
-}: {
-  page: number
-  setPage: (arg: number) => void
-}) {
+export default function SlidesShow({ writings, book }: { writings: writings; book: book }) {
+  const [page, setPage] = useState(0)
   const slidesRef = useRef<HTMLUListElement>(null)
   const lastPage = useRef(page)
   const onSlide = (plus: number, pagination = false) => {
@@ -80,7 +76,7 @@ export default function SlidesShow({
           className="absolute top-0 w-[900%] translate-x-0 
         transition-transform duration-300 ease-in-out"
         >
-          <Slides />
+          <Slides writings={writings} book={book}/>
         </ul>
       </div>
       {/* wrap_button */}

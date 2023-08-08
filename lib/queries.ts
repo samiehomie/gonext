@@ -1,5 +1,27 @@
 import qs from 'qs'
 
+export const getFilteredQuery = (tag: string) => {
+  const queryTags = qs.stringify(
+    {
+      fields: ['username', 'introduction', 'job', 'tags'],
+      populate: {
+        profile: {
+          fields: ['url']
+        }
+      },
+      filters: {
+        tags: { $contains: tag }
+      },
+      start: 0,
+      limit: 6
+    },
+    {
+      encodeValuesOnly: true
+    }
+  )
+  return queryTags
+}
+
 export const queryTopBanners = qs.stringify(
   {
     filters: {

@@ -116,6 +116,7 @@ export function dressUpMarkdown(str: string) {
   const regexImg = /!\[(.*?)\]\((.*?)\)/g
   const content = str
     .replace(regexImg, '')
+    .replace(/\*{3}/g, '')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
   return content

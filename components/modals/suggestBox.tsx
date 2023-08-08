@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useRef, useEffect, FormEvent } from 'react'
 import { getSearchQuery, regexInvalidQuery } from '@/lib/utils'
 import useSWR from 'swr'
@@ -10,7 +9,7 @@ import { queryUsersFive } from '@/lib/queries'
 import Link from 'next/link'
 
 function SuggestList() {
-  const { data: users }: { data: users | undefined } = useSWR(
+  const { data: users } = useSWR<users>(
     `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + queryUsersFive
   )
 
@@ -58,21 +57,13 @@ function SuggestList() {
 
 function SearchSide({ searchWord }: { searchWord: string }) {
   const { queryBooks, queryUsers } = getSearchQuery(searchWord)
-  const {
-    data: booksData
-  }: {
-    data: books | undefined
-  } = useSWR(
+  const { data: booksData } = useSWR<books>(
     regexInvalidQuery.test(queryBooks)
       ? null
       : `${process.env.NEXT_PUBLIC_DB_URL}/api/books?` + queryBooks
   )
 
-  const {
-    data: usersData
-  }: {
-    data: users | undefined
-  } = useSWR(
+  const { data: usersData } = useSWR<users>(
     regexInvalidQuery.test(queryUsers)
       ? null
       : `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + queryUsers
@@ -191,11 +182,7 @@ function SearchSide({ searchWord }: { searchWord: string }) {
 
 function SearchList({ searchWord }: { searchWord: string }) {
   const { queryWritings } = getSearchQuery(searchWord)
-  const {
-    data: writingData
-  }: {
-    data: writings | undefined
-  } = useSWR(
+  const { data: writingData } = useSWR<writings>(
     regexInvalidQuery.test(queryWritings)
       ? null
       : `${process.env.NEXT_PUBLIC_DB_URL}/api/writings?` + queryWritings

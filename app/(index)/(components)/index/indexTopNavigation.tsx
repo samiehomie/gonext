@@ -1,25 +1,21 @@
 'use client'
 import { useEffect, useState, useContext } from 'react'
-import SuggestBox from '../../../../components/modals/suggestBox'
-import SideMenu from '../../../../components/modals/sideMenu'
+import SideMenu from '@/components/modals/sideMenu'
 import Link from 'next/link'
-import {
-  startModalContext,
-  startStateType
-} from '../../../../components/userContext'
-
+import dynamic from 'next/dynamic'
+import { startModalContext, stateType } from '@/components/userContext'
+const SuggestBox = dynamic(() => import('@/components/modals/suggestBox'), {
+  ssr: false
+})
 // TODO: #1 Implement search modal and right hidden menu
 
-export default function IndexTopNavigation({
-  onSearch,
-  setOnSearch
-}: {
-  onSearch: boolean
-  setOnSearch: (onSearch: boolean) => void
-}) {
+export default function IndexTopNavigation() {
   const [isFloat, setIsFloat] = useState(false)
   const [onSide, setOnSide] = useState(false)
-  const [_, setOnStart] = useContext(startModalContext) as startStateType
+  const {
+    start: [_, setOnStart],
+    search: [onSearch, setOnSearch]
+  } = useContext(startModalContext) as stateType
   function handlerDown() {
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop

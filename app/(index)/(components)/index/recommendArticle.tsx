@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import useSWRInfinite from 'swr/infinite'
 import { writing, writings } from '../../../../types'
 import { dressUpMarkdown, getWritingsQuery } from '../../../../lib/utils'
@@ -28,13 +28,8 @@ const slideGroupActions = 7
 let previousSection = 1
 let section = 1
 
-export default function RecommendArticle({
-  cursor,
-  setCursor
-}: {
-  cursor: number
-  setCursor: (arg: number) => void
-}) {
+export default function RecommendArticle() {
+  const [cursor, setCursor] = useState(0)
   const slidesRef = useRef<HTMLUListElement>(null)
   const lastCursor = useRef(cursor)
   const {
@@ -88,23 +83,9 @@ export default function RecommendArticle({
   const pageCount = writings[0].meta.pagination?.pageCount as number
 
   return (
-    <div className="relative">
-      <h3
-        className="bg-brunch-text bg-[0px_-225px] h-[13px] w-[380px] 
-                  mt-[150px] mx-auto overflow-hidden indent-[-9999px]"
-      >
-        RECOMMENDED ARTICLES
-      </h3>
-      <p className="w-[960px] m-auto">
-        <span
-          className="block overflow-hidden indent-[-9999px] w-[162px]
-                    bg-brunch-text bg-[0px_-75px] h-[11px] mb-[47px] mt-[17px] 
-                    mx-auto"
-        >
-          갓 구워낸 따끈따끈한 추천글을 만나보세요
-        </span>
-      </p>
+    <>
       {/* recommend slide */}
+
       <div className="relative w-[960px] m-auto overflow-visible">
         <ul
           ref={slidesRef}
@@ -193,6 +174,6 @@ export default function RecommendArticle({
           </span>
         </button>
       </div>
-    </div>
+    </>
   )
 }

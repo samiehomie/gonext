@@ -1,41 +1,17 @@
-'use client'
-import { useState } from 'react'
-import useSWR from 'swr'
-import { regexInvalidQuery } from '@/lib/utils'
-import qs from 'qs'
 import type { users } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import defaultProfile from '@/public/default.jpg'
+import { getFilteredQuery } from '@/lib/queries'
+import fetchJson from '@/lib/fetchJson'
+import TopTabs from './topTabs'
+import { Suspense } from 'react'
 
 function getRandomElementExcept(arr: string[], except: string) {
   const filteredArr = arr.filter((el) => el !== except)
   const randomIndex = Math.floor(Math.random() * filteredArr.length)
   return filteredArr[randomIndex]
 }
-
-const getFilterdUrl = (tag: string) => {
-  const queryTags = qs.stringify(
-    {
-      fields: ['username', 'introduction', 'job', 'tags'],
-      populate: {
-        profile: {
-          fields: ['url']
-        }
-      },
-      filters: {
-        tags: { $contains: tag }
-      },
-      start: 0,
-      limit: 6
-    },
-    {
-      encodeValuesOnly: true
-    }
-  )
-  return queryTags
-}
-
 const tags = ['사랑', '여행', '가족']
 const initialState = tags.reduce(
   (pre: { [key: string]: boolean }, cur: string) => {
@@ -44,28 +20,24 @@ const initialState = tags.reduce(
   },
   {}
 )
-function AuthorsGroup({
+
+async function AuthorsGroup({
   tag,
-  tagsState
+  tagIndex
 }: {
   tag: string
-  tagsState: typeof initialState
+  tagIndex: number
 }) {
-  const query = getFilterdUrl(tag)
-  const { data: users }: { data: users | undefined } = useSWR(
-    regexInvalidQuery.test(query)
-      ? null
-      : `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + query
+  const query = getFilteredQuery(tag)
+  const users = await fetchJson<users>(
+    `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + query
   )
-
-  if (!users) return null
 
   return (
     <ul
-      className={`${
-        !tagsState[tag]
-          ? 'hidden'
-          : 'after:content-[""] after:block after:clear-both'
+      id={`tab-${tagIndex}`}
+      className={`after:content-[""] after:block after:clear-both ${
+        tagIndex !== 0 && 'hidden'
       }`}
     >
       {users.map((user) => (
@@ -131,11 +103,7 @@ function AuthorsGroup({
   )
 }
 
-export default function WritersWeekly() {
-  const [tagsState, setTagsState] = useState({
-    ...initialState,
-    [tags[0]]: true
-  })
+export default async function WritersWeekly() {
   return (
     <>
       <div className="bg-[#fafafa] my-[150px] mx-auto pt-[100px] overflow-hidden">
@@ -154,32 +122,14 @@ export default function WritersWeekly() {
           </span>
         </p>
         {/* writer_keyword_btn */}
-        <div className="mt-[43px] text-center">
-          {tags.map((tag, i) => (
-            <button
-              key={i}
-              onClick={() => setTagsState({ ...initialState, [tag]: true })}
-              type="button"
-              className={`bg-white border rounded-[25px] inline-block
-                    font-noto_sans_demlight text-[15px] leading-[18px] mx-[2px]
-                    overflow-hidden p-[7px_16px_6px] outline-none cursor-pointer
-                   ${
-                     tagsState[tag]
-                       ? 'text-[#00c6be] border-[#00c6be]'
-                       : 'text-[#959595] border-[#eee]'
-                   }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+        <TopTabs tags={tags} />
         {/* writer_keyword_writers */}
         <div
           className={`w-[960px] mx-auto mt-[50px] mb-[85px] 
                   font-noto_sans_demlight`}
         >
           {tags.map((tag, i) => (
-            <AuthorsGroup key={i} tag={tag} tagsState={tagsState} />
+            <AuthorsGroup key={i} tag={tag} tagIndex={i} />
           ))}
         </div>
       </div>

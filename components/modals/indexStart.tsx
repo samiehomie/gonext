@@ -3,14 +3,14 @@ import { useState, useEffect, useCallback, useContext, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Login from '@/components/buttons/logIn'
-import { startModalContext, startStateType } from '../userContext'
+import { startModalContext, stateType } from '../userContext'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 
 function PageButton({
   page,
   role,
-  handler,
+  handler
 }: {
   page: number
   role: number
@@ -46,7 +46,9 @@ function StartItem() {
   const searchParams = useSearchParams()
   const isSignin = searchParams?.has('signin')
   const loadingRef = useRef<HTMLDivElement>(null)
-  const [_, setOnStart] = useContext(startModalContext) as startStateType
+  const {
+    start: [_, setOnStart]
+  } = useContext(startModalContext) as stateType
 
   useEffect(() => {
     if (isSignin) {
@@ -111,14 +113,16 @@ function StartItem() {
 
 export default function IndexStart() {
   const [page, setPage] = useState(0)
-  const [onStart, _] = useContext(startModalContext) as startStateType
+  const {
+    start: [onStart, _]
+  } = useContext(startModalContext) as stateType
 
   const handlePage = useCallback(
     (page: number, plus: number, direct = false) => {
       const nextPage = direct ? plus : page + plus < 0 ? 2 : (page + plus) % 3
       setPage(nextPage)
     },
-    [],
+    []
   )
 
   useEffect(() => {

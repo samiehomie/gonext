@@ -1,16 +1,10 @@
 'use client'
 import moment from 'moment'
 import { book } from '@/types'
-import { queryBook } from '@/lib/queries'
-import useSWR from 'swr'
 import BookCover from './bookCover'
 import Link from 'next/link'
 
-export default function Book({ bookId }: { bookId: number }) {
-  const { data: bookData }: { data: book | undefined } = useSWR(
-    `${process.env.NEXT_PUBLIC_DB_URL}/api/books/${bookId}?` + queryBook
-  )
-
+export default function Book({ book: bookData }: { book: book }) {
   if (!bookData) return null
 
   const { publishedAt } = bookData.data.attributes
@@ -18,7 +12,7 @@ export default function Book({ bookId }: { bookId: number }) {
 
   return (
     <Link
-      href={`/book/${bookId}`}
+      href={`/book/${bookData.data.id}`}
       className="group float-left relative w-1/2 h-[520px] block bg-book-cover
                 before:content-[''] before:block before:absolute 
                 before:bottom-0 before:w-full before:h-[156px] before:bg-[#f6f6f6]
