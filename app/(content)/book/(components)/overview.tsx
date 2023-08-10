@@ -164,7 +164,8 @@ function OverviewSlide({
           <div className="text-[0px] after:content-[''] after:block after:clear-both">
             {bookData.data.attributes.tags &&
               bookData.data.attributes.tags.map((tag, index) => (
-                <span
+                <Link
+                  href={`/keyword/writing/${tag}`}
                   key={index}
                   className="relative block float-left p-[1px] mt-[8px] mr-[8px]"
                 >
@@ -182,7 +183,7 @@ function OverviewSlide({
                   >
                     {tag}
                   </label>
-                </span>
+                </Link>
               ))}
           </div>
         </div>

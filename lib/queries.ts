@@ -1,12 +1,15 @@
 import qs from 'qs'
 
-export const getFilteredQuery = (tag: string) => {
+export const getUsersFilteredQuery = (tag: string) => {
   const queryTags = qs.stringify(
     {
       fields: ['username', 'introduction', 'job', 'tags'],
       populate: {
         profile: {
-          fields: ['url']
+          fields: ['url', 'formats']
+        },
+        writings: {
+          fields: ['title']
         }
       },
       filters: {
@@ -206,3 +209,5 @@ export const queryUser = `?populate[profile]=true&populate[writings][populate][0
 
 export const getQuerySubscribers = (userId: string | number) =>
   `?filters[targets][id][$eq]=${userId}&populate[subscriber][populate][profile]=true`
+
+export const queryWritingsFilteredTag = `/api/writings?populate[cover]=true&populate[user]=true&filters[tags][$contains]=`

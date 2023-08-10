@@ -19,7 +19,7 @@ export default async function ReadyWritePage({
     const color = await getColorFromURL(imgUrl)
     const brightness = (color[0] * 299 + color[1] * 587 + color[2] * 114) / 1000
     const isDark = brightness < 128
-    console.log('dark?', isDark, color)
+
     return (
       <Form
         writingData={writingData}

@@ -77,24 +77,24 @@ function StartItem() {
           내 브런치스토리 찾기
         </strong>
         <a
-          href="#"
+          href="https://github.com/password_reset"
           className="bg-[#fff] rounded-[5px] box-border text-[#333] 
                       block text-[16px] h-[60px] leading-[61px] mt-[14px] text-center w-full"
         >
-          내 브런치스토리의 카카오계정을 모르겠어요
+          GitHub 비밀번호를 모르겠어요
         </a>
-        <a
-          href="#"
+        {/* <a
+          href="https://github.com/password_reset"
           className="bg-[#fff] rounded-[5px] box-border text-[#333] 
                       block text-[16px] h-[60px] leading-[61px] mt-[14px] text-center w-full"
         >
-          페이스북·트위터로만 로그인 했었나요?
-        </a>
+          GitHub 비밀번호를 모르겠어요
+        </a> */}
         <a
-          href="#"
+          href="mailto:samie.worker@gmail.com"
           className="block text-[#6c6c6c] text-[14px] mt-[57px] text-center underline"
         >
-          로그인 관련 상세 도움말
+          메일로 관리자에게 문의하기
         </a>
       </div>
       <button
@@ -166,7 +166,7 @@ export default function IndexStart() {
                 }`}
               >
                 <li className="inline-block w-full relative">
-                  <a href="#" className="block">
+                  <div className="block">
                     <div className="block h-[208px] w-[315px] m-auto">
                       <Image
                         src="https://i.ibb.co/9tFXKMb/pc-img-start-01.png"
@@ -185,10 +185,10 @@ export default function IndexStart() {
                         당신의 이야기를 세상에 선보이세요.
                       </span>
                     </div>
-                  </a>
+                  </div>
                 </li>
                 <li className="inline-block w-full relative">
-                  <a href="#" className="block">
+                  <div className="block">
                     <div className="block h-[208px] w-[315px] m-auto">
                       <Image
                         src="https://i.ibb.co/R7t07Sz/pc-img-start-02.png"
@@ -207,10 +207,10 @@ export default function IndexStart() {
                         작가님의 작품이 책·강연 등으로 확장됩니다.
                       </span>
                     </div>
-                  </a>
+                  </div>
                 </li>
                 <li className="inline-block w-full relative">
-                  <a href="#" className="block">
+                  <div className="block">
                     <div className="block h-[208px] w-[315px] m-auto">
                       <Image
                         src="https://i.ibb.co/4Pt3MxS/pc-img-start-03.png"
@@ -229,7 +229,7 @@ export default function IndexStart() {
                         당신에게 영감을 주는 작품을 추천합니다.
                       </span>
                     </div>
-                  </a>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -274,7 +274,9 @@ export default function IndexStart() {
           </div>
         </div>
         {/* item start */}
-        <Suspense fallback={<></>}>
+        <Suspense
+          fallback={<div className="bg-[#f8f8f8] w-1/2 h-full inline-block" />}
+        >
           <StartItem />
         </Suspense>
       </div>

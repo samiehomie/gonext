@@ -55,11 +55,11 @@ export default function TopNavigation({
     <>
       <SideMenu onSide={onSide} setOnStart={setOnStart} setOnSide={setOnSide} />
       <div
-        className={`transition duration-300
+        className={`transition duration-300 group
                   ease-in top-0 w-full z-[100] 
                   ${
                     !isFloat
-                      ? 'overflow-hidden absolute h-[80px]'
+                      ? 'absolute h-[80px]'
                       : `fixed border-b border-[#ddd] h-[59px] overflow-visible bg-[hsla(0,0%,100%,.9)] box-border`
                   }`}
       >

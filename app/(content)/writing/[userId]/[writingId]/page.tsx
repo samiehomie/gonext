@@ -47,10 +47,12 @@ async function Others({
           className="m-auto relative w-[1020px] 
                 after:content-[''] after:block after:clear-both"
         >
-          {writings?.map((writing) => (
+          {writings?.map((writing, i) => (
             <li
               key={writing.id}
-              className="float-left w-[300px] mx-[20px] mb-[35px]"
+              className={`float-left w-[300px] mx-[20px] mb-[35px] ${
+                i % 3 === 0 && 'clear-both'
+              }`}
             >
               <Link
                 href={`/writing/${userId}/${writing.id}#title`}
@@ -91,7 +93,10 @@ async function Others({
       </div>
       {/* bottom promotion banner */}
       <div className="bg-[#75beff] relative min-w-[1020px] mb-[60px]">
-        <a href="#" className="block m-auto w-[700px]">
+        <a
+          href={process.env.NEXT_PUBLIC_TEMP!}
+          className="block m-auto w-[700px]"
+        >
           <Image
             src={bottomBanner}
             alt={'하단 배너'}

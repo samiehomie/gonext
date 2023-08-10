@@ -9,14 +9,14 @@ const menuItems = [
     '제휴제안',
     '청소년 보호정책',
     '고객센터',
-    '운영정책',
+    '운영정책'
   ],
   [
     '브런치스토리팀 공지사항',
     '공식 카카오톡 채널',
     '공식 인스타그램',
-    '공식 페이스북',
-  ],
+    '공식 페이스북'
+  ]
 ]
 
 export default function IndexFooter() {
@@ -46,7 +46,7 @@ export default function IndexFooter() {
                 className="float-left leading-[17px] w-[232px] mb-[17px]"
               >
                 <a
-                  href="#"
+                  href={process.env.NEXT_PUBLIC_TEMP}
                   className="text-[#d9d9d9] text-[12px] tracking-[-.03em]"
                 >
                   {item}
@@ -58,7 +58,7 @@ export default function IndexFooter() {
             {menuItems[1].map((item, i) => (
               <li key={i} className="leading-[15px] mb-[17px]">
                 <a
-                  href="#"
+                  href={process.env.NEXT_PUBLIC_TEMP}
                   className="text-[#d9d9d9] text-[12px] tracking-[-.03em]"
                 >
                   {item}
@@ -73,7 +73,7 @@ export default function IndexFooter() {
         >
           <small className="mt-[2px] ml-[-1px] float-left">
             <a
-              href="#"
+              href="mailto:samie.worker@gmail.com"
               className="text-[11px] text-[#fff] font-[Georgia] italic opacity-50"
             >
               @ Sam

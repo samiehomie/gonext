@@ -7,6 +7,7 @@ import useUser from '@/lib/useUser'
 import useFollowing from '@/lib/useFollowing'
 import useFollower from '@/lib/useFollower'
 import SubscribeButton from '@/components/buttons/subscribeButton'
+import defaultImage from '@/public/default.png'
 
 export default function Profile({ user }: { user: user }) {
   const { followers } = useFollower({ userId: user.id })
@@ -45,7 +46,7 @@ export default function Profile({ user }: { user: user }) {
             className="absolute right-0 top-[-22px]"
           >
             <Image
-              src={user.profile?.url as string}
+              src={user.profile?.url || defaultImage}
               alt={user.username}
               width={100}
               height={100}
@@ -60,14 +61,14 @@ export default function Profile({ user }: { user: user }) {
             </Link>
           </div>
           <div className="mt-[34px] after:content-[''] after:clear-both after:block">
-            <a href="#" className="text-[14px]">
+            <Link href={`/user/${user.id}/follower`} className="text-[14px]">
               <span className="text-[#666] float-left mt-[6px]">
                 <span>구독자</span>
                 <span className="text-[#666] ml-[4px] font-sf_light">
                   {followers.data.length}
                 </span>
               </span>
-            </a>
+            </Link>
             <span className="float-right text-center">
               {/* <button
             className="bg-[#00c6be] border border-[#00c6be] rounded-[21px] 

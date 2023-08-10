@@ -50,16 +50,20 @@ export default function Authors({
                     className="bg-ico-brunch-sub3 bg-[-70px_-210px] rounded-[42px] float-left h-[42px] w-[42px] relative 
                   inline-block leading-none overflow-hidden indent-[-9999px] align-top"
                   >
-                    <Image
-                      src={
-                        follower.attributes.subscriber.data.attributes.profile
-                          ?.data.attributes.url!
-                      }
-                      alt={
-                        follower.attributes.subscriber.data.attributes.username
-                      }
-                      fill={true}
-                    />
+                    {follower.attributes.subscriber.data.attributes.profile
+                      ?.data && (
+                      <Image
+                        src={
+                          follower.attributes.subscriber.data.attributes.profile
+                            ?.data.attributes.formats.thumbnail.url
+                        }
+                        alt={
+                          follower.attributes.subscriber.data.attributes
+                            .username
+                        }
+                        fill={true}
+                      />
+                    )}
                   </Link>
                   <Link
                     href={`/user/${follower.attributes.subscriber.data.id}`}
@@ -118,9 +122,12 @@ export default function Authors({
                     className="bg-ico-brunch-sub3 bg-[-70px_-210px] rounded-[42px] float-left h-[42px] w-[42px] relative 
                       inline-block leading-none overflow-hidden indent-[-9999px] align-top"
                   >
-                    {follower.attributes.profile && (
+                    {follower.attributes.profile?.data && (
                       <Image
-                        src={follower.attributes.profile.data.attributes.url}
+                        src={
+                          follower.attributes.profile.data.attributes.formats
+                            .thumbnail.url
+                        }
                         alt={follower.attributes.username}
                         fill={true}
                       />

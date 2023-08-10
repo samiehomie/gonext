@@ -325,6 +325,10 @@ body {
     animation: animation_up_linear 0.2s;
     transition: opacity 0.2s ease-out 0s, transform 0.2s ease-out 0s;
   }
+  .animation-up-50 {
+    animation: animation_up 0.5s;
+    transition: opacity 0.2s ease-out 0s, transform 0.5s ease-out 0s;
+  }
   .zoom-motion {
     animation-name: zoom;
     animation-duration: 0.4s;

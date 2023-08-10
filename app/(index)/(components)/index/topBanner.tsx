@@ -55,9 +55,8 @@ function InnerPaging({
             )
           }
           return (
-            <a
+            <button
               key={slide.key}
-              href="#"
               className={`inline-block ${
                 isBig ? 'h-[24px]' : 'h-[4px]'
               } w-[24px] p-[4px] float-left align-top`}
@@ -76,7 +75,7 @@ function InnerPaging({
                   isWhite ? 'bg-zinc-300' : 'bg-zinc-500'
                 }`}
               ></span>
-            </a>
+            </button>
           )
         })}
       </div>

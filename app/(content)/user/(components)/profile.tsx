@@ -68,7 +68,6 @@ export default function Profile({ userData }: { userData: user }) {
     }
   }, [tabs])
 
-  console.log('gggggg', followers, userData.id)
   if (!user || !followers) return null
   if (!followings && user?.isLoggedIn) return null
 
@@ -95,7 +94,7 @@ export default function Profile({ userData }: { userData: user }) {
           <div className="relative zoom-motion h-full">
             <Image
               priority
-              src={userData.profile?.url as string}
+              src={userData.profile?.url!}
               alt={userData.username}
               width={500}
               height={500}
@@ -106,7 +105,7 @@ export default function Profile({ userData }: { userData: user }) {
         </div>
         <div className="w-[100px] absolute h-[100px] overflow-hidden right-0 top-[-50px]">
           <Image
-            src={userData.profile?.url as string}
+            src={userData.profile?.formats.thumbnail.url!}
             alt={userData.username}
             width={100}
             height={100}

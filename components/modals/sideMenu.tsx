@@ -6,6 +6,7 @@ import Link from 'next/link'
 import defaultProfile from '@/public/default.jpg'
 import LogOut from '../buttons/logOut'
 import useUser from '@/lib/useUser'
+import { usePathname } from 'next/navigation'
 
 function InnerContainer({
   children,
@@ -26,58 +27,18 @@ function InnerContainer({
   )
 }
 
-function CommonContent() {
+function CommonContent({ path }: { path: string | null }) {
   return (
     <>
       <li className="h-[13px] leading-[13px] py-[12.5px] m-auto w-[240px]">
-        <a
+        <Link
           href="/"
-          className="text-[#00c6be] block h-[13px] leading-[14px] text-[14px] relative"
+          className={`hover:text-[#00c6be] block h-[13px] leading-[14px] text-[14px] relative ${
+            path === '/' && 'text-[#00c6be] pointer-events-none'
+          }`}
         >
-          <span
-            className="absolute top-[6px] block border-b 
-                  border-[#00c6be] w-[8px] left-[50px]"
-          ></span>
           브런치스토리 홈
-          <span
-            className="absolute top-[6px] block border-b 
-                  border-[#00c6be] w-[8px] right-[50px]"
-          ></span>
-        </a>
-      </li>
-      <li className="h-[13px] leading-[13px] py-[12.5px] m-auto w-[240px] ">
-        <a
-          href="#"
-          className="hover:text-[#00c6be] block h-[13px] leading-[14px] 
-                  text-[14px] group relative"
-        >
-          <span
-            className="absolute top-[6px] block border-b opacity-0
-                  border-[#00c6be] w-[8px] left-[50px] group-hover:opacity-100"
-          ></span>
-          브런치스토리 나우
-          <span
-            className="absolute top-[6px] block border-b opacity-0
-                  border-[#00c6be] w-[8px] right-[50px] group-hover:opacity-100"
-          ></span>
-        </a>
-      </li>
-      <li className="h-[13px] leading-[13px] py-[12.5px] m-auto w-[240px]">
-        <a
-          href="#"
-          className="hover:text-[#00c6be] block h-[13px] leading-[14px] text-[14px] 
-                    group relative"
-        >
-          <span
-            className="absolute top-[6px] block border-b opacity-0
-                  border-[#00c6be] w-[8px] left-[50px] group-hover:opacity-100"
-          ></span>
-          브런치스토리 책방
-          <span
-            className="absolute top-[6px] block border-b opacity-0
-                  border-[#00c6be] w-[8px] right-[50px] group-hover:opacity-100"
-          ></span>
-        </a>
+        </Link>
       </li>
     </>
   )
@@ -85,13 +46,12 @@ function CommonContent() {
 
 function UserProfile({ user }: { user: userSession }) {
   const { username, id, avatar } = user
-  const imgUrl = avatar || defaultProfile
   return (
     <div className="bg-[#f6f6f6] h-[239px] overflow-hidden realtive font-noto_sans_light">
       <Link href={`/user/${id}`}>
         <div className="w-[60px] m-[40px_auto_0px]">
           <Image
-            src={imgUrl}
+            src={avatar}
             alt={username as string}
             height={60}
             width={60}
@@ -149,47 +109,42 @@ function UserOnlyButton() {
   )
 }
 
-function UserOnlyMenu() {
+function UserOnlyMenu({
+  user,
+  path
+}: {
+  user: userSession
+  path: string | null
+}) {
   return (
     <>
       <li className="h-[13px] leading-[13px] py-[12.5px] m-auto w-[240px] ">
-        <a
-          href="#"
-          className="hover:text-[#00c6be] block h-[13px] leading-[14px] 
-                  text-[14px] group relative"
+        <Link
+          href={`/user/${user.id}`}
+          className={`hover:text-[#00c6be] block h-[13px] leading-[14px] 
+                  text-[14px] group relative ${
+                    path === `/user/${user.id}` &&
+                    'text-[#00c6be] pointer-events-none'
+                  }`}
         >
-          <span
-            className="absolute top-[6px] block border-b opacity-0
-                  border-[#00c6be] w-[8px] left-[50px] group-hover:opacity-100"
-          ></span>
           내 브랜치스토리
-          <span
-            className="absolute top-[6px] block border-b opacity-0
-                  border-[#00c6be] w-[8px] right-[50px] group-hover:opacity-100"
-          ></span>
-        </a>
+        </Link>
       </li>
       <li className="h-[13px] leading-[13px] py-[12.5px] m-auto w-[240px] ">
         <Link
           href="/ready"
-          className="hover:text-[#00c6be] block h-[13px] leading-[14px] 
-                  text-[14px] group relative"
+          className={`hover:text-[#00c6be] block h-[13px] leading-[14px] 
+                  text-[14px] group relative ${
+                    path === '/ready' && 'text-[#00c6be] pointer-events-none'
+                  }`}
         >
-          <span
-            className="absolute top-[6px] block border-b opacity-0
-                  border-[#00c6be] w-[8px] left-[50px] group-hover:opacity-100"
-          ></span>
           작가의 서랍
-          <span
-            className="absolute top-[6px] block border-b opacity-0
-                  border-[#00c6be] w-[8px] right-[50px] group-hover:opacity-100"
-          ></span>
         </Link>
       </li>
-      <li
+      {/* <li
         className="block bg-ico-ico-sidebar bg-[-52px_-5px] h-[15px] w-[140px] 
                   m-[30px_auto_32px] leading-[13px]"
-      ></li>
+      ></li> */}
     </>
   )
 }
@@ -204,6 +159,7 @@ export default function SideMenu({
   setOnSide: (arg: boolean) => void
 }) {
   const { user } = useUser()
+  const pathname = usePathname()
 
   useEffect(() => {
     document.addEventListener('click', function handler(e) {
@@ -218,6 +174,8 @@ export default function SideMenu({
     })
   }, [onSide, setOnSide])
 
+  if (!user) return null
+  console.log('user--------->', user)
   return (
     <InnerContainer onSide={onSide}>
       {user?.isLoggedIn ? (
@@ -255,8 +213,8 @@ export default function SideMenu({
       )}
       <div className="border-t border-[#ddd] overflow-y-auto pt-[28px] h-[427px]">
         <ul>
-          {user?.isLoggedIn && <UserOnlyMenu />}
-          <CommonContent />
+          <CommonContent path={pathname} />
+          {user?.isLoggedIn && <UserOnlyMenu user={user} path={pathname} />}
         </ul>
 
         <div className="absolute mb-[37px] mt-[40px] bottom-0 w-full text-center">

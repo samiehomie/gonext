@@ -4,6 +4,7 @@ import type { user } from '@/types'
 import CommentForm from './commentForm'
 import Comments from './comments'
 import useComment from '@/lib/useComment'
+import Link from 'next/link'
 
 export default function CommentContainer({
   user,
@@ -40,9 +41,9 @@ export default function CommentContainer({
                         key={tag + i}
                         className="float-left mb-[8px] mr-[8px]"
                       >
-                        <a href="#" className="writing-tag tracking-[-.5px]">
+                        <Link href={`/keyword/writing/${tag}`} className="writing-tag tracking-[-.5px]">
                           {tag}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                 </ul>

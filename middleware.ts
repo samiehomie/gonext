@@ -61,17 +61,12 @@ export const middleware = async (req: NextRequest) => {
         if (!accessToken) {
           throw new Error(`There isn't a given access_token`)
         }
-        console.log('access_github -------->', req.nextUrl.href)
-        // const res: Response = await debouncedFetch(
-        //   `${process.env.NEXT_PUBLIC_DB_URL}/api/auth/github/callback?access_token=` +
-        //     accessToken
-        // )!
+    
         const res: Response = await fetch(
           `${process.env.NEXT_PUBLIC_DB_URL}/api/auth/github/callback?access_token=` +
             accessToken
         )!
 
-        console.log('res-------///---->', res)
 
         if (!res.ok) {
           throw new Error('Failed to fetch user data')
@@ -82,15 +77,14 @@ export const middleware = async (req: NextRequest) => {
           {
             id: data.user.id,
             username: data.user.username,
-            avatar: data.user.profile?.url || defaultImg,
+            avatar: data.user.profile?.url,
             isLoggedIn: true,
             jwt: data.jwt,
             subscription: data.user.subscription?.id
           },
           { password: process.env.SESSION_SECRET! }
         )
-        console.log('back----------->', back)
-
+        
         return NextResponse.redirect(
           `${process.env.NEXT_PUBLIC_FRONT_URL}${back || ''}?seal=${dataSealed}`
         )

@@ -56,7 +56,6 @@ const ResponsiveImage = async (props: imgAttrsMDX) => {
 const ItemInParagraph = async (
   content: paraImgAttrsMDX['children'] | string
 ) => {
-  console.dir('pi---->', content)
   switch (typeof content) {
     case 'string':
       return (
@@ -123,8 +122,5 @@ export function CustomMDX(props: any) {
 }
 
 export default function Markdown({ content }: { content: string }) {
-  console.log('----시작----')
-  console.dir(content)
-  console.log('----종료----')
   return <CustomMDX source={content} />
 }

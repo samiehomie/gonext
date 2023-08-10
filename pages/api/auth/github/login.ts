@@ -12,7 +12,7 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     const user = await unsealData<userSession>(seal, {
       password: process.env.SESSION_SECRET!
     })
-    console.log('----------------confirm', user)
+    
     // const id = req.cookies['id'] as string
     // const jwt = req.cookies['jwt'] as string
     // const username = req.cookies['username'] as string

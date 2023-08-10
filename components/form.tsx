@@ -391,7 +391,7 @@ export default function Form({
                   className={`hidden`}
                   onChange={(e) => {
                     setCover(e.target.files![0])
-                    console.log(typeof e.target.files![0])
+    
                     handleColor(URL.createObjectURL(e.target.files![0]))
                   }}
                 />

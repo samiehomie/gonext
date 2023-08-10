@@ -2,10 +2,9 @@ import type { users } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import defaultProfile from '@/public/default.jpg'
-import { getFilteredQuery } from '@/lib/queries'
+import { getUsersFilteredQuery } from '@/lib/queries'
 import fetchJson from '@/lib/fetchJson'
 import TopTabs from './topTabs'
-import { Suspense } from 'react'
 
 function getRandomElementExcept(arr: string[], except: string) {
   const filteredArr = arr.filter((el) => el !== except)
@@ -28,7 +27,8 @@ async function AuthorsGroup({
   tag: string
   tagIndex: number
 }) {
-  const query = getFilteredQuery(tag)
+  const query = getUsersFilteredQuery(tag)
+
   const users = await fetchJson<users>(
     `${process.env.NEXT_PUBLIC_DB_URL}/api/users?` + query
   )
@@ -40,65 +40,71 @@ async function AuthorsGroup({
         tagIndex !== 0 && 'hidden'
       }`}
     >
-      {users.map((user) => (
-        <li
-          key={user.id}
-          className="float-left h-full mb-[15px] relative text-center w-[310px]"
-        >
-          <Link
-            href={`/user/${user.id}`}
-            className="bg-[#fff] block min-h-[288px] py-[46px] px-[40px]"
+      {users.map((user) => {
+        const anotherTag = getRandomElementExcept(user.tags!, tag)
+        return (
+          <li
+            key={user.id}
+            className="float-left h-full mb-[15px] relative text-center w-[310px]"
           >
-            <Image
-              src={user.profile ? user.profile.url : defaultProfile}
-              alt={user.username}
-              width={80}
-              height={80}
-              className="m-auto rounded-full"
-            />
-            <strong className="font-serif_mj tit_writer block overflow-hidden text-ellipsis">
-              {user.username}
-            </strong>
-            <span
-              className="text-[#666] block overflow-hidden
+            <Link
+              href={`/user/${user.id}`}
+              className="bg-[#fff] block min-h-[288px] py-[46px] px-[40px]"
+            >
+              <Image
+                src={user.profile ? user.profile.url : defaultProfile}
+                alt={user.username}
+                width={80}
+                height={80}
+                className="m-auto rounded-full"
+              />
+              <strong className="font-serif_mj tit_writer block overflow-hidden text-ellipsis">
+                {user.username}
+              </strong>
+              <span
+                className="text-[#666] block overflow-hidden
                       font-thin mt-[4px] tracking-[-.02em] 
                       text-ellipsis whitespace-nowrap text-[12px]"
-            >
-              {user.job}
-            </span>
-            <span
-              className="block h-[60px] text-[#959595] overflow-hidden
+              >
+                {user.job}
+              </span>
+              <span
+                className="block h-[60px] text-[#959595] overflow-hidden
                       text-[12px] leading-[20px] mt-[16px]  
                       text-ellipsis break-all"
-            >
-              {user.introduction}
-            </span>
-          </Link>
-          {/* weekly_writer_tags */}
-          <div className="absolute w-full bottom-[46px] mt-[43px] text-center">
-            <button
-              className="border border-[#ddd] rounded-[20px] text-[#959595]
-                      text-[12px] tracking-[-1px] py-[4px] px-[10px] 
+              >
+                {user.introduction}
+              </span>
+            </Link>
+            {/* weekly_writer_tags */}
+            <div className="absolute w-full bottom-[46px] mt-[43px] text-center">
+              <Link
+                href={`/keyword/user/${tag}`}
+                className="border border-[#ddd] rounded-[20px] text-[#959595]
+                      text-[12px] tracking-[-1px] py-[4px] px-[10px] align-middle
                       inline-block leading-[18px] mx-[2px] overflow-hidden"
-            >
-              {tag}
-            </button>
-            <button
-              className="border border-[#ddd] rounded-[20px] text-[#959595]
-                      text-[12px] tracking-[-1px] py-[4px] px-[10px] 
+              >
+                {tag}
+              </Link>
+              <Link
+                href={`/keyword/user/${anotherTag}`}
+                className="border border-[#ddd] rounded-[20px] text-[#959595]
+                      text-[12px] tracking-[-1px] py-[4px] px-[10px] align-middle
                       inline-block leading-[18px] mx-[2px] overflow-hidden"
-            >
-              {getRandomElementExcept(user.tags!, tag)}
-            </button>
-            <button
-              className="h-[28px] w-[35px] rounded-[20px] indent-[-9999px] 
-                      mx-[2px] bg-ico-brunch-main bg-[-280px_-70px]"
-            >
-              더보기
-            </button>
-          </div>
-        </li>
-      ))}
+              >
+                {anotherTag}
+              </Link>
+              <Link
+                href={`/user/${user.id}`}
+                className="h-[28px] w-[35px] rounded-[20px] indent-[-9999px] 
+                      mx-[2px] bg-ico-brunch-main bg-[-280px_-70px] inline-block"
+              >
+                더보기
+              </Link>
+            </div>
+          </li>
+        )
+      })}
     </ul>
   )
 }
@@ -133,7 +139,10 @@ export default async function WritersWeekly() {
           ))}
         </div>
       </div>
-      <a href="#" className="block w-[960px] mt-[97px] mx-auto">
+      <a
+        href={process.env.NEXT_PUBLIC_TEMP}
+        className="block w-[960px] mt-[97px] mx-auto"
+      >
         <Image
           src={'https://i.ibb.co/RzDjwS8/brunch-apply.png'}
           alt={'brunch-apply'}

@@ -16,7 +16,7 @@ export default function TopTabs({ tags }: { tags: string[] }) {
             )
             const merged = tabs.map((item, index) => [item, buttons[index]])
             merged.forEach(([tab, button]) => {
-              console.log(tab.id, button.id)
+
               if (tab.id === `tab-${i}`) {
                 tab.style.display = 'block'
                 button.style.borderColor = '#00c6be'

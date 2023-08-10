@@ -14,7 +14,7 @@ export default function Page() {
       <IndexContainer>
         <>
           <TopContentContainer />
-          <Keywords />
+          {/* <Keywords /> */}
           <WritersWeekly />
           <RecommendContainer />
           <IndexFooter />
