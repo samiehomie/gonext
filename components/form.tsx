@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 import Image from 'next/image'
 import { getColor } from 'color-thief-react'
 import TopNavigation from '@/components/navigations/topNavigation'
-import ContentEditable from 'react-contenteditable'
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
 import fetchJson from '@/lib/fetchJson'
 import useUser from '@/lib/useUser'
 import { getDateString } from '@/lib/utils'
@@ -35,12 +35,6 @@ export default function Form({
 }) {
   const [menuColor, setMenuColor] = useState(initialMenuColor)
   const [cover, setCover] = useState<Blob | null | string>(coverUrl!)
-  const [title, setTitle] = useState(
-    writingData ? writingData.data.attributes.title : ''
-  )
-  const [subTitle, setSubTitle] = useState(
-    writingData ? writingData.data.attributes.subtitle || '' : ''
-  )
   const [isLoading, setIsLoading] = useState(false)
   const [block, setBlock] = useState(false)
   const [isDone, setIsDone] = useState(false)
@@ -74,13 +68,17 @@ export default function Form({
     setIsLoading(false)
   }
 
-  const handleTitle = (e: any) => {
-    titleRef.current = e.target.value
-    setTitle(e.target.value)
+  const handleTitle = (e: ContentEditableEvent) => {
+    const text = e.target.value
+    const titleLabel = document.getElementById('title-label')
+    titleLabel!.style.display = text.length === 0 ? 'inline-block' : 'none'
+    titleRef.current = text
   }
-  const handleSubTitle = (e: any) => {
-    subTitleRef.current = e.target.value
-    setSubTitle(e.target.value)
+  const handleSubTitle = (e: ContentEditableEvent) => {
+    const text = e.target.value
+    const subtitleLabel = document.getElementById('subtitle-label')
+    subtitleLabel!.style.display = text.length === 0 ? 'inline-block' : 'none'
+    subTitleRef.current = text
   }
 
   function restoreToolbar() {
@@ -98,7 +96,7 @@ export default function Form({
     setIsLoading(true)
     const markdownContent = editorRef.current?.getInstance().getMarkdown()!
 
-    if (!title || !markdownContent) {
+    if (!titleRef.current || !markdownContent) {
       setIsLoading(false)
       setBlock(true)
       return setTimeout(() => {
@@ -123,8 +121,8 @@ export default function Form({
         : { publishedAt: null }
 
     const data = {
-      title: title,
-      subtitle: subTitle,
+      title: titleRef.current,
+      subtitle: subTitleRef.current,
       user: `${userMe!.id}`,
       content: sanitizeHtml(contentData, {
         transformTags: {
@@ -300,26 +298,26 @@ export default function Form({
               html={titleRef.current}
               onChange={handleTitle}
               id="write-title"
-              className={`outline-none ml-[-3px] text-[34pt] inline-block max-w-[700px] min-w-[100px] 
+              className={`outline-none ml-[-3px] text-[34pt] inline-block max-w-[700px] min-w-[100px]
                   font-serif_mj leading-[40pt] word-wrap-break ${
                     menuColor === 'black' ? 'text-[#333]' : 'text-white'
                   }`}
             />
 
-            {!title && (
-              <span
-                onClick={() => {
-                  const title = document.getElementById('write-title')
-                  title?.focus()
-                }}
-                className={`font-serif_mj cursor-text box-border leading-[40pt] opacity-60 
-                word-wrap-break text-[38pt] inline-block absolute w-full left-0 ${
+            <span
+              id="title-label"
+              onClick={() => {
+                const title = document.getElementById('write-title')
+                title?.focus()
+              }}
+              className={`font-serif_mj cursor-text box-border leading-[40pt] opacity-60 
+                word-wrap-break text-[38pt] absolute w-full left-0 ${
                   menuColor === 'black' ? 'text-[#333]' : 'text-white'
-                }`}
-              >
-                제목을 입력하세요
-              </span>
-            )}
+                } ${!titleRef.current ? 'inline-block' : 'hidden'}`}
+            >
+              제목을 입력하세요
+            </span>
+
             <br />
             {/* 소제목 입력란 */}
             <ContentEditable
@@ -332,20 +330,19 @@ export default function Form({
                   }`}
             />
 
-            {!subTitle && (
-              <span
-                onClick={() => {
-                  const subtitle = document.getElementById('write-subtitle')
-                  subtitle?.focus()
-                }}
-                className={`cursor-text box-border leading-[18pt] opacity-60 
+            <span
+              id="subtitle-label"
+              onClick={() => {
+                const subtitle = document.getElementById('write-subtitle')
+                subtitle?.focus()
+              }}
+              className={`cursor-text box-border leading-[18pt] opacity-60 
                 word-wrap-break text-[12pt] inline-block absolute w-full left-0 bottom-0 ${
                   menuColor === 'black' ? 'text-[#333]' : 'text-white'
-                }`}
-              >
-                소제목을 입력하세요
-              </span>
-            )}
+                } ${!subTitleRef.current ? 'inline-block' : 'hidden'}`}
+            >
+              소제목을 입력하세요
+            </span>
           </div>
         </div>
 
@@ -391,7 +388,7 @@ export default function Form({
                   className={`hidden`}
                   onChange={(e) => {
                     setCover(e.target.files![0])
-    
+
                     handleColor(URL.createObjectURL(e.target.files![0]))
                   }}
                 />

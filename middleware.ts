@@ -21,6 +21,8 @@ declare module 'iron-session' {
   }
 }
 
+const regexAuth = /^\/(write|ready|me)/;
+
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
   const session = await getIronSession(req, res, sessionOptions)
@@ -38,7 +40,7 @@ export const middleware = async (req: NextRequest) => {
     return res
   }
 
-  if (req.nextUrl.pathname === '/write' || req.nextUrl.pathname === '/ready') {
+  if (regexAuth.test(req.nextUrl.pathname)) {
     if (!user?.isLoggedIn) {
       return NextResponse.redirect(
         `${process.env.NEXT_PUBLIC_FRONT_URL}?signin`
