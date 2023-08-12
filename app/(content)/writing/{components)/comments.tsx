@@ -16,6 +16,7 @@ function Comment({
   writingId: string
 }) {
   const [isForm, setIsForm] = useState(false)
+  if (!comment.user) return null
   return (
     <div>
       {isForm ? (

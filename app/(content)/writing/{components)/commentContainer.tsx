@@ -41,7 +41,10 @@ export default function CommentContainer({
                         key={tag + i}
                         className="float-left mb-[8px] mr-[8px]"
                       >
-                        <Link href={`/keyword/writing/${tag}`} className="writing-tag tracking-[-.5px]">
+                        <Link
+                          href={`/keyword/writing/${tag}`}
+                          className="writing-tag tracking-[-.5px]"
+                        >
                           {tag}
                         </Link>
                       </li>
@@ -59,7 +62,7 @@ export default function CommentContainer({
                   ></span>
                   <span>댓글</span>
                   <span className="font-sf_light text-[#00c6be] ml-[3px]">
-                    {comments.length}
+                    {comments.filter((c) => !!c.user).length}
                   </span>
                 </button>
               </span>
@@ -77,7 +80,7 @@ export default function CommentContainer({
           <strong className="ml-[-1px] pt-[4px] float-left font-normal text-[16px]">
             댓글{' '}
             <span className="text-[#00c6be] pl-[5px] font-sf_light text-[16px] font-normal">
-              {comments.length}
+              {comments.filter((c) => !!c.user).length}
             </span>
           </strong>
         </div>

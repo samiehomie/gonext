@@ -17,6 +17,8 @@ import sanitizeHtml from 'sanitize-html'
 import Link from 'next/link'
 import type { writing, resCreateWriting } from '@/types'
 import { toolbar } from '@/components/editor'
+import CustomInput from '@/components/customInput'
+import { TextareaAutosize } from '@mui/base/TextareaAutosize'
 
 const uploader = Uploader({
   apiKey: process.env.NEXT_PUBLIC_UPLOAD_API_KEY!
@@ -43,11 +45,15 @@ export default function Form({
   const [updateId, setUpdateId] = useState(
     writingData ? writingData.data.id : null
   )
+  const titleInitial = writingData ? writingData.data.attributes.title : ''
+  const subTitleInitial = writingData
+    ? writingData.data.attributes.subtitle
+      ? writingData.data.attributes.subtitle
+      : ''
+    : ''
   const imgInputRef = useRef<HTMLInputElement>(null)
-  const titleRef = useRef(writingData ? writingData.data.attributes.title : '')
-  const subTitleRef = useRef(
-    writingData ? writingData.data.attributes.subtitle || '' : ''
-  )
+  const titleRef = useRef(titleInitial)
+  const subTitleRef = useRef(subTitleInitial)
   const editorRef = useRef<Editor>(null)
 
   const handleColor = async (url: string) => {
@@ -66,19 +72,6 @@ export default function Form({
     const response = await uploader.uploadFile(blob)
     callback(response.fileUrl)
     setIsLoading(false)
-  }
-
-  const handleTitle = (e: ContentEditableEvent) => {
-    const text = e.target.value
-    const titleLabel = document.getElementById('title-label')
-    titleLabel!.style.display = text.length === 0 ? 'inline-block' : 'none'
-    titleRef.current = text
-  }
-  const handleSubTitle = (e: ContentEditableEvent) => {
-    const text = e.target.value
-    const subtitleLabel = document.getElementById('subtitle-label')
-    subtitleLabel!.style.display = text.length === 0 ? 'inline-block' : 'none'
-    subTitleRef.current = text
   }
 
   function restoreToolbar() {
@@ -293,56 +286,32 @@ export default function Form({
             className={`text-left absolute bottom-0 right-[50%] w-[700px] z-[11] 
                 translate-x-[50%] translate-y-[-80px]`}
           >
-            {/* 대제목 입력란 */}
-            <ContentEditable
-              html={titleRef.current}
-              onChange={handleTitle}
-              id="write-title"
-              className={`outline-none ml-[-3px] text-[34pt] inline-block max-w-[700px] min-w-[100px]
-                  font-serif_mj leading-[40pt] word-wrap-break ${
-                    menuColor === 'black' ? 'text-[#333]' : 'text-white'
-                  }`}
-            />
-
-            <span
-              id="title-label"
-              onClick={() => {
-                const title = document.getElementById('write-title')
-                title?.focus()
+            {/* 제목 입력란 */}
+            <TextareaAutosize
+              onInput={(e) => {
+                titleRef.current = e.currentTarget.value
               }}
-              className={`font-serif_mj cursor-text box-border leading-[40pt] opacity-60 
-                word-wrap-break text-[38pt] absolute w-full left-0 ${
+              defaultValue={titleInitial}
+              placeholder="제목을 입력하세요"
+              maxLength={30}
+              className={`outline-none ml-[-3px] w-full text-[34pt] inline-block max-w-[700px] min-w-[100px]
+                font-serif_mj leading-[40pt] word-wrap-break bg-transparent resize-none ${
                   menuColor === 'black' ? 'text-[#333]' : 'text-white'
-                } ${!titleRef.current ? 'inline-block' : 'hidden'}`}
-            >
-              제목을 입력하세요
-            </span>
-
+                }`}
+            />
             <br />
-            {/* 소제목 입력란 */}
-            <ContentEditable
-              html={subTitleRef.current}
-              id="write-subtitle"
-              onChange={handleSubTitle}
-              className={`outline-none inline-block max-w-[700px] min-w-[100px] text-[12pt] leading-[18pt] 
-                  opacity-80 pt-[10px] word-wrap-break ${
-                    menuColor === 'black' ? 'text-[#333]' : 'text-white'
-                  }`}
-            />
-
-            <span
-              id="subtitle-label"
-              onClick={() => {
-                const subtitle = document.getElementById('write-subtitle')
-                subtitle?.focus()
+            <TextareaAutosize
+              onInput={(e) => {
+                subTitleRef.current = e.currentTarget.value
               }}
-              className={`cursor-text box-border leading-[18pt] opacity-60 
-                word-wrap-break text-[12pt] inline-block absolute w-full left-0 bottom-0 ${
-                  menuColor === 'black' ? 'text-[#333]' : 'text-white'
-                } ${!subTitleRef.current ? 'inline-block' : 'hidden'}`}
-            >
-              소제목을 입력하세요
-            </span>
+              defaultValue={subTitleInitial}
+              placeholder="소제목을 입력하세요"
+              maxLength={30}
+              className={`outline-none inline-block max-w-[700px] min-w-[100px] text-[12pt] leading-[18pt] 
+              opacity-80 pt-[10px] word-wrap-break w-full bg-transparent ${
+                menuColor === 'black' ? 'text-[#333]' : 'text-white'
+              }`}
+            />
           </div>
         </div>
 

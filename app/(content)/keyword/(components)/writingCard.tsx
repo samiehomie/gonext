@@ -49,7 +49,9 @@ export default function WritingCard({
           </div>
           <span className="text-[#959595] block text-[12px] overflow-hidden pt-[20px]">
             <span className="float-left">댓글</span>
-            <span className="float-left">{comments.length}</span>
+            <span className="float-left">
+              {comments.filter((c) => !!c.user).length}
+            </span>
             <span className="float-left bg-[#aaa] inline-block h-[2px] m-[8px_6px_0px] align-top w-[2px]" />
             <span className="float-left">{createdAt}</span>
             <span className="float-left bg-[#aaa] inline-block h-[2px] m-[8px_6px_0px] align-top w-[2px]" />

@@ -9,8 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
+    "@mui/base": "^5.0.0-beta.10",
+    "@mui/material": "^5.14.4",
     "@toast-ui/editor": "^3.2.2",
     "@toast-ui/react-editor": "^3.2.3",
     "@types/jsonwebtoken": "^9.0.2",

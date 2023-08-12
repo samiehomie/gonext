@@ -72,7 +72,7 @@ export default function Writing({
         </div>
         <span className=" whitespace-nowrap text-[#959595] block text-[12px] overflow-hidden pt-[21px]">
           <span className="float-left">댓글</span>
-          <span className="float-left">{comments.length}</span>
+          <span className="float-left">{comments.filter((c) => !!c.user).length}</span>
           <span className="float-left bg-[#ddd] inline-block h-[2px] w-[2px] align-top m-[9px_5px_0px_6px]"></span>
           <span className="float-left text-[#959595]">
             {writing.publishedAt && getEnglishDate(writing.publishedAt)}
