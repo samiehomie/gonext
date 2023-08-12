@@ -89,7 +89,7 @@ function UserProfile({ user }: { user: userSession }) {
 function UserOnlyButton() {
   return (
     <>
-      <Link href={'#'}>
+      <Link href={'/me/setting'}>
         <button
           className="border border-[#bbb] rounded-[16px] text-[#959595] text-[13px] 
                     h-[32px] mx-[2px] w-[80px]"

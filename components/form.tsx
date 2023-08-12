@@ -17,7 +17,6 @@ import sanitizeHtml from 'sanitize-html'
 import Link from 'next/link'
 import type { writing, resCreateWriting } from '@/types'
 import { toolbar } from '@/components/editor'
-import CustomInput from '@/components/customInput'
 import { TextareaAutosize } from '@mui/base/TextareaAutosize'
 
 const uploader = Uploader({
@@ -308,7 +307,7 @@ export default function Form({
               placeholder="소제목을 입력하세요"
               maxLength={30}
               className={`outline-none inline-block max-w-[700px] min-w-[100px] text-[12pt] leading-[18pt] 
-              opacity-80 pt-[10px] word-wrap-break w-full bg-transparent ${
+              opacity-80 pt-[10px] word-wrap-break w-full bg-transparent resize-none ${
                 menuColor === 'black' ? 'text-[#333]' : 'text-white'
               }`}
             />

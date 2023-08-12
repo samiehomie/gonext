@@ -16,12 +16,14 @@ declare module 'iron-session' {
       avatar: string
       isLoggedIn: boolean
       subscription: null | number
+      introduction: string
+      tags: null | string[]
     }
     back?: string
   }
 }
 
-const regexAuth = /^\/(write|ready|me)/;
+const regexAuth = /^\/(write|ready|me)/
 
 export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
@@ -63,12 +65,11 @@ export const middleware = async (req: NextRequest) => {
         if (!accessToken) {
           throw new Error(`There isn't a given access_token`)
         }
-    
+
         const res: Response = await fetch(
           `${process.env.NEXT_PUBLIC_DB_URL}/api/auth/github/callback?access_token=` +
             accessToken
         )!
-
 
         if (!res.ok) {
           throw new Error('Failed to fetch user data')
@@ -82,11 +83,13 @@ export const middleware = async (req: NextRequest) => {
             avatar: data.user.profile?.url,
             isLoggedIn: true,
             jwt: data.jwt,
-            subscription: data.user.subscription?.id
+            subscription: data.user.subscription?.id,
+            introduction: data.user.introduction,
+            tags: data.user.tags
           },
           { password: process.env.SESSION_SECRET! }
         )
-        
+
         return NextResponse.redirect(
           `${process.env.NEXT_PUBLIC_FRONT_URL}${back || ''}?seal=${dataSealed}`
         )

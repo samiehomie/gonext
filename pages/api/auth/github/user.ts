@@ -21,7 +21,9 @@ async function userRoute(
       username: '',
       id: '',
       jwt: '',
-      subscription: null
+      subscription: null,
+      introduction: '',
+      tags: null
     })
   }
 }

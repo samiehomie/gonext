@@ -24,6 +24,20 @@ body {
   color: #8d8d8d;
 }
 
+/* react input tags */
+
+.ReactTags__tag {
+  @apply text-[12px] font-noto_sans_demlight float-left mr-[8px] border border-[#ddd] 
+  text-[#959595] inline-block rounded-[15px] py-[4px] pl-[10px] pr-[1px] tracking-[-.2px];
+}
+.ReactTags__remove {
+  @apply indent-[-999px] bg-ico-brunch-sub bg-[-90px_0px] w-[20px] h-[20px] inline-block opacity-70 
+  pl-[5px] bg-no-repeat scale-[40%] align-top;
+}
+.ReactTags__tagInputField {
+  @apply text-[13px] font-noto_sans_light align-middle outline-none;
+}
+/* uploader */
 .uploader__backdrop.show {
   pointer-events: none !important;
 }
