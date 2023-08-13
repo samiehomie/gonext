@@ -3,9 +3,6 @@ import type { NextRequest } from 'next/server'
 import { getIronSession, sealData } from 'iron-session/edge'
 import { strapiUserResponse } from '@/types'
 import { sessionOptions } from '@/lib/session'
-import defaultImg from '@/public/default.png'
-// import { debounce } from 'lodash'
-// const debouncedFetch = debounce(fetch, 1000)
 
 declare module 'iron-session' {
   interface IronSessionData {
