@@ -10,6 +10,7 @@ async function userRoute(
   res: NextApiResponse<userSession>
 ) {
   if (req.session.user) {
+    console.log('This is user api --->', req.session)
     res.json({
       ...req.session.user,
       isLoggedIn: true

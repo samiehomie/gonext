@@ -13,7 +13,7 @@ export default async function AuthorPage({
 }) {
   const userData = await fetchJson<user>(
     `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${userId}${queryUser}`,
-    { next: { tags: ['userPage'] } }
+    { next: { tags: [`userPage_${userId}`] } }
   )
 
   return (
@@ -27,7 +27,7 @@ export default async function AuthorPage({
   )
 }
 
-export const revalidate = 3600
+export const revalidate = 36000
 
 export async function generateStaticParams() {
   const reqUrl = `${process.env.NEXT_PUBLIC_DB_URL}/api/users?${queryUser}`

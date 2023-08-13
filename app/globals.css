@@ -26,7 +26,7 @@ body {
 
 /* react input tags */
 
-.ReactTags__tag {
+#tags span.ReactTags__tag {
   @apply text-[12px] font-noto_sans_demlight float-left mr-[8px] border border-[#ddd] 
   text-[#959595] inline-block rounded-[15px] py-[4px] pl-[10px] pr-[1px] tracking-[-.2px];
 }

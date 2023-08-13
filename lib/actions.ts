@@ -1,9 +1,11 @@
 'use server'
 import { cookies } from 'next/headers'
-import { userSession } from '../types'
+import { userSession } from '@/types'
 import { revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import type { UploadWidgetResult } from 'uploader/dist/components/modal/UploadWidgetResult'
+import { sealData } from 'iron-session'
+import fetchJson from './fetchJson'
 
 export async function revalidateTagAction(tag: string) {
   revalidateTag(tag)
@@ -23,4 +25,16 @@ export async function deleteUploadImage(params: UploadWidgetResult) {
     const result = await response.json()
     throw new Error(`Upload API Error: ${JSON.stringify(result)}`)
   }
+}
+
+export async function getSeal(user: userSession) {
+  console.log('>>>>>>>>>>', user)
+  const dataSealed = await sealData(user, {
+    password: process.env.SESSION_SECRET!
+  })
+  // const resUser = await fetchJson<userSession>(
+  //   `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/login?seal=${dataSealed}`
+  // )
+  // console.log('>>>>>>>>>>', resUser)
+  return dataSealed
 }

@@ -89,14 +89,14 @@ function UserProfile({ user }: { user: userSession }) {
 function UserOnlyButton() {
   return (
     <>
-      <Link href={'/me/setting'}>
+      <a href={'/me/setting'}>
         <button
           className="border border-[#bbb] rounded-[16px] text-[#959595] text-[13px] 
                     h-[32px] mx-[2px] w-[80px]"
         >
           설정
         </button>
-      </Link>
+      </a>
       <LogOut>
         <button
           className="border border-[#bbb] rounded-[16px] text-[#959595] text-[13px] 
@@ -175,7 +175,7 @@ export default function SideMenu({
   }, [onSide, setOnSide])
 
   if (!user) return null
-  console.log('rerender!')
+  console.log('rerender!', user)
   return (
     <InnerContainer onSide={onSide}>
       {user?.isLoggedIn ? (

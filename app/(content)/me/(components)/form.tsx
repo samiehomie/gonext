@@ -4,31 +4,84 @@ import useUser from '@/lib/useUser'
 import Image from 'next/image'
 import TagInput from '@/components/tagInput'
 import { TextareaAutosize } from '@mui/base/TextareaAutosize'
+import { useRouter } from 'next/navigation'
+import sanitizeHtml from 'sanitize-html'
+import fetchJson from '@/lib/fetchJson'
+import { resUpdateUser } from '@/types'
+import { revalidateTagAction, getSeal } from '@/lib/actions'
 
 export default function SettingForm() {
   const { user, mutateUser } = useUser()
-  const imgInputRef = useRef<HTMLInputElement>(null)
-  const [profile, setProfile] = useState<Blob | null | string>()
+  const [profile, setProfile] = useState<Blob | null>()
+  const tagsRef = useRef<string[] | null | undefined>()
+  const editorRef = useRef<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+
+  async function handleSubmit(e: any) {
+    setIsLoading(true)
+    const contentData = editorRef.current
+      ? editorRef.current.replace(/\\(<[a-zA-Z]+.*?>)/g, '$1')
+      : user!.introduction
+
+    // const formData = new FormData()
+    // if (profile instanceof Blob) {
+    //   formData.append(`files.profile`, profile, profile.name || '프로필 이미지')
+    // }
+
+    const reqUrl = `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${user!.id}`
+    const method = 'PUT'
+
+    try {
+      const resData = await fetchJson<resUpdateUser>(reqUrl, {
+        method: method,
+        headers: {
+          Authorization: `Bearer ${user!.jwt}`,
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+          introduction: sanitizeHtml(contentData, {
+            transformTags: {
+              br: '\n'
+            }
+          }),
+          tags: tagsRef.current ? tagsRef.current : []
+        })
+      })
+      const seal = await getSeal({
+        ...user!,
+        introduction: resData.introduction,
+        tags: resData.tags
+      })
+      mutateUser(await fetchJson(`/api/auth/github/login?seal=${seal}`), false)
+      await revalidateTagAction(`userPage_${user!.id}`)
+    } catch (e) {
+      console.error(e)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+    router.push(`/user/${user!.id}`)
+  }
 
   if (!user) return null
-  console.log(user)
+  console.log('user is coming', user)
   return (
     <article className="font-noto_sans_light">
       <h2 className="screen-out">프로필 설정</h2>
       <div className="min-h-[120px] bg-[#f8f8f8] relative">
         <div className="w-[100px] h-[100px] absolute left-1/2 ml-[250px] bottom-[-50px] z-[5]">
           <Image
-            src={user.avatar}
+            src={profile ? URL.createObjectURL(profile) : user.avatar}
             alt={user.username}
             fill={true}
             className="object-cover rounded-full"
           />
           <label
             className="bg-ico-brunch-sub2 bg-[0px_-210px] bottom-0 h-[42px] absolute 
-                      w-[42px] right-[-13px] inline-block"
+                      w-[42px] right-[-13px] inline-block cursor-pointer"
           >
             <input
-              ref={imgInputRef}
               type="file"
               accept="image/*"
               className={`hidden`}
@@ -40,8 +93,8 @@ export default function SettingForm() {
         </div>
       </div>
       <div className="pb-[76px]">
-        <form>
-          <fieldset>
+        <div>
+          <div>
             <legend className="screen-out">프로필 편집 입력폼</legend>
             {/* 작가명 */}
             <div className="w-[700px] m-auto mb-[-4px] after:clear-both after:block after:content-['']">
@@ -91,7 +144,22 @@ export default function SettingForm() {
                 </h3>
               </div>
               <div className="pb-[6px] border-b border-[#eee] bg-white overflow-hidden">
-                <TagInput />
+                <TagInput
+                  initialTags={user.tags}
+                  tagsRef={tagsRef}
+                  isLoading={isLoading}
+                />
+              </div>
+              <div className="pt-[17px]">
+                <span
+                  className="border border-[#00c6be] text-[#00c6be] rounded-[8px] float-left text-[10px] 
+                            leading-[15px] m-[4px_6px_0px_0px] px-[4px] font-semibold"
+                >
+                  TIP
+                </span>
+                <p className="text-[#959595] text-[12px] leading-[20px] overflow-hidden">
+                  {` 쉼표와 엔터키로 구분하여 최대 5개의 태그를 입력할 수 있습니다.`}
+                </p>
               </div>
             </div>
             {/* 소개 */}
@@ -114,6 +182,10 @@ export default function SettingForm() {
               <div className="overflow-hidden bg-white border border-[#eee]">
                 <TextareaAutosize
                   defaultValue={user.introduction}
+                  disabled={isLoading}
+                  onInput={(e) => {
+                    editorRef.current = e.currentTarget.value
+                  }}
                   minRows={2}
                   maxLength={100}
                   className={`overflow-y-hidden resize-none p-[15px_20px_13px] bg-transparent outline-none
@@ -137,6 +209,8 @@ export default function SettingForm() {
             {/* 버튼 */}
             <div className="text-center mt-[30px] mb-[24px]">
               <button
+                onClick={() => router.push('/')}
+                disabled={isLoading}
                 className="w-[80px] mx-[4px] border border-[#bbb] rounded-[20px] text-[#666] 
                         bg-white box-border inline-block text-[13px] h-[32px] leading-[32px] min-w-[80px]
                         text-center align-top"
@@ -144,6 +218,8 @@ export default function SettingForm() {
                 취소하기
               </button>
               <button
+                onClick={handleSubmit}
+                disabled={isLoading}
                 className="w-[80px] mx-[4px] border border-[#00c6be] rounded-[20px] text-[#00c6be] 
                         bg-white box-border inline-block text-[13px] h-[32px] leading-[32px] min-w-[80px]
                         text-center align-top"
@@ -151,8 +227,8 @@ export default function SettingForm() {
                 저장하기
               </button>
             </div>
-          </fieldset>
-        </form>
+          </div>
+        </div>
       </div>
     </article>
   )

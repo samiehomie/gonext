@@ -15,6 +15,28 @@ export type resCreateWriting = {
   meta: {}
 }
 
+export type resUpdateUser = {
+  id: number
+  username: string
+  email: string
+  provider: string
+  confirmed: boolean
+  blocked: boolean
+  job: string
+  tags: string[] | null
+  introduction: string
+  createdAt: string
+  updatedAt: string
+  role: {
+    id: number
+    name: string
+    description: string
+    type: string
+    createdAt: string
+    updatedAt: string
+  }
+}
+
 export type comment = {
   id: number
   content: string

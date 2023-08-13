@@ -1,5 +1,6 @@
 import TopNavigation from '@/components/navigations/topNavigation'
 import SettingForm from '../(components)/form'
+
 export default function SettingPage() {
   return (
     <>

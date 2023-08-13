@@ -3,7 +3,6 @@ import { useRef, useState } from 'react'
 import Image from 'next/image'
 import { getColor } from 'color-thief-react'
 import TopNavigation from '@/components/navigations/topNavigation'
-import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
 import fetchJson from '@/lib/fetchJson'
 import useUser from '@/lib/useUser'
 import { getDateString } from '@/lib/utils'
@@ -144,7 +143,7 @@ export default function Form({
         body: formData
       })
       setUpdateId(resData.data.id)
-      await revalidateTagAction('userPage')
+      await revalidateTagAction(`userPage_${userMe!.id}`)
     } catch (e) {
       console.error(e)
       setIsLoading(false)
