@@ -79,6 +79,6 @@
     "encoding": "^0.1.13",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tailwindcss": "^3.12.1",
-    "tailwind-merge": "^1.13.2"
+    "tailwind-merge": "^1.14.0"
   }
 }
