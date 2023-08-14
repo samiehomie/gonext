@@ -2,7 +2,7 @@ import Form from '@/components/form'
 import fetchJson from '@/lib/fetchJson'
 import type { writing } from '@/types'
 // @ts-ignore
-import { getColorFromURL } from 'color-thief-node/src/color-thief'
+// import { getColorFromURL } from 'color-thief-node/src/color-thief'
 
 export default async function ReadyWritePage({
   params: { writingId }
@@ -16,15 +16,16 @@ export default async function ReadyWritePage({
 
   if (writingData.data.attributes.cover?.data) {
     const imgUrl = writingData.data.attributes.cover?.data.attributes.url
-    const color = await getColorFromURL(imgUrl)
-    const brightness = (color[0] * 299 + color[1] * 587 + color[2] * 114) / 1000
-    const isDark = brightness < 128
+    // const color = await getColorFromURL(imgUrl)
+    // const brightness = (color[0] * 299 + color[1] * 587 + color[2] * 114) / 1000
+    // const isDark = brightness < 128
 
     return (
       <Form
         writingData={writingData}
         coverUrl={imgUrl}
-        initialMenuColor={isDark ? 'white' : 'black'}
+        // initialMenuColor={isDark ? 'white' : 'black'}
+        initialMenuColor={'white'}
         isWrite={false}
       />
     )
