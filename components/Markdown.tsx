@@ -112,7 +112,7 @@ const components = {
   p: Paragraph
 }
 
-export function CustomMDX(props: any) {
+function CustomMDX(props: any) {
   return (
     <MDXRemote
       {...props}
