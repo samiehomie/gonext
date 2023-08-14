@@ -1,5 +1,7 @@
 import { MutableRefObject, useState } from 'react'
-import { WithContext as ReactTags, Tag } from 'react-tag-input'
+import { WithContext as ReactTags } from 'react-tag-input'
+
+type Tag = { id: string; text: string }
 
 const KeyCodes = {
   comma: 188,
