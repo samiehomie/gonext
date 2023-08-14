@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { getQueryWritingPage, queryUser } from '@/lib/queries'
 import type { user, users, writingsInUser, writingInUser } from '@/types'
-import Markdown from '@/components/markdown'
+import Markdown from '@/components/Markdown'
 import Image from 'next/image'
 import { getEnglishDate } from '@/lib/utils'
 import bottomBanner from '@/public/bottom-banner.png'

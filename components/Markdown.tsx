@@ -10,6 +10,8 @@ import type {
   paraTextAttrsMDX
 } from '@/types'
 
+// TODO
+
 async function getImgSize(imgUrl: string) {
   const options = new URL(imgUrl)
   const dimensions = await new Promise((resolve) => {
