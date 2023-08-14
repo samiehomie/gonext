@@ -1,12 +1,6 @@
 import qs from 'qs'
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
 import type { comments } from '@/types'
 import { subscription, subscribers } from '@/types'
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
 
 export function getCommentsQuery(comments: comments) {
   const filters = {
