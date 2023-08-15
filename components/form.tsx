@@ -73,10 +73,6 @@ export default function Form({
     // callback(response.fileUrl)
     const formData = new FormData()
     formData.append(`files`, blob, blob.name)
-    formData.append(`ref`, 'plugin::users-permissions.user')
-    formData.append(`source`, 'users-permissions')
-    formData.append(`refId`, `${userMe!.id}`)
-    formData.append(`field`, 'profile')
     const resProfile = await fetchJson<resUploadImage>(
       `${process.env.NEXT_PUBLIC_DB_URL}/api/upload`,
       {
