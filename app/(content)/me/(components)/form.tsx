@@ -9,50 +9,74 @@ import sanitizeHtml from 'sanitize-html'
 import fetchJson from '@/lib/fetchJson'
 import { resUpdateUser } from '@/types'
 import { revalidateTagAction, getSeal } from '@/lib/actions'
+import type { resUploadImage } from '@/types'
 
 export default function SettingForm() {
   const { user, mutateUser } = useUser()
   const [profile, setProfile] = useState<Blob | null>()
   const tagsRef = useRef<string[] | null | undefined>()
-  const editorRef = useRef<string | null>(null)
+  const editorRef = useRef<string | null>()
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   async function handleSubmit(e: any) {
     setIsLoading(true)
+    let newProfile = null
     const contentData = editorRef.current
       ? editorRef.current.replace(/\\(<[a-zA-Z]+.*?>)/g, '$1')
       : user!.introduction
 
-    // const formData = new FormData()
-    // if (profile instanceof Blob) {
-    //   formData.append(`files.profile`, profile, profile.name || '프로필 이미지')
-    // }
-
-    const reqUrl = `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${user!.id}`
-    const method = 'PUT'
-
     try {
-      const resData = await fetchJson<resUpdateUser>(reqUrl, {
-        method: method,
-        headers: {
-          Authorization: `Bearer ${user!.jwt}`,
-          'Content-Type': 'application/json'
-        },
+      if (profile instanceof Blob) {
+        const formData = new FormData()
+        formData.append(`files`, profile, profile.name)
+        formData.append(`ref`, 'plugin::users-permissions.user')
+        formData.append(`source`, 'users-permissions')
+        formData.append(`refId`, `${user!.id}`)
+        formData.append(`field`, 'profile')
+        const resProfile = await fetchJson<resUploadImage>(
+          `${process.env.NEXT_PUBLIC_DB_URL}/api/upload`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${user!.jwt}`
+            },
 
-        body: JSON.stringify({
-          introduction: sanitizeHtml(contentData, {
-            transformTags: {
-              br: '\n'
-            }
-          }),
-          tags: tagsRef.current ? tagsRef.current : []
-        })
-      })
+            body: formData
+          }
+        )
+        newProfile = resProfile[0].formats.thumbnail.url
+      }
+
+      const resData = await fetchJson<resUpdateUser>(
+        `${process.env.NEXT_PUBLIC_DB_URL}/api/users/${user!.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${user!.jwt}`,
+            'Content-Type': 'application/json'
+          },
+
+          body: JSON.stringify({
+            introduction: sanitizeHtml(contentData, {
+              transformTags: {
+                br: '\n'
+              }
+            }),
+            tags: tagsRef.current ? tagsRef.current : []
+          })
+        }
+      )
+      const newInfo = newProfile
+        ? {
+            introduction: resData.introduction,
+            tags: resData.tags,
+            avatar: newProfile
+          }
+        : { introduction: resData.introduction, tags: resData.tags }
       const seal = await getSeal({
         ...user!,
-        introduction: resData.introduction,
-        tags: resData.tags
+        ...newInfo
       })
       mutateUser(await fetchJson(`/api/auth/github/login?seal=${seal}`), false)
       await revalidateTagAction(`userPage_${user!.id}`)
@@ -65,7 +89,7 @@ export default function SettingForm() {
   }
 
   if (!user) return null
-  console.log('user is coming', user)
+
   return (
     <article className="font-noto_sans_light">
       <h2 className="screen-out">프로필 설정</h2>

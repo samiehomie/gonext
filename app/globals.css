@@ -25,14 +25,24 @@ body {
 }
 
 /* react input tags */
+#editor-wrapper .ReactTags__tagInputField {
+  @apply text-[17pt] text-[#999999] font-noto_sans_demlight opacity-90;
+}
 
-#tags span.ReactTags__tag {
-  @apply text-[12px] font-noto_sans_demlight float-left mr-[8px] border border-[#ddd] 
+.ReactTags__selected {
+  @apply leading-[1.5];
+}
+span.ReactTags__tag {
+  @apply text-[12px] font-noto_sans_demlight float-left mr-[8px] border border-[#ddd]
   text-[#959595] inline-block rounded-[15px] py-[4px] pl-[10px] pr-[1px] tracking-[-.2px];
 }
+span.ReactTags__tag > span {
+  @apply w-[10px] inline-block;
+}
+
 .ReactTags__remove {
   @apply indent-[-999px] bg-ico-brunch-sub bg-[-90px_0px] w-[20px] h-[20px] inline-block opacity-70 
-  pl-[5px] bg-no-repeat scale-[40%] align-top;
+  pl-[5px] bg-no-repeat scale-[40%] align-top text-[0px];
 }
 .ReactTags__tagInputField {
   @apply text-[13px] font-noto_sans_light align-middle outline-none;
@@ -47,7 +57,9 @@ body {
 #editor-wrapper .toastui-editor-contents {
   @apply font-noto_sans_demlight text-[11pt] text-[#333] text-left leading-[22pt] tracking-[.8px];
 }
-
+#editor-wrapper .placeholder.ProseMirror-widget {
+  @apply leading-none text-[17pt] text-[#A8AFB9] font-noto_sans_demlight opacity-90;
+}
 #editor-wrapper .toastui-editor-contents *:not(table) {
   line-height: 22pt;
 }

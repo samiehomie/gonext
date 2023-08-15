@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import { getColor } from 'color-thief-react'
 import TopNavigation from '@/components/navigations/topNavigation'
@@ -17,6 +17,7 @@ import Link from 'next/link'
 import type { writing, resCreateWriting } from '@/types'
 import { toolbar } from '@/components/editor'
 import { TextareaAutosize } from '@mui/base/TextareaAutosize'
+import TagInput from '@/components/tagInput'
 
 const uploader = Uploader({
   apiKey: process.env.NEXT_PUBLIC_UPLOAD_API_KEY!
@@ -53,6 +54,7 @@ export default function Form({
   const titleRef = useRef(titleInitial)
   const subTitleRef = useRef(subTitleInitial)
   const editorRef = useRef<Editor>(null)
+  const tagsRef = useRef<string[] | null | undefined>()
 
   const handleColor = async (url: string) => {
     const color = await getColor(url, 'rgbArray', 'anonymous')
@@ -120,6 +122,7 @@ export default function Form({
           br: '\n'
         }
       }),
+      tags: tagsRef.current ? tagsRef.current : [],
       created: getDateString(),
       ...dataSubset
     }
@@ -144,16 +147,27 @@ export default function Form({
       })
       setUpdateId(resData.data.id)
       await revalidateTagAction(`userPage_${userMe!.id}`)
+      if (writingData) {
+        await revalidateTagAction(`writing_${writingData.data.id}`)
+      }
     } catch (e) {
       console.error(e)
       setIsLoading(false)
     }
-    await revalidateTagAction('readyWrite')
+
     setIsDone(true)
     setIsLoading(false)
     editorRef.current?.getInstance().removeToolbarItem('구분선')
     editorRef.current?.getInstance().removeToolbarItem('image')
   }
+
+  useEffect(() => {
+    if (coverUrl) {
+      handleColor(coverUrl)
+    }
+  }, [coverUrl])
+
+  if (!userMe) return null
 
   return (
     <>
@@ -324,6 +338,23 @@ export default function Form({
             id="editor-wrapper"
             className={`outline-none mt-[-7px] m-auto w-auto min-w-fit min-h-[300px]`}
           >
+            <div className="pb-[6px] mt-[-15px] border-b border-[#eee] bg-white overflow-hidden">
+              <TagInput
+                initialTags={writingData && writingData.data.attributes.tags}
+                tagsRef={tagsRef}
+                isLoading={isLoading}
+                readOnly={!onWrite}
+              />
+            </div>
+
+            <p
+              className={`${
+                onWrite ? 'text-[#959595]' : 'text-transparent'
+              } text-[12px] leading-[20px] overflow-hidden mb-[50px] opacity-60 select-none`}
+            >
+              {` 쉼표와 엔터키로 구분하여 최대 5개의 태그를 입력할 수 있습니다.`}
+            </p>
+
             <TuiEditor
               editorRef={editorRef}
               imageHandler={handleImage}
@@ -332,58 +363,59 @@ export default function Form({
             />
           </div>
         </div>
-      </div>
-      {/* top buttons */}
-      {onWrite && (
-        <div className="inline-block left-1/2 absolute top-[90px] translate-x-[479px] z-[9999]">
-          <div className="left-0 absolute top-0 w-[41px] z-[3]">
-            <div className="relative z-[1]">
-              {/* cover insert button */}
-              <label
-                className="z-0 relative mt-[1px] bg-clip-padding inline-block 
-                          rounded-none h-[35px] py-[2px] text-center w-[42px]"
-              >
-                <i
-                  className={`bg-ico-btn-cover cursor-pointer inline-block h-[25px] w-[25px] ${
-                    menuColor === 'black' ? 'bg-[0px_0px]' : 'bg-[-29px_0px]'
-                  }`}
-                />
-                <input
-                  ref={imgInputRef}
-                  type="file"
-                  accept="image/*"
-                  className={`hidden`}
-                  onChange={(e) => {
-                    setCover(e.target.files![0])
 
-                    handleColor(URL.createObjectURL(e.target.files![0]))
-                  }}
-                />
-              </label>
-              {/* cover remove button */}
-              {cover && (
-                <div
+        {/* top buttons */}
+        {onWrite && (
+          <div className="inline-block left-1/2 absolute top-[90px] translate-x-[479px] z-[9999]">
+            <div className="left-0 absolute top-0 w-[41px] z-[3]">
+              <div className="relative z-[1]">
+                {/* cover insert button */}
+                <label
                   className="z-0 relative mt-[1px] bg-clip-padding inline-block 
                           rounded-none h-[35px] py-[2px] text-center w-[42px]"
                 >
-                  <button
-                    onClick={async () => {
-                      setCover(null)
-                      imgInputRef.current!.value = ''
-                      setMenuColor('white')
-                    }}
+                  <i
                     className={`bg-ico-btn-cover cursor-pointer inline-block h-[25px] w-[25px] ${
-                      menuColor === 'black'
-                        ? 'bg-[0px_-249px]'
-                        : 'bg-[-29px_-249px]'
+                      menuColor === 'black' ? 'bg-[0px_0px]' : 'bg-[-29px_0px]'
                     }`}
-                  ></button>
-                </div>
-              )}
+                  />
+                  <input
+                    ref={imgInputRef}
+                    type="file"
+                    accept="image/*"
+                    className={`hidden`}
+                    onChange={(e) => {
+                      setCover(e.target.files![0])
+
+                      handleColor(URL.createObjectURL(e.target.files![0]))
+                    }}
+                  />
+                </label>
+                {/* cover remove button */}
+                {cover && (
+                  <div
+                    className="z-0 relative mt-[1px] bg-clip-padding inline-block 
+                          rounded-none h-[35px] py-[2px] text-center w-[42px]"
+                  >
+                    <button
+                      onClick={async () => {
+                        setCover(null)
+                        imgInputRef.current!.value = ''
+                        setMenuColor('white')
+                      }}
+                      className={`bg-ico-btn-cover cursor-pointer inline-block h-[25px] w-[25px] ${
+                        menuColor === 'black'
+                          ? 'bg-[0px_-249px]'
+                          : 'bg-[-29px_-249px]'
+                      }`}
+                    ></button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   )
 }

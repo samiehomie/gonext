@@ -21,13 +21,14 @@ function objArraytoStrArray(array: Tag[]) {
 export default function TagInput({
   initialTags,
   tagsRef,
-  isLoading
+  isLoading,
+  readOnly = false
 }: {
-  initialTags: string[] | null
+  initialTags: string[] | null | undefined
   tagsRef: MutableRefObject<string[] | undefined | null>
   isLoading: boolean
+  readOnly?: boolean
 }) {
-  console.log('----------------------------->', initialTags, typeof initialTags)
   const oldTags = initialTags
     ? initialTags.map((tag, i) => strToObj(tag, i))
     : []
@@ -66,6 +67,7 @@ export default function TagInput({
     >
       <ReactTags
         tags={tags}
+        readOnly={readOnly}
         delimiters={delimiters}
         handleDelete={handleDelete}
         handleAddition={handleAddition}

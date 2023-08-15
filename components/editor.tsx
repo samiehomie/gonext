@@ -32,8 +32,6 @@ function TuiEditor({
   imageHandler?: (blob: File | Blob, callback: HookCallback) => void
   onWrite?: boolean
 }) {
-
-
   return (
     <Editor
       initialValue={content ?? ' '}
@@ -41,6 +39,7 @@ function TuiEditor({
       autofocus={false}
       ref={editorRef}
       toolbarItems={onWrite ? toolbar : undefined}
+      placeholder="내용을 입력해주세요"
       hideModeSwitch
       height="100%"
       hooks={{ addImageBlobHook: imageHandler }}

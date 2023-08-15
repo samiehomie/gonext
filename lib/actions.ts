@@ -1,11 +1,8 @@
 'use server'
-import { cookies } from 'next/headers'
 import { userSession } from '@/types'
 import { revalidateTag } from 'next/cache'
-import { redirect } from 'next/navigation'
 import type { UploadWidgetResult } from 'uploader/dist/components/modal/UploadWidgetResult'
 import { sealData } from 'iron-session'
-import fetchJson from './fetchJson'
 
 export async function revalidateTagAction(tag: string) {
   revalidateTag(tag)

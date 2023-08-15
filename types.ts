@@ -15,6 +15,76 @@ export type resCreateWriting = {
   meta: {}
 }
 
+export type resUploadImage = [
+  {
+    id: number
+    name: string
+    alternativeText: null
+    caption: null
+    width: number
+    height: number
+    formats: {
+      thumbnail: {
+        name: string
+        hash: string
+        ext: string
+        mime: string
+        path: null
+        width: number
+        height: number
+        size: number
+        url: string
+        provider_metadata: {
+          public_id: string
+          resource_type: string
+        }
+      }
+      small: {
+        name: string
+        hash: string
+        ext: string
+        mime: string
+        path: null
+        width: number
+        height: number
+        size: number
+        url: string
+        provider_metadata: {
+          public_id: string
+          resource_type: string
+        }
+      }
+      medium: {
+        name: string
+        hash: string
+        ext: string
+        mime: string
+        path: null
+        width: number
+        height: number
+        size: number
+        url: string
+        provider_metadata: {
+          public_id: string
+          resource_type: string
+        }
+      }
+    }
+    hash: string
+    ext: string
+    mime: string
+    size: number
+    url: string
+    previewUrl: null
+    provider: string
+    provider_metadata: {
+      public_id: string
+      resource_type: string
+    }
+    createdAt: string
+    updatedAt: string
+  }
+]
 export type resUpdateUser = {
   id: number
   username: string

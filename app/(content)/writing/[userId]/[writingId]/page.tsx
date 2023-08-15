@@ -156,7 +156,9 @@ export default async function Page({
   params: { userId: string; writingId: string }
 }) {
   const [target, _] = getQueryWritingPage(userId, writingId)
-  const user: user = await fetchJson(target)
+  const user = await fetchJson<user>(target, {
+    next: { tags: [`writing_${writingId}`] }
+  })
 
   if (!user || !user.writings) return null
 
