@@ -1,10 +1,9 @@
-import Profile from '@/app/(content)/user/(components)/profile'
 import { queryUser } from '@/lib/queries'
 import { user, users } from '@/types'
 import Content from '@/app/(content)/user/(components)/content'
-import TopNavigation from '@/components/navigations/topNavigation'
-import TopProfile from '../(components)/topProfile'
 import fetchJson from '@/lib/fetchJson'
+import TopNavigationContainer from '../(components)/containers/topNavigationContainer'
+import ProfileContainer from '../(components)/containers/profileContainer'
 
 export default async function AuthorPage({
   params: { userId }
@@ -18,10 +17,8 @@ export default async function AuthorPage({
 
   return (
     <>
-      <TopNavigation isBlack={true}>
-        <TopProfile userData={userData} />
-      </TopNavigation>
-      <Profile userData={userData} />
+      <TopNavigationContainer userData={userData} />
+      <ProfileContainer userData={userData} />
       <Content userData={userData} />
     </>
   )

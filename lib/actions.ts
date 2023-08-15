@@ -25,13 +25,9 @@ export async function deleteUploadImage(params: UploadWidgetResult) {
 }
 
 export async function getSeal(user: userSession) {
-  console.log('>>>>>>>>>>', user)
   const dataSealed = await sealData(user, {
     password: process.env.SESSION_SECRET!
   })
-  // const resUser = await fetchJson<userSession>(
-  //   `${process.env.NEXT_PUBLIC_FRONT_URL}/api/auth/github/login?seal=${dataSealed}`
-  // )
-  // console.log('>>>>>>>>>>', resUser)
+
   return dataSealed
 }

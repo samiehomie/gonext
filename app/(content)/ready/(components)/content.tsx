@@ -95,13 +95,18 @@ function Writings({ userId, query }: { userId: number; query: string }) {
                 {writing.title}
               </strong>
               <div className="pt-[6px] text-ellipsis line-clamp-2 max-h-[43px]">
-                <em className="not-italic font-normal text-[#666] pt-[6px] text-[14px] tracking-[-1px]">
-                  {writing.subtitle}
-                </em>
-                <span
-                  className="w-[1px] align-top h-[11px] inline-block bg-[#bfbfbf] 
+                {writing.subtitle && (
+                  <>
+                    <em className="not-italic font-normal text-[#666] pt-[6px] text-[14px] tracking-[-1px]">
+                      {writing.subtitle}
+                    </em>
+                    <span
+                      className="w-[1px] h-[11px] inline-block bg-[#bfbfbf] 
                             m-[4px_6px_0px_11px]"
-                ></span>
+                    ></span>
+                  </>
+                )}
+
                 <span className="text-[#666] text-[14px] leading-[21px] max-w-[520px]">
                   {dressUpMarkdown(writing.content).slice(0, 200)}
                 </span>

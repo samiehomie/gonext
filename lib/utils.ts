@@ -112,6 +112,7 @@ export function dressUpMarkdown(str: string) {
     .replace(/\*{3}/g, '')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
+    .replace(/\\/g, '')
   return content
 }
 

@@ -59,10 +59,15 @@ export default function Writing({
             className="line-clamp-2 text-[14px] leading-[21px] max-h-[43px] 
                     overflow-hidden pt-[5px] text-ellipsis"
           >
-            <em className="not-italic font-normal text-[#666] pt-[6px]">
-              {writing.subtitle}
-            </em>
-            <span className="w-[1px] align-top h-[12px] inline-block bg-[#eee] m-[4px_3px_0px]"></span>
+            {writing.subtitle && (
+              <>
+                <em className="not-italic font-normal text-[#666] pt-[6px]">
+                  {writing.subtitle}
+                </em>
+                <span className="w-[1px] align-top h-[12px] inline-block bg-[#eee] m-[4px_3px_0px]"></span>
+              </>
+            )}
+
             <span className="word-wrap-break break-words text-[#959595]">
               {dressUpMarkdown(writing.content).slice(0, 200)}
             </span>

@@ -175,7 +175,7 @@ export default function SideMenu({
   }, [onSide, setOnSide])
 
   if (!user) return null
-  console.log('rerender!', user)
+ 
   return (
     <InnerContainer onSide={onSide}>
       {user?.isLoggedIn ? (

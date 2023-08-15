@@ -14,7 +14,7 @@ import { HookCallback } from '@toast-ui/editor/types/editor'
 import Toast from '@/components/toast'
 import sanitizeHtml from 'sanitize-html'
 import Link from 'next/link'
-import type { writing, resCreateWriting } from '@/types'
+import type { writing, resCreateWriting, resUploadImage } from '@/types'
 import { toolbar } from '@/components/editor'
 import { TextareaAutosize } from '@mui/base/TextareaAutosize'
 import TagInput from '@/components/tagInput'
@@ -69,8 +69,26 @@ export default function Form({
   }
   const handleImage = async (blob: Blob | File, callback: HookCallback) => {
     setIsLoading(true)
-    const response = await uploader.uploadFile(blob)
-    callback(response.fileUrl)
+    // const response = await uploader.uploadFile(blob)
+    // callback(response.fileUrl)
+    const formData = new FormData()
+    formData.append(`files`, blob, blob.name)
+    formData.append(`ref`, 'plugin::users-permissions.user')
+    formData.append(`source`, 'users-permissions')
+    formData.append(`refId`, `${userMe!.id}`)
+    formData.append(`field`, 'profile')
+    const resProfile = await fetchJson<resUploadImage>(
+      `${process.env.NEXT_PUBLIC_DB_URL}/api/upload`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${userMe!.jwt}`
+        },
+
+        body: formData
+      }
+    )
+    callback(resProfile[0].url)
     setIsLoading(false)
   }
 

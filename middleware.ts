@@ -26,7 +26,7 @@ export const middleware = async (req: NextRequest) => {
   const res = NextResponse.next()
   const session = await getIronSession(req, res, sessionOptions)
   const { user, back } = session
-  console.log('middleware ----->', user)
+  
   if (req.nextUrl.pathname === '/api/comment/create') {
     const path = req.nextUrl.searchParams.get('path')
     if (!user?.isLoggedIn) {

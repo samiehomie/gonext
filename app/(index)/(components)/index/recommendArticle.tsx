@@ -10,14 +10,17 @@ import Link from 'next/link'
 
 function calcHeight(data: writing['data'], height: number) {
   return (
-    (data.attributes.cover?.data.attributes.formats.small?.height as number) *
+    (data.attributes.cover?.data.attributes.formats.thumbnail
+      ?.height as number) *
     (height /
-      (data.attributes.cover?.data.attributes.formats.small?.width as number))
+      (data.attributes.cover?.data.attributes.formats.thumbnail
+        ?.width as number))
   )
 }
 
 const getKey = (pageIndex: number, previousPageData: writings) => {
   if (previousPageData && !previousPageData.data.length) return null
+
   return `${process.env.NEXT_PUBLIC_DB_URL}/api/writings?${getWritingsQuery(
     30,
     pageIndex + 1
@@ -80,7 +83,8 @@ export default function RecommendArticle() {
   }, [])
 
   if (!writings) return null
-  const pageCount = writings[0].meta.pagination?.pageCount as number
+  
+  const total = writings[0].meta.pagination!.total!
 
   return (
     <>
@@ -109,7 +113,7 @@ export default function RecommendArticle() {
                       <Image
                         src={
                           writing.attributes.cover?.data.attributes.formats
-                            .small?.url as string
+                            .thumbnail.url
                         }
                         alt={writing.attributes.title}
                         width={240}
@@ -161,7 +165,7 @@ export default function RecommendArticle() {
         <button
           className={`mt-[-77px] h-[100px] absolute 
           top-[50%] w-[100px] z-[10] right-[30px] ${
-            pageCount <= Math.floor(cursor / slideGroupActions) + 1 && 'hidden'
+            total < cursor * 4 && 'hidden'
           }`}
           onClick={onNext}
         >
