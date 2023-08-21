@@ -13,7 +13,29 @@ import IndexStart from '@/components/modals/indexStart'
 
 export const metadata = {
   title: 'Next brunch',
-  description: 'Next.js + brunch'
+  description: 'Next.js + brunch',
+  generator: 'Next.js',
+  applicationName: 'Next brunch',
+  referrer: 'origin-when-cross-origin',
+  keywords: ['Next.js', 'React', 'JavaScript'],
+  authors: [{ name: 'sam', url: process.env.NEXT_PUBLIC_TEMP }],
+  colorScheme: 'white',
+  creator: 'Sam Jeong',
+  publisher: 'Sam Jeong',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false
+  },
+  icons: {
+    icon: '/bc-favicon.ico',
+    shortcut: '/bc-sc-favicon.ico',
+    apple: '/bc-favicon.ico',
+    other: {
+      rel: 'apple-touch-icon-precomposed',
+      url: '/ico-bc-apple.png'
+    }
+  }
 }
 
 export default function RootLayout({

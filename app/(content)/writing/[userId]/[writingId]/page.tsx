@@ -13,8 +13,31 @@ import fetchJson from '@/lib/fetchJson'
 import defaultCover from '@/public/default-cover.png'
 import { dressUpMarkdown } from '@/lib/utils'
 import Profile from '../../{components)/profile'
+import type { Metadata, ResolvingMetadata } from 'next'
+import { Graph } from 'schema-dts'
 
-// TODO: #5 Add anchor using rehype library
+type Props = {
+  params: { userId: string; writingId: string }
+}
+
+export async function generateMetadata(
+  { params }: Props,
+  parent?: ResolvingMetadata
+): Promise<Metadata> {
+  const { userId, writingId } = params
+  const [target, _] = getQueryWritingPage(userId, writingId)
+  const user = await fetchJson<user>(target, {
+    next: { tags: [`writing_${writingId}`] }
+  })
+
+  return {
+    title: user.writings![0].title,
+    description: user.writings![0].content,
+    openGraph: {
+      images: [user.writings![0].cover?.url!, '/default-cover.png']
+    }
+  }
+}
 
 async function Others({
   userId,
@@ -162,8 +185,45 @@ export default async function Page({
 
   if (!user || !user.writings) return null
 
+  const jsonLd: Graph = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BlogPosting',
+        headline: user.writings![0].title,
+        description: user.writings![0].content,
+        datePublished: user.writings![0].publishedAt,
+        author: {
+          '@type': 'Person',
+          name: user.username
+        }
+      },
+      {
+        '@type': 'Person',
+        name: user.username,
+        url: `${process.env.NEXT_PUBLIC_FRONT_URL}/user/${user.id}`,
+        image: user.profile!.url
+      },
+      {
+        '@type': 'Organization',
+        name: 'Next brunch',
+        url: process.env.NEXT_PUBLIC_FRONT_URL,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${process.env.NEXT_PUBLIC_FRONT_URL}/bc-favicon.ico`,
+          width: '64',
+          height: '64'
+        }
+      }
+    ]
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <TopNavigation>
         <ScrollIndicator />
       </TopNavigation>

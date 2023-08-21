@@ -12,7 +12,10 @@ export default function Article({
   return (
     <div className="m-auto w-[1000px] animation-up-late">
       <Link
-        href={`/writing/${writing.attributes.user?.data.id}/${writing.id}#title`}
+        href={{
+          pathname: `/writing/${writing.attributes.user?.data.id}/${writing.id}`,
+          hash: 'title'
+        }}
         className="float-right h-[146px] mr-[150px] w-[700px] relative pt-[32px]"
       >
         <em

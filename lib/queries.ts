@@ -127,7 +127,7 @@ export function getQueryWritingPage(userId: string, writingId: string) {
       fields: ['username', 'introduction', 'job'],
       populate: {
         profile: {
-          fields: 'url'
+          fields: ['url', 'formats']
         },
         writings: {
           filters: {
@@ -138,7 +138,7 @@ export function getQueryWritingPage(userId: string, writingId: string) {
           fields: ['title', 'content', 'created', 'subtitle', 'tags'],
           populate: {
             cover: {
-              fields: 'url'
+              fields: ['url', 'formats']
             }
           }
         }
