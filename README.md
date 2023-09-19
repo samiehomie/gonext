@@ -34,9 +34,9 @@
 
 ## Project Overview
 
-| [홈](https://nextjs-blog.sanity.build)                                                                            | [브런치북](https://nextjs-blog.sanity.build/studio)                                                                        |
+| [홈](https://gonext-sam.vercel.app/)                                                                            | [브런치북](https://gonext-sam.vercel.app/book/1)                                                                        |
 | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| ![Blog](https://github.com/sanity-io/nextjs-blog-cms-sanity-v3/assets/81981/adc1a90e-644e-456a-b630-ac44e4636e24) | ![Sanity Studio](https://github.com/sanity-io/nextjs-blog-cms-sanity-v3/assets/81981/93a39af1-a806-45ca-8648-0cc7e2295eea) |
+| ![Home](https://i.ibb.co/d5qwkzL/homeindex.png) | ![book](https://i.ibb.co/7pLYYR5/brunchbook.png) |
 
 ### Important files and folders
 
