@@ -20,9 +20,7 @@ type Props = {
   params: { userId: string; writingId: string }
 }
 
-export async function generateMetadata(
-  { params }: Props,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { userId, writingId } = params
   const [target, _] = getQueryWritingPage(userId, writingId)
   const user = await fetchJson<user>(target, {
@@ -33,7 +31,11 @@ export async function generateMetadata(
     title: user.writings![0].title,
     description: user.writings![0].content,
     openGraph: {
-      images: [user.writings![0].cover?.url!, '/default-cover.png']
+      images: [
+        user.writings![0].cover
+          ? user.writings![0].cover?.url!
+          : '/default-cover.png'
+      ]
     }
   }
 }
