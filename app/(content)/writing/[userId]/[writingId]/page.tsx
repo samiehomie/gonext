@@ -33,9 +33,9 @@ export async function generateMetadata(
   return {
     title: user.writings![0].title,
     description: user.writings![0].content,
-    openGraph: {
-      images: [user.writings![0].cover?.url!, '/default-cover.png']
-    }
+    // openGraph: {
+    //   images: [user.writings![0].cover?.url!, '/default-cover.png']
+    // }
   }
 }
 
