@@ -22,7 +22,6 @@ type Props = {
 
 export async function generateMetadata(
   { params }: Props,
-  parent?: ResolvingMetadata
 ): Promise<Metadata> {
   const { userId, writingId } = params
   const [target, _] = getQueryWritingPage(userId, writingId)
@@ -33,9 +32,9 @@ export async function generateMetadata(
   return {
     title: user.writings![0].title,
     description: user.writings![0].content,
-    // openGraph: {
-    //   images: [user.writings![0].cover?.url!, '/default-cover.png']
-    // }
+    openGraph: {
+      images: [user.writings![0].cover?.url!, '/default-cover.png']
+    }
   }
 }
 
