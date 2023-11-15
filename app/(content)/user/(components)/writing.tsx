@@ -16,6 +16,7 @@ export default function Writing({
 }) {
   const { comments } = useComment({ writingId: `${writing.id}` })
 
+  if (!writing.publishedAt) return null
   if (!comments) return null
 
   return (
