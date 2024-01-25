@@ -17,8 +17,6 @@
 
 [Next Brunch](https://gonext-sam.vercel.app/)는 브런치스토리를 모방한 [Next.js](https://nextjs.org/) 기반의 웹 앱입니다. 사용자에게 브런치스토리와 유사한 직관적이고 효율적인 경험을 제공하도록 노력했습니다. 사용자가 쉽게 콘텐츠를 작성하고 공유할 수 있는 기능, 그리고 사용자 간의 상호작용을 중점으로 개발했습니다.
 
-**[데모 확인하기](https://gonext-sam.vercel.app/)**
-
 > **Note**
 >
 > React 18의 서버컴포넌트를 기반으로 하는 Next.js 13의 새 기능을 최대한 활용하고자 했습니다.
